@@ -4,25 +4,22 @@
     $slides = config('site.slides');
     $wa = preg_replace('/\D/', '', config('site.phone'));
     $field = 'flex items-center gap-3 px-4 py-3 md:border-l first:border-0 border-ink/10';
-    $icon = 'grid place-items-center size-10 shrink-0 rounded-full bg-mist text-royal';
+    $icon = 'shrink-0 text-royal';
 @endphp
 
 {{-- Hero --}}
 <section class="hidden md:grid px-5 sm:px-8 pt-4 pb-10 lg:grid-cols-[1fr_1.05fr] gap-10 items-stretch">
     <div class="flex flex-col py-4 lg:py-10">
-        <h1 class="font-display font-bold text-5xl sm:text-6xl xl:text-7xl leading-[1.05] text-balance mt-4">Find Your Perfect Escape in Sikkim.</h1>
-        <p class="mt-6 text-lg text-ink/70 max-w-md">Monasteries, mountain passes and misty tea gardens. Custom tours planned by locals who call these hills home.</p>
+        <h1 class="font-display font-bold text-5xl sm:text-6xl xl:text-7xl leading-[1.05] text-balance mt-4">Sikkim, planned by people who live here.</h1>
+        <p class="mt-6 text-lg text-ink/70 max-w-md">Monasteries, mountain passes and misty tea gardens. Permits, drivers and stays sorted by our team in Gangtok.</p>
         <div class="mt-8 flex flex-wrap items-center gap-3">
             <a href="{{ route('destinations') }}" class="inline-flex items-center gap-3 rounded-full bg-royal text-white font-semibold pl-7 pr-6 py-4 hover:bg-ink transition-colors">Explore destinations <x-icon name="arrow" class="size-4"/></a>
             <a href="https://wa.me/{{ $wa }}" target="_blank" rel="noopener" class="inline-flex items-center gap-3 rounded-full px-3 py-2 font-semibold hover:text-royal">
                 <span class="grid place-items-center size-11 rounded-full border border-ink/15 bg-white text-royal"><x-icon name="headset" class="size-5"/></span>Talk to a local</a>
         </div>
         <ul class="mt-auto pt-12 grid sm:grid-cols-3 gap-5">
-            @foreach ([['shield', 'Permits handled', 'Nathula and North Sikkim sorted for you.'], ['calendar', 'Flexible plans', 'Itineraries built around your dates.'], ['headset', '24/7 support', 'A real person on WhatsApp.']] as [$i, $t, $d])
-                <li class="flex gap-3">
-                    <span class="{{ $icon }}"><x-icon :name="$i" class="size-5"/></span>
-                    <div><b class="text-sm">{{ $t }}</b><p class="text-xs text-ink/60 mt-1">{{ $d }}</p></div>
-                </li>
+            @foreach ([['Permits handled', 'Nathula and North Sikkim sorted for you.'], ['Flexible plans', 'Itineraries built around your dates.'], ['24/7 support', 'A real person on WhatsApp.']] as [$t, $d])
+                <li class="border-t border-ink/15 pt-3"><b class="text-sm">{{ $t }}</b><p class="text-sm text-ink/60 mt-1">{{ $d }}</p></li>
             @endforeach
         </ul>
     </div>
@@ -104,7 +101,7 @@
     </div>
     </div>
 
-    <div class="relative mt-5 sm:mt-0 aspect-[5/6] sm:aspect-square rounded-[2rem] overflow-hidden bg-mist" x-data="{ i: 0, n: {{ count($slides) }}, t: null, tx: 0,
+    <div class="relative mt-5 sm:mt-0 aspect-[11/10] sm:aspect-square rounded-[2rem] overflow-hidden bg-mist" x-data="{ i: 0, n: {{ count($slides) }}, t: null, tx: 0,
             go(k) { this.i = (k + this.n) % this.n; this.run(); },
             run() { clearInterval(this.t); this.t = setInterval(() => this.i = (this.i + 1) % this.n, 4500); },
             start(e) { this.tx = e.touches[0].clientX; },
@@ -159,11 +156,11 @@
 
 {{-- Stats --}}
 <section class="px-5 sm:px-8 mt-5">
-    <dl class="bg-royal text-white rounded-3xl grid grid-cols-3 divide-x divide-white/20">
+    <dl class="grid grid-cols-3 border-y border-ink/10 divide-x divide-ink/10">
         @foreach ([['500+', 'Happy travellers'], ['120+', 'Trips planned'], ['15 yrs', 'Local knowledge']] as [$n, $l])
-            <div class="px-2 py-5 sm:px-8 sm:py-8 text-center">
-                <dt class="font-display font-bold text-2xl sm:text-5xl lg:text-6xl">{{ $n }}</dt>
-                <dd class="mt-1 sm:mt-2 text-xs sm:text-base text-white/80">{{ $l }}</dd>
+            <div class="px-3 py-5 sm:px-8 sm:py-8">
+                <dt class="font-display font-bold text-2xl sm:text-5xl lg:text-6xl text-royal">{{ $n }}</dt>
+                <dd class="mt-1 sm:mt-2 text-xs sm:text-base text-ink/65">{{ $l }}</dd>
             </div>
         @endforeach
     </dl>
@@ -182,7 +179,6 @@
 <section class="px-5 sm:px-8 mt-12">
     <div class="bg-royal text-white rounded-3xl p-5 sm:p-10 grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-center">
         <div class="flex gap-5 items-center min-w-0">
-            <span class="hidden sm:grid place-items-center size-20 shrink-0 rounded-full border border-white/30"><x-icon name="plane" class="size-9"/></span>
             <div>
                 <h2 class="font-display font-bold text-2xl sm:text-3xl text-balance">Let's plan your Sikkim trip together</h2>
                 <p class="mt-2 text-white/80">Leave your number and we'll send a tailored itinerary within a day.</p>
@@ -307,24 +303,24 @@
 @include('partials.entry')
 
 {{-- Why us --}}
-<section class="mx-5 sm:mx-8 mt-20 bg-mist rounded-[2rem] px-5 sm:px-10 py-10 sm:py-14">
-    <h2 class="font-display font-bold text-3xl sm:text-4xl max-w-xl text-balance">Why travel with us?</h2>
-    <dl class="mt-10 grid sm:grid-cols-2 gap-x-16 gap-y-8">
+<section class="px-5 sm:px-8 mt-20 grid lg:grid-cols-[1fr_1.6fr] gap-8 lg:gap-16">
+    <h2 class="font-display font-bold text-3xl sm:text-4xl max-w-xl text-balance lg:sticky lg:top-28 self-start">Why travel with us?</h2>
+    <dl class="divide-y divide-ink/10 border-y border-ink/10">
         @foreach (config('site.why') as [$t, $d])
-            <div class="border-t border-ink/20 pt-5"><dt class="font-display font-bold text-xl">{{ $t }}</dt><dd class="text-ink/75 mt-2 max-w-md">{{ $d }}</dd></div>
+            <div class="py-5 sm:grid sm:grid-cols-[13rem_1fr] sm:gap-8"><dt class="font-display font-bold text-xl">{{ $t }}</dt><dd class="text-ink/75 mt-1 sm:mt-0 max-w-md">{{ $d }}</dd></div>
         @endforeach
     </dl>
 </section>
 
 {{-- Steps --}}
 <section class="px-5 sm:px-8 pt-14 sm:pt-20">
-    <h2 class="font-display font-bold text-3xl sm:text-4xl text-center">Plan a trip in three steps</h2>
-    <div class="mt-10 grid md:grid-cols-3 gap-8">
+    <h2 class="font-display font-bold text-3xl sm:text-4xl">Plan a trip in three steps</h2>
+    <div class="mt-10 grid md:grid-cols-3 gap-x-12 gap-y-10">
         @foreach (config('site.steps') as $i => [$t, $d])
-            <div class="text-center px-4">
-                <span class="mx-auto grid place-items-center size-14 rounded-full bg-royal text-white font-display font-bold text-xl">{{ $i + 1 }}</span>
-                <h3 class="font-display font-bold text-xl mt-4">{{ $t }}</h3>
-                <p class="text-ink/70 mt-2">{{ $d }}</p>
+            <div>
+                <span class="block font-display font-bold text-7xl leading-none text-royal/25 tabular-nums" aria-hidden="true">{{ $i + 1 }}</span>
+                <h3 class="font-display font-bold text-xl mt-3">{{ $t }}</h3>
+                <p class="text-ink/70 mt-2 max-w-xs">{{ $d }}</p>
             </div>
         @endforeach
     </div>
@@ -344,7 +340,7 @@
                 <span class="text-sm text-ink/55 tabular-nums" x-text="(r + 1) + ' / ' + n"></span>
             </div>
         </div>
-        <div class="grid bg-white rounded-3xl p-5 sm:p-8">
+        <div class="grid">
             @foreach ($reviews as $k => [$who, $from, $text, $trip])
                 <figure class="col-start-1 row-start-1 transition-all duration-700 ease-out"
                         :class="r === {{ $k }} ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'" :aria-hidden="r !== {{ $k }}">
@@ -398,16 +394,16 @@
         <a href="https://wa.me/{{ $wa }}" target="_blank" rel="noopener" class="mt-8 inline-flex items-center gap-3 rounded-full bg-ink text-white font-semibold pl-6 pr-5 py-3.5 hover:bg-royal transition-colors">Ask us on WhatsApp <x-icon name="arrow" class="size-4"/></a>
         <p class="mt-6"><a href="{{ route('faq') }}" class="text-sm font-semibold text-royal">See all FAQs →</a></p>
     </div>
-    <div class="space-y-3">
+    <div class="divide-y divide-ink/10 border-y border-ink/10">
         @foreach (collect(config('faq.items'))->where('home', true)->values() as $k => $faq)
             @php [$q, $a] = [$faq['q'], $faq['a']]; @endphp
-            <div class="bg-white rounded-2xl border border-ink/5">
-                <button type="button" @click="o = o === {{ $k }} ? -1 : {{ $k }}" :aria-expanded="o === {{ $k }}" class="w-full flex items-center justify-between gap-4 text-left px-6 py-5 font-semibold">
+            <div>
+                <button type="button" @click="o = o === {{ $k }} ? -1 : {{ $k }}" :aria-expanded="o === {{ $k }}" class="w-full flex items-center justify-between gap-4 text-left py-5 font-semibold hover:text-royal transition-colors">
                     {{ $q }}
-                    <span class="grid place-items-center size-8 shrink-0 rounded-full transition-all" :class="o === {{ $k }} ? 'bg-royal text-white rotate-45' : 'bg-mist text-royal'">+</span>
+                    <span class="shrink-0 text-2xl leading-none font-normal text-royal transition-transform duration-300" :class="o === {{ $k }} && 'rotate-45'" aria-hidden="true">+</span>
                 </button>
                 <div class="grid transition-all duration-300 ease-out" :class="o === {{ $k }} ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'">
-                    <p class="overflow-hidden px-6 text-ink/70"><span class="block pb-5">{{ $a }}</span></p>
+                    <p class="overflow-hidden text-ink/70 max-w-[62ch] pr-10"><span class="block pb-6">{{ $a }}</span></p>
                 </div>
             </div>
         @endforeach

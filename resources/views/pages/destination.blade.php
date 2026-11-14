@@ -6,15 +6,14 @@
     $monthShort = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     $seasonMonths = [[2, 3, 4], [5, 6, 7, 8], [9, 10], [11, 0, 1]];
     $levels = ['peak' => 'bg-royal text-white', 'good' => 'bg-royal/30 text-ink', 'wet' => 'bg-sky-200 text-ink', 'cold' => 'bg-slate-300 text-ink'];
-    $tints = ['bg-rose-100', 'bg-emerald-100', 'bg-amber-100', 'bg-sky-200', 'bg-violet-100', 'bg-orange-100', 'bg-teal-100', 'bg-indigo-100'];
 
-    // Best months, e.g. "Apr–May, Oct–Nov", from the months marked peak.
+    // Best months, e.g. "Apr-May, Oct-Nov", from the months marked peak.
     $runs = [];
     foreach ($d['calendar'] as $i => $level) {
         if ($level !== 'peak') { continue; }
         if ($runs && end($runs)[1] === $i - 1) { $runs[array_key_last($runs)][1] = $i; } else { $runs[] = [$i, $i]; }
     }
-    $best = implode(', ', array_map(fn ($r) => $r[0] === $r[1] ? $monthShort[$r[0]] : $monthShort[$r[0]].'–'.$monthShort[$r[1]], $runs));
+    $best = implode(', ', array_map(fn ($r) => $r[0] === $r[1] ? $monthShort[$r[0]] : $monthShort[$r[0]].'-'.$monthShort[$r[1]], $runs));
 
     $facts = [['Best time', $best], ['Plan', $d['days']], ['High point', $d['high']], ['Base', $d['base']]];
     $toc = ['overview' => 'Overview', 'best-time' => 'Best time to visit', 'places' => 'Places to visit', 'pack' => 'What to pack', 'getting-there' => 'Getting there', 'permits-stay' => 'Permits and stay', 'itinerary' => 'Suggested plan', 'tips' => 'Tips', 'faq' => 'FAQ'];
@@ -34,7 +33,7 @@
     if (count($pool) < 5) { array_unshift($pool, ['img' => '/images/'.$d['img'], 'name' => $d['name'], 'type' => 'Base: '.$d['base']]); }
     $tileClasses = ['col-span-2 h-44 sm:col-span-1 sm:row-span-2 sm:h-auto', 'h-24 sm:h-auto', 'h-24 sm:h-auto', 'h-24 sm:h-auto', 'h-24 sm:h-auto'];
 @endphp
-@section('title', $d['name'].' travel guide – '.config('site.brand'))
+@section('title', $d['name'].' travel guide - '.config('site.brand'))
 @section('description', $d['tagline'].' When to visit, temperature, places to see and what to pack for '.$d['name'].'.')
 @push('head')
 <script type="application/ld+json">{!! json_encode([
@@ -62,7 +61,6 @@
                                 <x-icon name="pin" class="size-4 shrink-0 mb-0.5"/>
                                 <span class="min-w-0">
                                     <span class="block font-semibold text-xs sm:text-sm leading-tight truncate" x-text="tiles[{{ $t }}].{{ $L }}.name">{{ $first['name'] }}</span>
-                                    <span class="block text-[10px] uppercase tracking-wider text-white/75 truncate" x-text="tiles[{{ $t }}].{{ $L }}.type">{{ $first['type'] }}</span>
                                 </span>
                             </span>
                         </div>
@@ -75,17 +73,15 @@
             <div>
                 <h1 class="font-display font-bold text-[2rem] leading-[1.1] sm:text-5xl lg:text-6xl text-balance">{{ $d['name'] }}</h1>
                 <p class="mt-3 text-base sm:text-lg text-ink/70 max-w-xl text-pretty">{{ $d['tagline'] }}</p>
-                <ul class="mt-4 flex flex-wrap gap-2" aria-label="Good for">
-                    @foreach ($d['good_for'] as $g)<li class="rounded-full bg-mist px-3.5 py-1.5 text-xs sm:text-sm font-semibold text-royal">{{ $g }}</li>@endforeach
-                </ul>
+                <p class="mt-4 text-sm sm:text-base text-ink/70"><span class="font-semibold text-ink">Good for</span> {{ implode(', ', array_map('mb_strtolower', $d['good_for'])) }}</p>
                 <div class="mt-6 grid grid-cols-2 gap-2.5 sm:flex sm:gap-3">
                     <button type="button" @click="pick('{{ $d['name'] }}')" class="inline-flex items-center justify-center rounded-full bg-royal text-white text-sm sm:text-base font-semibold px-3 py-3.5 sm:px-8 sm:py-4 whitespace-nowrap hover:bg-ink transition-colors">Plan this trip</button>
                     <a href="https://wa.me/{{ $wa }}?text={{ rawurlencode('Hi, I have a question about '.$d['name']) }}" target="_blank" rel="noopener" class="inline-flex items-center justify-center gap-1.5 sm:gap-3 rounded-full bg-mist text-ink text-sm sm:text-base font-semibold px-3 py-3.5 sm:pl-7 sm:pr-6 sm:py-4 whitespace-nowrap hover:bg-royal/10 transition-colors">Ask on WhatsApp <x-icon name="arrow" class="size-4"/></a>
                 </div>
             </div>
-            <dl class="mt-7 lg:mt-0 grid grid-cols-2 gap-3">
-                @foreach ($facts as $i => [$k, $v])
-                    <div class="{{ $tints[$i] }} rounded-2xl p-4"><dt class="text-xs text-ink/60">{{ $k }}</dt><dd class="mt-1 font-semibold leading-snug">{{ $v }}</dd></div>
+            <dl class="mt-7 lg:mt-0 grid grid-cols-2 gap-x-6 gap-y-6 border-t border-ink/15 pt-5">
+                @foreach ($facts as [$k, $v])
+                    <div><dt class="text-sm text-ink/60">{{ $k }}</dt><dd class="mt-1 font-display font-bold text-xl leading-snug">{{ $v }}</dd></div>
                 @endforeach
             </dl>
         </div>
@@ -180,8 +176,8 @@
                             <span class="absolute inset-0 grid place-items-center font-display font-bold text-8xl text-white/15" aria-hidden="true">{{ mb_substr($name, 0, 1) }}</span>
                         @endif
                         <span class="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/35 to-transparent"></span>
-                        <span class="absolute left-4 top-4 rounded-full bg-white/90 text-ink px-3 py-1.5 text-[11px] font-semibold">{{ $type }}</span>
                         <div class="absolute inset-x-0 bottom-0 p-5">
+                            <p class="text-sm text-white/75">{{ $type }}</p>
                             <h3 class="font-display font-bold text-xl sm:text-2xl leading-snug">{{ $name }}</h3>
                             <p class="mt-1 flex items-center gap-1.5 text-xs font-semibold text-white/85"><x-icon name="pin" class="size-3.5 shrink-0"/>{{ $meta }}</p>
                             <p class="mt-2 text-sm text-white/80 leading-snug line-clamp-4">{{ $desc }}</p>
@@ -199,19 +195,19 @@
                     <button role="tab" type="button" @click="s = {{ $k }}" :aria-selected="s === {{ $k }}" class="{{ $pill }}" :class="s === {{ $k }} ? 'bg-ink text-white' : 'bg-mist text-ink/75 hover:text-ink'">{{ $se[0] }}</button>
                 @endforeach
             </div>
-            <div class="mt-6 grid md:grid-cols-2 gap-4">
-                <div class="{{ $card }} p-5 sm:p-6">
+            <div class="mt-6 grid md:grid-cols-2 gap-x-12 gap-y-8">
+                <div>
                     <h3 class="{{ $h3 }}">What to wear in <span x-text="['{{ implode("','", array_column($d['seasons'], 0)) }}'][s].toLowerCase()"></span></h3>
                     @foreach ($d['seasons'] as $k => $se)
-                        <ul x-show="s === {{ $k }}" @if ($k) x-cloak @endif class="mt-4 space-y-3 text-sm {{ $body }}">
-                            @foreach ($se[5] as $item)<li class="flex gap-3"><span class="mt-2.5 h-px w-4 bg-royal shrink-0"></span>{{ $item }}</li>@endforeach
+                        <ul x-show="s === {{ $k }}" @if ($k) x-cloak @endif class="mt-3 divide-y divide-ink/10 border-y border-ink/10 px-0 text-sm {{ $body }}">
+                            @foreach ($se[5] as $item)<li class="py-3">{{ $item }}</li>@endforeach
                         </ul>
                     @endforeach
                 </div>
-                <div class="bg-mist rounded-3xl p-5 sm:p-6">
+                <div>
                     <h3 class="{{ $h3 }}">Always bring</h3>
-                    <ul class="mt-4 space-y-3 text-sm {{ $body }}">
-                        @foreach ($d['pack_always'] as $item)<li class="flex gap-3"><span class="mt-2.5 h-px w-4 bg-royal shrink-0"></span>{{ $item }}</li>@endforeach
+                    <ul class="mt-3 divide-y divide-ink/10 border-y border-ink/10 text-sm {{ $body }}">
+                        @foreach ($d['pack_always'] as $item)<li class="py-3">{{ $item }}</li>@endforeach
                     </ul>
                 </div>
             </div>
@@ -226,7 +222,7 @@
                     <div class="py-4 sm:py-6 grid lg:grid-cols-[14rem_1fr_9.5rem] gap-2 lg:gap-8 items-start">
                         <dt class="{{ $h3 }}">{{ $route }}</dt>
                         <dd class="{{ $body }}">{{ $detail }}</dd>
-                        <dd class="lg:text-right"><span class="inline-block rounded-full bg-mist px-3 py-1.5 text-xs font-semibold text-royal">{{ $time }}</span></dd>
+                        <dd class="lg:text-right"><span class="text-sm font-semibold text-royal">{{ $time }}</span></dd>
                     </div>
                 @endforeach
             </dl>
@@ -251,12 +247,11 @@
         {{-- Suggested plan --}}
         <section id="itinerary" data-spy class="scroll-mt-40 lg:scroll-mt-28">
             <h2 class="{{ $h2 }}">Suggested {{ count($d['itinerary']) }}-day plan</h2>
-            <ol class="mt-6 ml-2 border-l border-ink/15 space-y-5">
+            <ol class="mt-6 divide-y divide-ink/10 border-y border-ink/10">
                 @foreach ($d['itinerary'] as $i => $day)
-                    <li class="relative pl-7">
-                        <span class="absolute -left-[5px] top-1.5 size-2.5 rounded-full bg-royal ring-4 ring-paper"></span>
-                        <p class="text-sm font-bold text-royal">Day {{ $i + 1 }}</p>
-                        <p class="mt-1 {{ $body }} max-w-2xl">{{ $day }}</p>
+                    <li class="py-5 grid sm:grid-cols-[7rem_1fr] gap-1 sm:gap-8">
+                        <p class="font-display font-bold text-xl text-royal">Day {{ $i + 1 }}</p>
+                        <p class="{{ $body }} max-w-2xl">{{ $day }}</p>
                     </li>
                 @endforeach
             </ol>
@@ -269,24 +264,24 @@
         {{-- Tips --}}
         <section id="tips" data-spy class="scroll-mt-40 lg:scroll-mt-28">
             <h2 class="{{ $h2 }}">Tips from our team</h2>
-            <ul class="mt-6 bg-mist rounded-3xl p-5 sm:p-8 grid sm:grid-cols-2 gap-x-10 gap-y-4">
-                @foreach ($d['tips'] as $tip)<li class="flex gap-3 text-sm {{ $body }}"><span class="mt-2.5 h-px w-4 bg-royal shrink-0"></span>{{ $tip }}</li>@endforeach
+            <ul class="mt-6 grid sm:grid-cols-2 gap-x-12 divide-y divide-ink/10 sm:divide-y-0 border-y border-ink/10 sm:[&>li]:border-b sm:[&>li]:border-ink/10 sm:border-b-0">
+                @foreach ($d['tips'] as $tip)<li class="py-3 text-sm {{ $body }}">{{ $tip }}</li>@endforeach
             </ul>
         </section>
 
         {{-- FAQ --}}
         <section id="faq" data-spy class="scroll-mt-40 lg:scroll-mt-28">
             <h2 class="{{ $h2 }}">Questions about {{ $d['short'] }} Sikkim</h2>
-            <div class="mt-6 max-w-3xl rounded-2xl bg-white border border-ink/5 divide-y divide-ink/10 overflow-hidden">
+            <div class="mt-6 max-w-3xl divide-y divide-ink/10 border-y border-ink/10">
                 @foreach ($d['faqs'] as $k => [$q, $a])
                     <div>
                         <h3>
-                            <button type="button" @click="faq = faq === {{ $k }} ? -1 : {{ $k }}" :aria-expanded="faq === {{ $k }}" class="w-full flex items-center justify-between gap-4 text-left px-4 sm:px-6 py-4 sm:py-5 font-semibold">
+                            <button type="button" @click="faq = faq === {{ $k }} ? -1 : {{ $k }}" :aria-expanded="faq === {{ $k }}" class="w-full flex items-center justify-between gap-4 text-left py-5 font-semibold hover:text-royal transition-colors">
                                 {{ $q }}
-                                <span class="grid place-items-center size-8 shrink-0 rounded-full transition-all" :class="faq === {{ $k }} ? 'bg-royal text-white rotate-45' : 'bg-mist text-royal'" aria-hidden="true">+</span>
+                                <span class="shrink-0 text-2xl leading-none font-normal text-royal transition-transform duration-300" :class="faq === {{ $k }} && 'rotate-45'" aria-hidden="true">+</span>
                             </button>
                         </h3>
-                        <div x-show="faq === {{ $k }}" x-cloak class="px-4 sm:px-6 pb-5"><p class="{{ $body }}">{{ $a }}</p></div>
+                        <div x-show="faq === {{ $k }}" x-cloak class="pb-6 pr-10"><p class="{{ $body }} max-w-[62ch]">{{ $a }}</p></div>
                     </div>
                 @endforeach
             </div>

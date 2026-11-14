@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'FAQ – '.config('site.brand'))
+@section('title', 'FAQ - '.config('site.brand'))
 @php
     $cats = config('faq.categories');
     $items = collect(config('faq.items'))->values();
@@ -46,22 +46,22 @@
             @foreach ($cats as $c)
                 <section x-show="has('{{ $c }}')" class="{{ $loop->first ? '' : 'mt-14' }}" @if (! $loop->first) x-cloak @endif>
                     <h2 class="font-display font-bold text-2xl sm:text-3xl">{{ $c }}</h2>
-                    <div class="mt-5 space-y-3 max-sm:space-y-0 max-sm:rounded-2xl max-sm:overflow-hidden max-sm:border max-sm:border-ink/5 max-sm:bg-white max-sm:divide-y max-sm:divide-ink/10">
+                    <div class="mt-4 divide-y divide-ink/10 border-y border-ink/10">
                         @foreach ($items as $i => $it)
                             @if ($it['cat'] === $c)
-                                <div x-show="show({{ $i }})" class="bg-white border border-ink/5 rounded-2xl max-sm:rounded-none max-sm:border-0">
+                                <div x-show="show({{ $i }})" class="group">
                                     <h3>
                                         <button type="button" @click="toggle({{ $i }})" :aria-expanded="open.includes({{ $i }})" aria-controls="faq-{{ $i }}"
-                                                class="w-full flex items-center justify-between gap-4 text-left px-4 sm:px-6 py-4 sm:py-5 font-semibold">
+                                                class="w-full flex items-center justify-between gap-4 text-left py-5 font-semibold hover:text-royal transition-colors">
                                             {{ $it['q'] }}
-                                            <span class="grid place-items-center size-8 shrink-0 rounded-full transition-all" :class="open.includes({{ $i }}) ? 'bg-royal text-white rotate-45' : 'bg-mist text-royal'" aria-hidden="true">+</span>
+                                            <span class="shrink-0 text-2xl leading-none font-normal text-royal transition-transform duration-300" :class="open.includes({{ $i }}) && 'rotate-45'" aria-hidden="true">+</span>
                                         </button>
                                     </h3>
                                     <div id="faq-{{ $i }}" class="grid transition-all duration-300 ease-out" :class="open.includes({{ $i }}) ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'">
-                                        <div class="overflow-hidden px-4 sm:px-6">
-                                            <p class="text-ink/75 leading-relaxed">{{ $it['a'] }}</p>
+                                        <div class="overflow-hidden">
+                                            <p class="text-ink/75 leading-relaxed max-w-[62ch] pr-10">{{ $it['a'] }}</p>
                                             @isset($it['link'])<a href="{{ $it['link'][1] }}" @if (str_starts_with($it['link'][1], 'http')) target="_blank" rel="noopener" @endif class="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-royal">{{ $it['link'][0] }} <x-icon name="arrow" class="size-4"/></a>@endisset
-                                            <div class="pb-5"></div>
+                                            <div class="pb-6"></div>
                                         </div>
                                     </div>
                                 </div>
