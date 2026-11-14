@@ -96,7 +96,7 @@
 
 <div class="px-5 sm:px-8 pt-8 grid grid-cols-[minmax(0,1fr)] lg:grid-cols-[14rem_minmax(0,1fr)] gap-x-14 gap-y-6">
     {{-- Contents: pinned chips on phones and tablets, side list on desktop --}}
-    <nav aria-label="On this page" class="min-w-0 sticky top-20 lg:top-28 z-30 self-start -mx-5 sm:-mx-8 px-5 sm:px-8 py-3 bg-paper/95 backdrop-blur lg:m-0 lg:p-0 lg:bg-transparent lg:backdrop-blur-none">
+    <nav aria-label="On this page" class="min-w-0 sticky top-20 lg:top-28 z-30 self-start -mx-5 sm:-mx-8 px-5 sm:px-8 py-3 bg-paper lg:m-0 lg:p-0 lg:bg-transparent ">
         <p class="hidden lg:block text-xs font-semibold text-ink/55 mb-3 px-3">On this page</p>
         <ul x-ref="chips" class="flex lg:flex-col gap-1 overflow-x-auto lg:overflow-visible [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             @foreach ($toc as $id => $label)

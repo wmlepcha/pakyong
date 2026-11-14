@@ -122,7 +122,7 @@
         <iframe title="Map showing our location in Gangtok, Sikkim" class="size-full border-0"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3544.876996725831!2d88.60240979999999!3d27.3170379!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39e6bab528afa049%3A0xdde6213f5d58dd3f!2sDhungkar%20Technology!5e0!3m2!1sen!2sin!4v1794501988859!5m2!1sen!2sin"
                 allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
-        <a href="{{ $maps }}" target="_blank" rel="noopener" class="absolute left-3 top-3 inline-flex items-center gap-2 rounded-full bg-white/95 backdrop-blur shadow px-4 py-2 text-sm font-semibold"><x-icon name="navigation" class="size-4 text-royal"/>Directions</a>
+        <a href="{{ $maps }}" target="_blank" rel="noopener" class="absolute left-3 top-3 inline-flex items-center gap-2 rounded-full bg-white shadow px-4 py-2 text-sm font-semibold"><x-icon name="navigation" class="size-4 text-royal"/>Directions</a>
     </div>
 
     {{-- Toast --}}

@@ -18,7 +18,7 @@
      x-init="const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) active = e.target.id }), { rootMargin: '-20% 0px -70% 0px' });
              $root.querySelectorAll('[data-region]').forEach(el => io.observe(el));
              $watch('active', () => { const c = $refs.chips, el = c.querySelector('[aria-current]'); if (el) c.scrollTo({ left: el.offsetLeft - 20, behavior: 'smooth' }) })">
-    <nav aria-label="Regions" class="sticky top-20 z-30 bg-paper/95 backdrop-blur py-3">
+    <nav aria-label="Regions" class="sticky top-20 z-30 bg-paper py-3">
         <ul x-ref="chips" class="flex gap-2 overflow-x-auto px-5 sm:px-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             @foreach ($regions as $rg)
                 <li class="shrink-0"><a href="#{{ $slug($rg['name']) }}" :aria-current="active === '{{ $slug($rg['name']) }}' ? 'true' : null"
@@ -38,7 +38,7 @@
                     <div class="absolute inset-x-0 bottom-0 p-5 text-white">
                         <h2 class="font-display font-bold text-3xl">{{ $rg['name'] }}</h2>
                         <p class="mt-1 text-sm text-white/85">Base: {{ $rg['base'] }}</p>
-                        @if ($prices->has($rg['name']))<span class="mt-3 inline-block rounded-full bg-white/20 backdrop-blur px-3 py-1.5 text-xs font-semibold">from {{ $prices[$rg['name']] }}</span>@endif
+                        @if ($prices->has($rg['name']))<span class="mt-3 inline-block rounded-full bg-white text-ink px-3 py-1.5 text-xs font-semibold">from {{ $prices[$rg['name']] }}</span>@endif
                     </div>
                 </div>
 

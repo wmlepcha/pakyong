@@ -9,7 +9,7 @@
             <span class="absolute inset-x-0 bottom-0 p-5 text-white">
                 <span class="block font-display font-bold text-2xl">{{ $name }}</span>
                 <span class="block text-sm text-white/80 mt-1">{{ $places }}</span>
-                <span class="mt-3 inline-block rounded-full bg-white/20 backdrop-blur px-3 py-1.5 text-xs font-semibold">from {{ $price }}</span>
+                <span class="mt-3 inline-block rounded-full bg-white text-ink px-3 py-1.5 text-xs font-semibold">from {{ $price }}</span>
             </span>
         </a>
     @endforeach

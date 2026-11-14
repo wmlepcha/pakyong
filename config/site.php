@@ -46,10 +46,10 @@ return [
         ['Yak safaris', 'Ride a yak at Tsomgo Lake and Nathula.', 'all-sikkim.jpeg'],
     ],
     'seasons' => [
-        ['Mar – May', 'Spring', 'Rhododendrons in full bloom, clear skies.', 'bg-rose-100'],
-        ['Jun – Sep', 'Monsoon', 'Lush valleys, waterfalls, fewer crowds.', 'bg-emerald-100'],
-        ['Oct – Nov', 'Autumn', 'Crystal views of Kanchenjunga.', 'bg-amber-100'],
-        ['Dec – Feb', 'Winter', 'Snow in Lachung and Yumthang.', 'bg-sky-200'],
+        ['March to May', 'Spring', 'Rhododendrons in full bloom, clear skies.', 'bg-rose-100'],
+        ['June to September', 'Monsoon', 'Lush valleys, waterfalls, fewer crowds.', 'bg-emerald-100'],
+        ['October to November', 'Autumn', 'Crystal views of Kanchenjunga.', 'bg-amber-100'],
+        ['December to February', 'Winter', 'Snow in Lachung and Yumthang.', 'bg-sky-200'],
     ],
     'steps' => [
         ['Tell us your plan', 'Share dates, group size and interests through the form or WhatsApp.'],

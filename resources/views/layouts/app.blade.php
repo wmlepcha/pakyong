@@ -95,7 +95,7 @@
 </footer>
 
 {{-- Mobile bottom navigation --}}
-<nav aria-label="Primary" class="md:hidden fixed inset-x-4 sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2 sm:w-[30rem] bottom-[max(1rem,env(safe-area-inset-bottom))] z-40 rounded-[1.75rem] bg-white/95 backdrop-blur border border-ink/10 shadow-[0_12px_40px_-12px_rgba(11,27,63,.35)] px-2 py-2 flex items-center justify-between">
+<nav aria-label="Primary" class="md:hidden fixed inset-x-4 sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2 sm:w-[30rem] bottom-[max(1rem,env(safe-area-inset-bottom))] z-40 rounded-[1.75rem] bg-white border border-ink/10 shadow-lg px-2 py-2 flex items-center justify-between">
     @foreach ([['home', 'Home', 'home'], ['destinations', 'Destinations', 'pin'], ['guide', 'Guide', 'book'], ['blog', 'Blog', 'newspaper'], ['contact', 'Contact', 'phone']] as [$r, $label, $icon])
         @php $on = request()->routeIs($r) || ($r === 'blog' && request()->routeIs('post')) || ($r === 'destinations' && request()->routeIs('destination')); @endphp
         <a href="{{ route($r) }}" @if ($on) aria-current="page" @endif aria-label="{{ $label }}"
@@ -116,7 +116,7 @@
         </div>
         <div class="flex justify-between items-start">
             <div>
-                <p class="text-royal text-xs font-semibold uppercase tracking-widest" x-text="'Step ' + step + ' of 3'"></p>
+                <p class="text-royal text-sm font-semibold" x-text="'Step ' + step + ' of 3'"></p>
                 <h3 class="font-display font-bold text-2xl mt-1" x-text="['Where to?', 'When & who?', 'Your details'][step - 1]"></h3>
                 <p x-show="f.pkg" x-text="'Package: ' + f.pkg" class="mt-1 text-sm text-ink/70"></p>
             </div>

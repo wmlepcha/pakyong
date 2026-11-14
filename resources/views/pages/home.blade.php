@@ -26,17 +26,13 @@
             <a href="https://wa.me/{{ $wa }}" target="_blank" rel="noopener" class="inline-flex items-center gap-3 rounded-full px-3 py-2 font-semibold hover:text-royal">
                 <span class="grid place-items-center size-11 rounded-full border border-ink/15 bg-white text-royal"><x-icon name="headset" class="size-5"/></span>Talk to a local</a>
         </div>
-        <ul class="mt-auto pt-12 grid sm:grid-cols-3 gap-5">
-            @foreach ([['Permits handled', 'Nathula and North Sikkim sorted for you.'], ['Flexible plans', 'Itineraries built around your dates.'], ['24/7 support', 'A real person on WhatsApp.']] as [$t, $d])
-                <li class="border-t border-ink/15 pt-3"><b class="text-sm">{{ $t }}</b><p class="text-sm text-ink/60 mt-1">{{ $d }}</p></li>
-            @endforeach
-        </ul>
+        <p class="mt-auto pt-12 max-w-lg text-ink/70"><b class="text-ink">We handle the permits</b> for Nathula and North Sikkim, build the itinerary around your dates, and answer on WhatsApp at any hour.</p>
     </div>
 
     {{-- Auto-changing slider --}}
     <div class="relative order-first lg:order-none min-h-[20rem] sm:min-h-[26rem] lg:min-h-[34rem]" x-data="{ i: 0, n: {{ count($slides) }}, t: null,
             go(k) { this.i = (k + this.n) % this.n; this.run(); },
-            run() { clearInterval(this.t); this.t = setInterval(() => this.i = (this.i + 1) % this.n, 4500); } }" x-init="run()">
+            run() {} }">
         <div class="absolute inset-0 rounded-[2rem] overflow-hidden bg-mist">
             @foreach ($slides as $k => [$img, $title])
                 <img src="/images/{{ $img }}" @dims('/images/'.$img) alt="{{ $title }}" @if ($k) loading="lazy" @else fetchpriority="high" @endif
@@ -47,7 +43,7 @@
                 <button @click="go(i + 1)" aria-label="Next photo" class="grid place-items-center size-11 rounded-full bg-white/95 text-ink shadow hover:bg-white"><x-icon name="right"/></button>
             </div>
         </div>
-        <div class="absolute left-5 right-5 sm:right-auto bottom-5 sm:w-80 bg-white/95 backdrop-blur rounded-2xl shadow-lg p-5">
+        <div class="absolute left-5 right-5 sm:right-auto bottom-5 sm:w-80 bg-white border border-ink/10 rounded-2xl p-5">
             <div class="flex items-start gap-2 text-royal"><x-icon name="pin" class="size-5 mt-0.5 shrink-0"/>
                 <div class="text-ink">
                     @foreach ($slides as $k => [$img, $title, $sub])
@@ -66,7 +62,7 @@
 
 {{-- Search bar --}}
 <section class="hidden md:block px-5 sm:px-8">
-    <div class="bg-white rounded-3xl shadow-[0_10px_40px_-20px_rgba(11,27,63,.35)] border border-ink/5 p-3 grid md:grid-cols-[1fr_1fr_1fr_auto] items-center gap-2">
+    <div class="bg-white rounded-3xl border border-ink/10 p-3 grid md:grid-cols-[1fr_1fr_1fr_auto] items-center gap-2">
         <label class="{{ $field }}"><span class="{{ $icon }}"><x-icon name="pin"/></span>
             <span class="min-w-0 flex-1"><span class="block text-xs text-ink/55">Where to?</span>
                 <select x-model="f.dest" class="w-full bg-transparent font-semibold focus:outline-none">
@@ -77,7 +73,7 @@
             <button type="button" @click="pop = !pop" :aria-expanded="pop" class="{{ $field }} w-full text-left"><span class="{{ $icon }}"><x-icon name="calendar"/></span>
                 <span class="min-w-0 flex-1"><span class="block text-xs text-ink/55">Travel date</span>
                     <span class="block font-semibold" :class="f.date ? '' : 'text-ink/50'" x-text="f.date ? fmtDate(f.date) : 'Add date'"></span></span></button>
-            <div x-show="pop" x-cloak x-transition.opacity class="absolute z-30 left-0 top-full mt-3 w-80 bg-white rounded-2xl border border-ink/10 shadow-[0_20px_50px_-20px_rgba(11,27,63,.4)] p-4">
+            <div x-show="pop" x-cloak x-transition.opacity class="absolute z-30 left-0 top-full mt-3 w-80 bg-white rounded-2xl border border-ink/10 shadow-lg p-4">
                 <x-calendar />
             </div>
         </div>
@@ -112,10 +108,10 @@
 
     <div class="relative mt-5 sm:mt-0 aspect-[11/10] sm:aspect-square rounded-[2rem] overflow-hidden bg-mist" x-data="{ i: 0, n: {{ count($slides) }}, t: null, tx: 0,
             go(k) { this.i = (k + this.n) % this.n; this.run(); },
-            run() { clearInterval(this.t); this.t = setInterval(() => this.i = (this.i + 1) % this.n, 4500); },
+            run() {},
             start(e) { this.tx = e.touches[0].clientX; },
             end(e) { const d = e.changedTouches[0].clientX - this.tx; if (Math.abs(d) > 40) this.go(this.i + (d < 0 ? 1 : -1)); } }"
-         x-init="run()" @touchstart.passive="start($event)" @touchend.passive="end($event)">
+         @touchstart.passive="start($event)" @touchend.passive="end($event)">
         @foreach ($slides as $k => [$img, $title])
             <img src="/images/{{ $img }}" @dims('/images/'.$img) alt="{{ $title }}" @if ($k) loading="lazy" @else fetchpriority="high" @endif
                  class="absolute inset-0 size-full object-cover transition-opacity duration-700" :class="i === {{ $k }} ? 'opacity-100' : 'opacity-0'">
@@ -239,7 +235,7 @@
 {{-- Phones: swipeable experience cards --}}
 <section class="md:hidden pt-14" aria-label="Experiences">
     <div class="px-5 sm:px-8">
-        <h2 class="font-display font-bold text-2xl">More than sightseeing</h2>
+        <h2 class="font-display font-bold text-2xl">Experiences to add to your trip</h2>
         <p class="mt-1 text-sm text-ink/60">Add something unforgettable to any itinerary.</p>
     </div>
     <div class="mt-5 flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-px-5 px-5 sm:scroll-px-8 sm:px-8 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -269,7 +265,7 @@
             <p class="absolute left-6 bottom-5 font-display text-2xl text-white" x-text="['{{ implode("','", array_column($exp, 0)) }}'][a]"></p>
         </div>
         <div class="order-1 lg:order-2">
-            <h2 class="font-display font-bold text-3xl sm:text-5xl text-balance leading-tight">More than sightseeing</h2>
+            <h2 class="font-display font-bold text-3xl sm:text-5xl text-balance leading-tight">Experiences to add to your trip</h2>
             <p class="mt-4 text-ink/70 max-w-sm">Add something unforgettable to any itinerary.</p>
             <ul class="mt-8 border-t border-ink/10">
                 @foreach ($exp as $k => [$t, $d])
@@ -292,16 +288,15 @@
     </div>
 </section>
 
-{{-- When to go: each card has a quiet weather scene that explains the season --}}
-<section class="pt-14 sm:pt-20" x-data="{ off: false }" x-init="new IntersectionObserver(([e]) => off = !e.isIntersecting).observe($el)" :class="off ? 'season-paused' : ''">
+{{-- When to go --}}
+<section class="pt-14 sm:pt-20">
     <h2 class="px-5 sm:px-8 font-display font-bold text-2xl sm:text-4xl">When to go</h2>
     <div class="mt-5 sm:mt-8 flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-px-5 px-5 pb-2 sm:px-8 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:overflow-visible [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         @foreach (config('site.seasons') as [$months, $name, $d, $bg])
             <article class="{{ $bg }} relative snap-start shrink-0 w-[78%] sm:w-auto rounded-3xl p-5 sm:p-6 min-h-52 overflow-hidden isolate">
-                @include('partials.season-scene', ['season' => strtolower($name)])
                 <div class="relative">
-                    <p class="text-xs font-bold uppercase tracking-widest text-ink/60">{{ $months }}</p>
-                    <h3 class="font-display font-bold text-2xl mt-2">{{ $name }}</h3>
+                    <h3 class="font-display font-bold text-2xl">{{ $name }}</h3>
+                    <p class="text-sm font-semibold text-ink/70 mt-1">{{ $months }}</p>
                     <p class="text-sm text-ink/80 mt-2 max-w-[16rem]">{{ $d }}</p>
                 </div>
             </article>
@@ -321,16 +316,12 @@
     </dl>
 </section>
 
-{{-- Steps --}}
+{{-- How planning works --}}
 <section class="px-5 sm:px-8 pt-14 sm:pt-20">
-    <h2 class="font-display font-bold text-3xl sm:text-4xl">Plan a trip in three steps</h2>
-    <div class="mt-10 grid md:grid-cols-3 gap-x-12 gap-y-10">
-        @foreach (config('site.steps') as $i => [$t, $d])
-            <div>
-                <span class="block font-display font-bold text-7xl leading-none text-royal/25 tabular-nums" aria-hidden="true">{{ $i + 1 }}</span>
-                <h3 class="font-display font-bold text-xl mt-3">{{ $t }}</h3>
-                <p class="text-ink/70 mt-2 max-w-xs">{{ $d }}</p>
-            </div>
+    <h2 class="font-display font-bold text-3xl sm:text-4xl">How we plan your trip</h2>
+    <div class="mt-6 max-w-2xl space-y-4 text-lg text-ink/75 leading-relaxed">
+        @foreach (config('site.steps') as [$t, $d])
+            <p><b class="text-ink">{{ $t }}.</b> {{ $d }}</p>
         @endforeach
     </div>
 </section>
@@ -339,7 +330,7 @@
 @php $reviews = config('site.reviews'); @endphp
 <section class="px-5 sm:px-8 pt-14 sm:pt-20" x-data="{ r: 0, n: {{ count($reviews) }}, t: null,
         go(k) { this.r = (k + this.n) % this.n; this.run(); },
-        run() { clearInterval(this.t); this.t = setInterval(() => this.r = (this.r + 1) % this.n, 7000); } }" x-init="run()">
+        run() {} }">
     <div class="rounded-[2rem] bg-mist grid lg:grid-cols-[1fr_2fr] gap-6 lg:gap-12 p-5 sm:p-8 items-center">
         <div>
             <h2 class="font-display font-bold text-2xl sm:text-3xl text-balance">Words from travellers</h2>
