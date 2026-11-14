@@ -1,5 +1,6 @@
 @extends('layouts.app')
-@section('title', 'Destinations – '.config('site.brand'))
+@section('title', 'Destinations - '.config('site.brand'))
+@section('description', 'Explore East, North, West and South Sikkim: best time to visit, places to see, permits, how to get there and sample day plans.')
 @section('content')
 @php
     $regions = config('guide.regions');
@@ -31,7 +32,7 @@
         @foreach ($regions as $rg)
             <article id="{{ $slug($rg['name']) }}" data-region class="scroll-mt-40 sm:grid sm:grid-cols-[1fr_1.1fr] sm:gap-6 sm:items-stretch">
                 <div class="relative aspect-[4/5] sm:aspect-auto sm:h-full sm:min-h-[26rem] rounded-[2rem] overflow-hidden bg-mist">
-                    <img src="/images/{{ $rg['img'] }}" alt="{{ $rg['name'] }}" @if ($loop->first) fetchpriority="high" @else loading="lazy" @endif class="absolute inset-0 size-full object-cover">
+                    <img src="/images/{{ $rg['img'] }}" @dims('/images/'.$rg['img']) alt="{{ $rg['name'] }}" @if ($loop->first) fetchpriority="high" @else loading="lazy" @endif class="absolute inset-0 size-full object-cover">
                     <span class="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/30 to-transparent"></span>
                     <a href="{{ route('destination', $slug($rg['name'])) }}" class="absolute inset-0 z-10" aria-label="Explore {{ $rg['name'] }}"></a>
                     <div class="absolute inset-x-0 bottom-0 p-5 text-white">

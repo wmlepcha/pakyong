@@ -9,7 +9,8 @@
         ['pin', 'Visit us', 'Gangtok, Sikkim', null, null],
     ];
 @endphp
-@section('title', 'Contact – '.config('site.brand'))
+@section('title', 'Contact - '.config('site.brand'))
+@section('description', 'Message or call the Pakyong Tours team in Gangtok to plan your Sikkim trip. Share your dates and we reply with an itinerary within a day.')
 @section('content')
 <section class="px-5 sm:px-8 pt-4 sm:pt-10">
     <h1 class="font-display font-bold text-[2rem] leading-[1.1] sm:text-6xl text-balance max-w-3xl">Let's plan your Sikkim trip</h1>

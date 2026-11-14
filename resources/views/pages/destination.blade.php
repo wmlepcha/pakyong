@@ -35,12 +35,13 @@
 @endphp
 @section('title', $d['name'].' travel guide - '.config('site.brand'))
 @section('description', $d['tagline'].' When to visit, temperature, places to see and what to pack for '.$d['name'].'.')
+@section('og_image', url('/images/'.$d['img']))
 @push('head')
 <script type="application/ld+json">{!! json_encode([
-    '@context' => 'https://schema.org', '@type' => 'TouristDestination',
+    '@@context' => 'https://schema.org', '@@type' => 'TouristDestination',
     'name' => $d['name'], 'description' => $d['tagline'].' '.$d['about'][0],
     'image' => url('/images/'.$d['img']), 'touristType' => $d['good_for'],
-    'containedInPlace' => ['@type' => 'AdministrativeArea', 'name' => 'Sikkim, India'],
+    'containedInPlace' => ['@@type' => 'AdministrativeArea', 'name' => 'Sikkim, India'],
 ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}</script>
 @endpush
 @section('content')
@@ -171,7 +172,7 @@
                     @php $img = $photoUrl($i); @endphp
                     <article class="group relative snap-start shrink-0 w-[76%] sm:w-[46%] lg:w-[calc(50%-0.5rem)] xl:w-[calc(33.333%-0.7rem)] aspect-[3/4] rounded-3xl overflow-hidden text-white {{ $img ? 'bg-mist' : 'bg-gradient-to-br from-royal to-ink' }}">
                         @if ($img)
-                            <img src="{{ $img }}" alt="{{ $name }}" loading="lazy" class="absolute inset-0 size-full object-cover lg:group-hover:scale-105 transition duration-700">
+                            <img src="{{ $img }}" @dims($img) alt="{{ $name }}" loading="lazy" class="absolute inset-0 size-full object-cover lg:group-hover:scale-105 transition duration-700">
                         @else
                             <span class="absolute inset-0 grid place-items-center font-display font-bold text-8xl text-white/15" aria-hidden="true">{{ mb_substr($name, 0, 1) }}</span>
                         @endif
@@ -312,7 +313,7 @@
     <div class="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-px-5 px-5 sm:scroll-px-8 sm:px-8 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:grid lg:grid-cols-3 lg:overflow-visible">
         @foreach ($others as $key => $o)
             <a href="{{ route('destination', $key) }}" class="group snap-start shrink-0 w-[68%] sm:w-[38%] lg:w-auto relative block aspect-[4/5] rounded-3xl overflow-hidden bg-mist">
-                <img src="/images/{{ $o['img'] }}" alt="" loading="lazy" class="absolute inset-0 size-full object-cover lg:group-hover:scale-105 transition duration-700">
+                <img src="/images/{{ $o['img'] }}" @dims('/images/'.$o['img']) alt="" loading="lazy" class="absolute inset-0 size-full object-cover lg:group-hover:scale-105 transition duration-700">
                 <span class="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/30 to-transparent"></span>
                 <span class="absolute inset-x-0 bottom-0 p-5 text-white">
                     <span class="block font-display font-bold text-xl">{{ $o['name'] }}</span>

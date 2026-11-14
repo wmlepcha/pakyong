@@ -11,9 +11,28 @@
     <meta name="theme-color" content="#fbfcff">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-    <title>@yield('title', $brand.' – Sikkim Tour Packages from Gangtok')</title>
-    <meta name="description" content="@yield('description', 'Custom Sikkim tour packages: Gangtok, Pelling, Lachung, Gurudongmar and more, planned by local experts.')">
+    <title>@yield('title', $brand.' - Sikkim Tour Packages from Gangtok')</title>
+    <meta name="description" content="@yield('description', 'Custom Sikkim tour packages from Gangtok to Pelling, Lachung and Gurudongmar, with permits and stays arranged by a local team.')">
+    <link rel="canonical" href="{{ url()->current() }}">
+    <meta property="og:site_name" content="{{ $brand }}">
+    <meta property="og:type" content="@yield('og_type', 'website')">
+    <meta property="og:title" content="@yield('title', $brand.' - Sikkim Tour Packages from Gangtok')">
+    <meta property="og:description" content="@yield('description', 'Custom Sikkim tour packages from Gangtok to Pelling, Lachung and Gurudongmar, with permits and stays arranged by a local team.')">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:image" content="@yield('og_image', url('/images/all-sikkim.jpeg'))">
+    <meta name="twitter:card" content="summary_large_image">
+    <script type="application/ld+json">{!! json_encode([
+        '@@context' => 'https://schema.org', '@@type' => 'TravelAgency',
+        'name' => $brand, 'url' => url('/'), 'telephone' => $phone,
+        'logo' => url('/apple-touch-icon.png'), 'image' => url('/images/all-sikkim.jpeg'),
+        'areaServed' => 'Sikkim, India',
+    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}</script>
+    <script type="application/ld+json">{!! json_encode([
+        '@@context' => 'https://schema.org', '@@type' => 'WebSite',
+        'name' => $brand, 'url' => url('/'), 'inLanguage' => 'en',
+    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}</script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
     @stack('head')
     @vite(['resources/css/app.css', 'resources/js/app.js'])

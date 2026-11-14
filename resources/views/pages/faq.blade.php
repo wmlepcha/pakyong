@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('title', 'FAQ - '.config('site.brand'))
+@section('description', 'Answers on Sikkim permits, the best time to go, payment, altitude and what to expect on the road, from a local tour team.')
 @php
     $cats = config('faq.categories');
     $items = collect(config('faq.items'))->values();
@@ -9,8 +10,8 @@
 @endphp
 @push('head')
 <script type="application/ld+json">{!! json_encode([
-    '@context' => 'https://schema.org', '@type' => 'FAQPage',
-    'mainEntity' => $items->map(fn ($i) => ['@type' => 'Question', 'name' => $i['q'], 'acceptedAnswer' => ['@type' => 'Answer', 'text' => $i['a']]])->all(),
+    '@@context' => 'https://schema.org', '@@type' => 'FAQPage',
+    'mainEntity' => $items->map(fn ($i) => ['@@type' => 'Question', 'name' => $i['q'], 'acceptedAnswer' => ['@@type' => 'Answer', 'text' => $i['a']]])->all(),
 ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}</script>
 @endpush
 @section('content')

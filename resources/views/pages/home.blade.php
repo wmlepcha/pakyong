@@ -1,4 +1,13 @@
 @extends('layouts.app')
+@push('head')
+<script type="application/ld+json">{!! json_encode([
+    '@@context' => 'https://schema.org', '@@type' => 'ItemList',
+    'itemListElement' => collect(config('site.packages'))->values()->map(fn ($p, $i) => [
+        '@@type' => 'ListItem', 'position' => $i + 1,
+        'item' => ['@@type' => 'TouristTrip', 'name' => $p[0], 'description' => implode('. ', $p[4]).'.', 'image' => url('/images/'.$p[2]), 'touristType' => 'Leisure'],
+    ])->all(),
+], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}</script>
+@endpush
 @section('content')
 @php
     $slides = config('site.slides');
@@ -30,7 +39,7 @@
             run() { clearInterval(this.t); this.t = setInterval(() => this.i = (this.i + 1) % this.n, 4500); } }" x-init="run()">
         <div class="absolute inset-0 rounded-[2rem] overflow-hidden bg-mist">
             @foreach ($slides as $k => [$img, $title])
-                <img src="/images/{{ $img }}" alt="{{ $title }}" @if ($k) loading="lazy" @else fetchpriority="high" @endif
+                <img src="/images/{{ $img }}" @dims('/images/'.$img) alt="{{ $title }}" @if ($k) loading="lazy" @else fetchpriority="high" @endif
                      class="absolute inset-0 size-full object-cover transition-opacity duration-1000" :class="i === {{ $k }} ? 'opacity-100' : 'opacity-0'">
             @endforeach
             <div class="absolute right-5 top-1/2 -translate-y-1/2 flex gap-2">
@@ -108,7 +117,7 @@
             end(e) { const d = e.changedTouches[0].clientX - this.tx; if (Math.abs(d) > 40) this.go(this.i + (d < 0 ? 1 : -1)); } }"
          x-init="run()" @touchstart.passive="start($event)" @touchend.passive="end($event)">
         @foreach ($slides as $k => [$img, $title])
-            <img src="/images/{{ $img }}" alt="{{ $title }}" @if ($k) loading="lazy" @else fetchpriority="high" @endif
+            <img src="/images/{{ $img }}" @dims('/images/'.$img) alt="{{ $title }}" @if ($k) loading="lazy" @else fetchpriority="high" @endif
                  class="absolute inset-0 size-full object-cover transition-opacity duration-700" :class="i === {{ $k }} ? 'opacity-100' : 'opacity-0'">
         @endforeach
         <span class="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/30 to-transparent"></span>
@@ -134,7 +143,7 @@
     <div class="flex gap-4 overflow-x-auto snap-x scroll-px-5 px-5 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:grid sm:grid-cols-4 sm:gap-3 sm:overflow-visible sm:px-8 sm:pb-0">
         @foreach (config('site.destinations') as [$name, $places, $img])
             <a href="{{ route('destination', \Illuminate\Support\Str::slug($name)) }}" class="snap-start shrink-0 block w-[4.75rem] text-center sm:relative sm:w-auto sm:aspect-[5/4] sm:overflow-hidden sm:rounded-2xl sm:text-left">
-                <span class="block size-[4.75rem] rounded-full p-[3px] ring-2 ring-royal sm:size-full sm:rounded-none sm:p-0 sm:ring-0"><img src="/images/{{ $img }}" alt="" loading="lazy" class="size-full rounded-full object-cover sm:rounded-none"></span>
+                <span class="block size-[4.75rem] rounded-full p-[3px] ring-2 ring-royal sm:size-full sm:rounded-none sm:p-0 sm:ring-0"><img src="/images/{{ $img }}" @dims('/images/'.$img) alt="" loading="lazy" class="size-full rounded-full object-cover sm:rounded-none"></span>
                 <span class="mt-2 block text-xs font-semibold sm:absolute sm:inset-x-0 sm:bottom-0 sm:mt-0 sm:px-4 sm:pb-3 sm:pt-10 sm:bg-gradient-to-t sm:from-ink/85 sm:to-transparent sm:text-white sm:text-base sm:font-display sm:font-bold">{{ \Illuminate\Support\Str::before($name, ' ') }}</span>
             </a>
         @endforeach
@@ -207,7 +216,7 @@
         @foreach (config('site.packages') as [$name, $dur, $img, $price, $points])
             <article class="snap-start shrink-0 w-[85%] sm:w-[calc(50%-0.75rem)] lg:w-[calc(33.333%-1rem)] bg-white rounded-3xl overflow-hidden border border-ink/5 flex flex-col">
                 <div class="relative">
-                    <img src="/images/{{ $img }}" alt="{{ $name }}" loading="lazy" class="h-56 w-full object-cover">
+                    <img src="/images/{{ $img }}" @dims('/images/'.$img) alt="{{ $name }}" loading="lazy" class="h-56 w-full object-cover">
                     <span class="absolute top-4 left-4 bg-white/95 text-xs font-bold rounded-full px-3 py-1.5">{{ $dur }}</span>
                 </div>
                 <div class="p-6 flex flex-col flex-1">
@@ -236,7 +245,7 @@
     <div class="mt-5 flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-px-5 px-5 sm:scroll-px-8 sm:px-8 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         @foreach ($exp as [$t, $d, $img])
             <article class="relative snap-start shrink-0 w-[78%] sm:w-[42%] aspect-[3/4] rounded-3xl overflow-hidden text-white bg-mist">
-                <img src="/images/{{ $img }}" alt="" loading="lazy" class="absolute inset-0 size-full object-cover">
+                <img src="/images/{{ $img }}" @dims('/images/'.$img) alt="" loading="lazy" class="absolute inset-0 size-full object-cover">
                 <span class="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/30 to-transparent"></span>
                 <div class="absolute inset-x-0 bottom-0 p-5">
                     <h3 class="font-display font-bold text-2xl">{{ $t }}</h3>
@@ -252,7 +261,7 @@
     <div class="grid lg:grid-cols-[1fr_1fr] gap-10 lg:gap-16 items-center">
         <div class="relative aspect-[4/4.4] rounded-[2rem] overflow-hidden bg-mist order-2 lg:order-1">
             @foreach ($exp as $k => [$t, $d, $img])
-                <img src="/images/{{ $img }}" alt="{{ $t }}" loading="lazy"
+                <img src="/images/{{ $img }}" @dims('/images/'.$img) alt="{{ $t }}" loading="lazy"
                      class="absolute inset-0 size-full object-cover transition-all duration-700 ease-out"
                      :class="a === {{ $k }} ? 'opacity-100 scale-100' : 'opacity-0 scale-105'">
             @endforeach
@@ -364,7 +373,7 @@
     </div>
     <div class="grid lg:grid-cols-[1.4fr_1fr] gap-6">
         <a href="{{ route('post', $lead['slug']) }}" class="group relative block min-h-[26rem] rounded-3xl overflow-hidden">
-            <img src="/images/{{ $lead['img'] }}" alt="" loading="lazy" class="absolute inset-0 size-full object-cover group-hover:scale-105 transition duration-700">
+            <img src="/images/{{ $lead['img'] }}" @dims('/images/'.$lead['img']) alt="" loading="lazy" class="absolute inset-0 size-full object-cover group-hover:scale-105 transition duration-700">
             <span class="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/20 to-transparent"></span>
             <span class="absolute inset-x-0 bottom-0 p-7 text-white">
                 <span class="block font-display font-bold text-2xl sm:text-3xl max-w-md text-balance">{{ $lead['title'] }}</span>
@@ -375,7 +384,7 @@
         <div class="grid gap-6">
             @foreach ($rest as $p)
                 <a href="{{ route('post', $p['slug']) }}" class="group flex flex-col sm:flex-row lg:flex-col xl:flex-row gap-5 bg-white rounded-3xl border border-ink/5 p-3 hover:shadow-lg transition">
-                    <img src="/images/{{ $p['img'] }}" alt="" loading="lazy" class="sm:w-44 lg:w-full xl:w-44 h-40 sm:h-auto lg:h-40 xl:h-auto rounded-2xl object-cover shrink-0">
+                    <img src="/images/{{ $p['img'] }}" @dims('/images/'.$p['img']) alt="" loading="lazy" class="sm:w-44 lg:w-full xl:w-44 h-40 sm:h-auto lg:h-40 xl:h-auto rounded-2xl object-cover shrink-0">
                     <span class="flex flex-col justify-center p-2">
                         <span class="font-display font-bold text-xl group-hover:text-royal transition-colors">{{ $p['title'] }}</span>
                         <span class="mt-2 text-sm text-ink/65">{{ $p['excerpt'] }}</span>

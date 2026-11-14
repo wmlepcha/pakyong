@@ -5,7 +5,7 @@
     $t = fn ($s) => str_replace([':brand', ':phone'], [config('site.brand'), config('site.phone')], $s);
     $count = count($d['sections']);
 @endphp
-@section('title', $d['title'].' – '.config('site.brand'))
+@section('title', $d['title'].' - '.config('site.brand'))
 @section('content')
 <section class="px-5 sm:px-8 pt-4 sm:pt-10 pb-16 sm:pb-24">
     <h1 class="font-display font-bold text-[2rem] leading-[1.1] sm:text-6xl text-balance">{{ $d['title'] }}</h1>

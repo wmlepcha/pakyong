@@ -1,5 +1,6 @@
 @extends('layouts.app')
-@section('title', 'Travel Guide – '.config('site.brand'))
+@section('title', 'Travel Guide - '.config('site.brand'))
+@section('description', 'A practical Sikkim travel guide: entry rules and permits, getting there, regions, food, culture and safety tips for first-time visitors.')
 @section('content')
 @php
     $g = config('guide');
@@ -143,7 +144,7 @@
             </div>
             @foreach ($g['regions'] as $k => $rg)
                 <article x-show="r === {{ $k }}" @if ($k) x-cloak @endif role="tabpanel" class="mt-6 grid md:grid-cols-[1.05fr_1fr] gap-8 items-start">
-                    <img src="/images/{{ $rg['img'] }}" alt="{{ $rg['name'] }}" loading="lazy" class="w-full aspect-[4/3] md:aspect-[4/5] rounded-3xl object-cover">
+                    <img src="/images/{{ $rg['img'] }}" @dims('/images/'.$rg['img']) alt="{{ $rg['name'] }}" loading="lazy" class="w-full aspect-[4/3] md:aspect-[4/5] rounded-3xl object-cover">
                     <div>
                         <h3 class="font-display font-bold text-3xl">{{ $rg['name'] }}</h3>
                         <dl class="mt-5 grid grid-cols-3 divide-x divide-ink/10 border-y border-ink/10 text-sm">
@@ -282,7 +283,7 @@
                     @php $photo = $dishPhoto($t); @endphp
                     <article class="snap-start shrink-0 w-[68%] sm:w-[38%] rounded-3xl bg-white border border-ink/5 overflow-hidden">
                         @if ($photo)
-                            <img src="{{ $photo }}" alt="{{ $t }}" loading="lazy" class="w-full aspect-[4/3] object-cover">
+                            <img src="{{ $photo }}" @dims($photo) alt="{{ $t }}" loading="lazy" class="w-full aspect-[4/3] object-cover">
                         @else
                             <div class="{{ $tints[$i % count($tints)] }} aspect-[4/3] grid place-items-center" aria-hidden="true"><span class="font-display font-bold text-7xl text-ink/20">{{ mb_substr($t, 0, 1) }}</span></div>
                         @endif

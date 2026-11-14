@@ -1,5 +1,21 @@
 @extends('layouts.app')
-@section('title', $post['title'].' – '.config('site.brand'))
+@section('title', $post['title'].' - '.config('site.brand'))
+@section('og_type', 'article')
+@section('og_image', url('/images/'.$post['img']))
+@section('description', $post['excerpt'])
+@php
+    $published = config('blog.published');
+@endphp
+@push('head')
+<script type="application/ld+json">{!! json_encode([
+    '@@context' => 'https://schema.org', '@@type' => 'BlogPosting',
+    'headline' => $post['title'], 'description' => $post['excerpt'],
+    'image' => url('/images/'.$post['img']), 'mainEntityOfPage' => url()->current(),
+    'datePublished' => $published, 'dateModified' => $published,
+    'author' => ['@@type' => 'Organization', 'name' => config('site.brand'), 'url' => url('/')],
+    'publisher' => ['@@type' => 'Organization', 'name' => config('site.brand'), 'logo' => ['@@type' => 'ImageObject', 'url' => url('/apple-touch-icon.png')]],
+], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}</script>
+@endpush
 @section('content')
 @php
     $others = collect(config('blog.posts'))->where('slug', '!=', $post['slug'])->take(3);
@@ -7,9 +23,9 @@
 @endphp
 <article class="px-5 sm:px-8 pt-8 pb-20">
     <a href="{{ route('blog') }}" class="inline-flex items-center gap-2 text-sm font-semibold text-ink/70 hover:text-royal"><x-icon name="left" class="size-4"/> All posts</a>
-    <p class="mt-5 sm:mt-8 text-sm text-ink/60"><span class="font-semibold text-royal">{{ $post['cat'] }}</span> · {{ $post['mins'] }} min read · By the {{ config('site.brand') }} team</p>
+    <p class="mt-5 sm:mt-8 text-sm text-ink/60"><span class="font-semibold text-royal">{{ $post['cat'] }}</span> · {{ $post['mins'] }} min read · By the {{ config('site.brand') }} team · <time datetime="{{ $published }}">{{ \Illuminate\Support\Carbon::parse($published)->format('j F Y') }}</time></p>
     <h1 class="mt-3 font-display font-bold text-[2rem] sm:text-6xl leading-[1.1] text-balance max-w-4xl">{{ $post['title'] }}</h1>
-    <img src="/images/{{ $post['img'] }}" alt="" class="mt-6 sm:mt-10 w-full aspect-[4/3] sm:aspect-[16/8] object-cover rounded-3xl sm:rounded-[2rem]" fetchpriority="high">
+    <img src="/images/{{ $post['img'] }}" @dims('/images/'.$post['img']) alt="" class="mt-6 sm:mt-10 w-full aspect-[4/3] sm:aspect-[16/8] object-cover rounded-3xl sm:rounded-[2rem]" fetchpriority="high">
 
     <div class="mt-12 grid lg:grid-cols-[13rem_minmax(0,1fr)] gap-x-16 gap-y-8">
         <nav aria-label="In this story" class="hidden lg:block self-start sticky top-28">
@@ -41,7 +57,7 @@
     <div class="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         @foreach ($others as $p)
             <a href="{{ route('post', $p['slug']) }}" class="group block">
-                <span class="block overflow-hidden rounded-3xl"><img src="/images/{{ $p['img'] }}" alt="" loading="lazy" class="w-full aspect-[4/3] object-cover group-hover:scale-105 transition duration-700"></span>
+                <span class="block overflow-hidden rounded-3xl"><img src="/images/{{ $p['img'] }}" @dims('/images/'.$p['img']) alt="" loading="lazy" class="w-full aspect-[4/3] object-cover group-hover:scale-105 transition duration-700"></span>
                 <span class="mt-4 block text-sm text-ink/60"><span class="font-semibold text-royal">{{ $p['cat'] }}</span> · {{ $p['mins'] }} min read</span>
                 <span class="mt-2 block font-display font-bold text-xl leading-snug text-balance group-hover:text-royal transition-colors">{{ $p['title'] }}</span>
             </a>
