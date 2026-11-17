@@ -7,6 +7,7 @@
 <html lang="en-IN">
 <head>
     <meta charset="utf-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="#475332">
     <link rel="icon" href="/favicon.ico" sizes="48x48">
@@ -44,7 +45,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
 </head>
-<body class="bg-paper text-ink font-sans antialiased" data-wa="{{ $wa }}" data-dest="{{ json_encode(array_merge(array_column(config('site.destinations'), 0), ['Not sure yet'])) }}" data-regions="{{ json_encode(collect(config('site.destinations'))->map(fn ($d) => ['name' => $d[0], 'places' => $d[1], 'img' => '/images/'.$d[2]])->values()) }}" x-data="trip()" @keydown.escape.window="close()" x-effect="document.documentElement.style.overflow = open ? 'hidden' : ''">
+<body class="bg-paper text-ink font-sans antialiased" data-wa="{{ $wa }}" data-dest="{{ json_encode(\App\Support\ContentRepository::destinations()->pluck('name')->push('Not sure yet')->values()) }}" data-regions="{{ json_encode(\App\Support\ContentRepository::destinations()->map(fn ($d) => ['name' => $d['name'], 'places' => $d['places_line'] ?: $d['tagline'], 'img' => $d['img_url']])->values()) }}" x-data="trip()" @keydown.escape.window="close()" x-effect="document.documentElement.style.overflow = open ? 'hidden' : ''">
 
 {{-- Announcement bar + header --}}
 <div class="bg-royal text-paper text-center text-[10px] sm:text-[11px] tracking-[.2em] uppercase py-2.5 px-4">Locally rooted · Thoughtfully planned · Made for the mountains</div>
@@ -60,7 +61,7 @@
             @endforeach
         </nav>
         <div class="flex items-center gap-1 sm:gap-2">
-            <a href="{{ route('faq') }}" aria-label="FAQ" class="md:hidden grid place-items-center size-11 text-royal"><x-icon name="help" class="size-6"/></a>
+            <a href="{{ route('faq') }}" aria-label="FAQ" class="md:hidden grid place-items-center size-11 text-royal"><x-glyph name="help" class="size-6"/></a>
             <a href="https://wa.me/{{ $wa }}?text=Hi%2C%20I%27d%20like%20to%20plan%20a%20Sikkim%20trip" target="_blank" rel="noopener" aria-label="Chat on WhatsApp"
                class="grid place-items-center size-11 md:size-10 text-royal hover:text-ink transition-colors">
                 <svg viewBox="0 0 24 24" class="size-6 md:size-5 fill-current" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.1-1.3A10 10 0 1 0 12 2Zm5.8 14.2c-.2.7-1.4 1.3-2 1.3-.5.1-1.2.1-1.9-.1-.4-.1-1-.3-1.7-.6-3-1.3-5-4.3-5.1-4.5-.1-.2-1.2-1.6-1.2-3s.8-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.2 1.4 2.5 1.5.3.1.5.1.7-.1l.9-1.1c.2-.3.4-.2.6-.1l2 1c.3.1.5.2.5.3.1.2.1.8-.1 1.5Z"/></svg>
@@ -89,8 +90,8 @@
         <div class="md:grid md:gap-3 md:content-start text-paper/80">
             <p class="kicker text-paper/50 mb-3 md:mb-1">Contact</p>
             <div class="grid grid-cols-2 gap-2 md:contents">
-                <a href="tel:+{{ $wa }}" class="max-md:flex max-md:items-center max-md:justify-center max-md:gap-2 max-md:border max-md:border-paper/25 max-md:rounded-[0.75rem] max-md:py-3.5 max-md:text-[15px] hover:text-white"><x-icon name="phone" class="size-5 md:hidden"/><span class="max-md:hidden">{{ $phone }}</span><span class="md:hidden">Call</span></a>
-                <a href="https://wa.me/{{ $wa }}" target="_blank" rel="noopener" class="max-md:flex max-md:items-center max-md:justify-center max-md:gap-2 max-md:border max-md:border-paper/25 max-md:rounded-[0.75rem] max-md:py-3.5 max-md:text-[15px] hover:text-white"><x-icon name="chat" class="size-5 md:hidden"/>Chat on WhatsApp</a>
+                <a href="tel:+{{ $wa }}" class="max-md:flex max-md:items-center max-md:justify-center max-md:gap-2 max-md:border max-md:border-paper/25 max-md:rounded-[0.75rem] max-md:py-3.5 max-md:text-[15px] hover:text-white"><x-glyph name="phone" class="size-5 md:hidden"/><span class="max-md:hidden">{{ $phone }}</span><span class="md:hidden">Call</span></a>
+                <a href="https://wa.me/{{ $wa }}" target="_blank" rel="noopener" class="max-md:flex max-md:items-center max-md:justify-center max-md:gap-2 max-md:border max-md:border-paper/25 max-md:rounded-[0.75rem] max-md:py-3.5 max-md:text-[15px] hover:text-white"><x-glyph name="chat" class="size-5 md:hidden"/>Chat on WhatsApp</a>
             </div>
             <p class="md:hidden mt-3 text-sm text-paper/60">{{ $phone }}</p>
             <a href="https://indianfrro.gov.in/efrro/" target="_blank" rel="noopener" class="max-md:mt-1 max-md:inline-block max-md:py-3 max-md:text-sm max-md:underline max-md:underline-offset-4 max-md:text-paper/70 hover:text-white">FRRO registration for foreign nationals</a>
@@ -110,7 +111,7 @@
         @php $on = request()->routeIs($r) || ($r === 'blog' && request()->routeIs('post')) || ($r === 'destinations' && request()->routeIs('destination')); @endphp
         <a href="{{ route($r) }}" @if ($on) aria-current="page" @endif aria-label="{{ $label }}"
            class="flex items-center gap-2 h-12 rounded-[999px] transition-colors {{ $on ? 'bg-royal text-white pl-4 pr-5' : 'text-ink/70 px-3.5 hover:bg-mist' }}">
-            <x-icon :name="$icon" class="size-5 shrink-0"/>@if ($on)<span class="text-sm font-semibold">{{ $label }}</span>@endif
+            <x-glyph :name="$icon" class="size-5 shrink-0"/>@if ($on)<span class="text-sm font-semibold">{{ $label }}</span>@endif
         </a>
     @endforeach
 </nav>
@@ -180,8 +181,8 @@
                                     move(d) { const t = this.$refs.track; t.scrollBy({ left: d * t.clientWidth * .8, behavior: 'smooth' }); } }"
                                  x-init="$nextTick(() => sync())" @resize.window.debounce="sync()">
                                 <div x-show="more" x-cloak class="mb-3 flex justify-end gap-2">
-                                    <button type="button" @click="move(-1)" :disabled="start" aria-label="Previous regions" class="grid place-items-center size-10 border border-royal/40 text-royal hover:bg-royal hover:text-white transition-colors disabled:opacity-30 disabled:pointer-events-none"><x-icon name="left"/></button>
-                                    <button type="button" @click="move(1)" :disabled="end" aria-label="Next regions" class="grid place-items-center size-10 border border-royal/40 text-royal hover:bg-royal hover:text-white transition-colors disabled:opacity-30 disabled:pointer-events-none"><x-icon name="right"/></button>
+                                    <button type="button" @click="move(-1)" :disabled="start" aria-label="Previous regions" class="grid place-items-center size-10 border border-royal/40 text-royal hover:bg-royal hover:text-white transition-colors disabled:opacity-30 disabled:pointer-events-none"><x-glyph name="left"/></button>
+                                    <button type="button" @click="move(1)" :disabled="end" aria-label="Next regions" class="grid place-items-center size-10 border border-royal/40 text-royal hover:bg-royal hover:text-white transition-colors disabled:opacity-30 disabled:pointer-events-none"><x-glyph name="right"/></button>
                                 </div>
                                 <div x-ref="track" @scroll.passive="sync()" class="flex gap-3 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                                     <template x-for="r in regions" :key="r.name">
@@ -189,7 +190,7 @@
                                             <input type="checkbox" :value="r.name" :checked="f.dests.includes(r.name)" @change="toggleDest(r.name)" class="peer sr-only">
                                             <span class="relative block border border-ink/20 bg-white transition-colors hover:border-royal peer-checked:border-royal peer-checked:shadow-[inset_0_0_0_1px_var(--color-royal)] peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-star peer-checked:[&_.tick]:opacity-100">
                                                 <span class="block aspect-[4/3] overflow-hidden bg-mist"><img :src="r.img" alt="" loading="lazy" class="size-full object-cover"></span>
-                                                <span class="tick absolute top-2 right-2 grid place-items-center size-6 bg-royal text-white opacity-0 transition-opacity"><x-icon name="check" class="size-4"/></span>
+                                                <span class="tick absolute top-2 right-2 grid place-items-center size-6 bg-royal text-white opacity-0 transition-opacity"><x-glyph name="check" class="size-4"/></span>
                                                 <span class="block px-3 py-2.5"><span class="block font-display text-base" x-text="r.name"></span><span class="block mt-0.5 text-xs text-ink/60 leading-snug" x-text="r.places"></span></span>
                                             </span>
                                         </label>

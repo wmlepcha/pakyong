@@ -20,9 +20,9 @@
     <span :id="$id('dp')" class="block">{{ $label }}</span>
     <div role="group" :aria-labelledby="$id('dp')" class="mt-1.5 border p-4 sm:p-5 bg-white" :class="{{ $error }} ? 'border-red-700' : 'border-ink/30'">
         <div class="flex items-center justify-between mb-3">
-            <button type="button" @click="shift(-1)" :disabled="!canPrev" aria-label="Previous month" class="grid place-items-center size-10 text-royal hover:bg-mist disabled:opacity-25 disabled:hover:bg-transparent"><x-icon name="left" class="size-4"/></button>
+            <button type="button" @click="shift(-1)" :disabled="!canPrev" aria-label="Previous month" class="grid place-items-center size-10 text-royal hover:bg-mist disabled:opacity-25 disabled:hover:bg-transparent"><x-glyph name="left" class="size-4"/></button>
             <p class="font-display text-lg" x-text="title" aria-live="polite"></p>
-            <button type="button" @click="shift(1)" :disabled="!canNext" aria-label="Next month" class="grid place-items-center size-10 text-royal hover:bg-mist disabled:opacity-25 disabled:hover:bg-transparent"><x-icon name="right" class="size-4"/></button>
+            <button type="button" @click="shift(1)" :disabled="!canNext" aria-label="Next month" class="grid place-items-center size-10 text-royal hover:bg-mist disabled:opacity-25 disabled:hover:bg-transparent"><x-glyph name="right" class="size-4"/></button>
         </div>
         <div class="grid grid-cols-7 text-center text-xs font-semibold text-ink/60 mb-1">
             @foreach (['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'] as $d)<span class="py-1">{{ $d }}</span>@endforeach

@@ -1,8 +1,7 @@
 @extends('layouts.app')
 @php
     $wa = preg_replace('/\D/', '', config('site.phone'));
-    $price = collect(config('site.destinations'))->firstWhere(0, $d['name'])[3] ?? null;
-    $others = collect(config('destinations'))->except($slug);
+    $others = \App\Support\ContentRepository::destinations()->except($slug);
     $monthShort = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     $seasonMonths = [[2, 3, 4], [5, 6, 7, 8], [9, 10], [11, 0, 1]];
     $levels = ['peak' => 'bg-royal text-white', 'good' => 'bg-royal/30 text-ink', 'wet' => 'bg-[#cdd8bd] text-ink', 'cold' => 'bg-[#c2c8b4] text-ink'];
@@ -24,23 +23,23 @@
     $card = 'bg-white border border-ink/10 r-ios-lg';
 
     // Photos of individual places (Wikimedia Commons, credited at the bottom of the page). Only this region's own photos are ever used.
-    $photos = config('destination_photos.'.$slug, []);
-    $photoUrl = fn ($i) => isset($photos[$i]) ? '/images/'.$photos[$i]['file'] : null;
+    $photos = array_filter($d['place_photos']);
+    $photoUrl = fn ($i) => $d['place_photos'][$i]['url'] ?? null;
     $pool = [];
     foreach ($d['places'] as $i => $pl) {
         if ($url = $photoUrl($i)) { $pool[] = ['img' => $url, 'name' => $pl[0], 'type' => $pl[1]]; }
     }
-    if (count($pool) < 5) { array_unshift($pool, ['img' => '/images/'.$d['img'], 'name' => $d['name'], 'type' => 'Base: '.$d['base']]); }
+    if (count($pool) < 5) { array_unshift($pool, ['img' => $d['img_url'], 'name' => $d['name'], 'type' => 'Base: '.$d['base']]); }
     $tileClasses = ['col-span-2 aspect-[16/10] sm:aspect-auto sm:col-span-1 sm:row-span-2 sm:h-auto', 'max-sm:hidden sm:h-auto', 'max-sm:hidden sm:h-auto', 'max-sm:hidden sm:h-auto', 'max-sm:hidden sm:h-auto'];
 @endphp
-@section('title', $d['name'].' travel guide - '.config('site.brand'))
-@section('description', $d['tagline'].' When to visit, temperature, places to see and what to pack for '.$d['name'].'.')
-@section('og_image', url('/images/'.$d['img']))
+@section('title', ($d['seo_title'] ?: $d['name'].' travel guide').' - '.config('site.brand'))
+@section('description', $d['seo_description'] ?: $d['tagline'].' When to visit, temperature, places to see and what to pack for '.$d['name'].'.')
+@section('og_image', url($d['img_url']))
 @push('head')
 <script type="application/ld+json">{!! json_encode([
     '@@context' => 'https://schema.org', '@@type' => 'TouristDestination',
     'name' => $d['name'], 'description' => $d['tagline'].' '.$d['about'][0],
-    'image' => url('/images/'.$d['img']), 'touristType' => $d['good_for'],
+    'image' => url($d['img_url']), 'touristType' => $d['good_for'],
     'containedInPlace' => ['@@type' => 'AdministrativeArea', 'name' => $d['place'] ?? 'Sikkim, India'],
 ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}</script>
 @endpush
@@ -48,7 +47,7 @@
 
 {{-- Hero: a mosaic of photos that change, then the essentials --}}
 <section class="px-5 sm:px-8 pt-3 sm:pt-6">
-    <a href="{{ route('destinations') }}" class="inline-flex items-center gap-1 -ml-1 min-h-11 text-[15px] font-semibold text-royal"><x-icon name="left" class="size-5"/> All destinations</a>
+    <a href="{{ route('destinations') }}" class="inline-flex items-center gap-1 -ml-1 min-h-11 text-[15px] font-semibold text-royal"><x-glyph name="left" class="size-5"/> All destinations</a>
     <div class="mt-4 lg:mt-6 flex flex-col gap-6 lg:gap-10">
         <div x-data='mosaic(@json($pool, JSON_HEX_APOS | JSON_HEX_QUOT))' class="order-first lg:order-last grid grid-cols-2 gap-2 sm:grid-cols-[1.5fr_1.2fr_1fr] sm:grid-rows-2 sm:gap-3 sm:h-[22rem] lg:h-[30rem]">
             @foreach ($tileClasses as $t => $cls)
@@ -59,7 +58,7 @@
                         <div class="absolute inset-0 transition-opacity duration-[1400ms]" :class="tiles[{{ $t }}].front === '{{ $L }}' ? 'opacity-100' : 'opacity-0'">
                             <img src="{{ $first['img'] }}" :src="tiles[{{ $t }}].{{ $L }}.img" alt="" @if ($t === 0 && $L === 'a') fetchpriority="high" @endif class="absolute inset-0 size-full object-cover">
                             <span class="absolute inset-x-0 bottom-0 flex items-end gap-2 px-3 pb-2.5 pt-8 sm:px-4 sm:pb-4 text-white bg-gradient-to-t from-ink/80 to-transparent">
-                                <x-icon name="pin" class="size-4 shrink-0 mb-0.5"/>
+                                <x-glyph name="pin" class="size-4 shrink-0 mb-0.5"/>
                                 <span class="min-w-0">
                                     <span class="block font-semibold text-xs sm:text-sm leading-tight truncate" x-text="tiles[{{ $t }}].{{ $L }}.name">{{ $first['name'] }}</span>
                                 </span>
@@ -77,7 +76,7 @@
                 <p class="mt-4 text-sm sm:text-base text-ink/70"><span class="font-semibold text-ink">Good for</span> {{ implode(', ', array_map('mb_strtolower', $d['good_for'])) }}</p>
                 <div class="mt-6 grid grid-cols-2 gap-2.5 sm:flex sm:gap-3">
                     <button type="button" @click="pick('{{ $d['name'] }}')" class="btn btn-solid">Plan this trip</button>
-                    <a href="https://wa.me/{{ $wa }}?text={{ rawurlencode('Hi, I have a question about '.$d['name']) }}" target="_blank" rel="noopener" class="btn btn-light">Ask on WhatsApp <x-icon name="arrow" class="size-4 max-sm:hidden"/></a>
+                    <a href="https://wa.me/{{ $wa }}?text={{ rawurlencode('Hi, I have a question about '.$d['name']) }}" target="_blank" rel="noopener" class="btn btn-light">Ask on WhatsApp <x-glyph name="arrow" class="size-4 max-sm:hidden"/></a>
                 </div>
             </div>
             <dl class="mt-6 lg:mt-0 ios-group lg:grid lg:grid-cols-2 lg:gap-x-6 lg:gap-y-6 lg:border-t lg:border-ink/15 lg:pt-5">
@@ -162,8 +161,8 @@
             <div class="flex items-end justify-between gap-6">
                 <h2 class="{{ $h2 }}">Places to visit</h2>
                 <div class="max-sm:hidden flex gap-2 shrink-0">
-                    <button type="button" @click="move(-1)" :disabled="start" aria-label="Previous places" class="grid place-items-center size-11 sm:size-12 rounded-full border border-ink/15 bg-white hover:bg-ink hover:text-white hover:border-ink transition-colors disabled:opacity-30 disabled:pointer-events-none"><x-icon name="left"/></button>
-                    <button type="button" @click="move(1)" :disabled="end" aria-label="Next places" class="grid place-items-center size-11 sm:size-12 rounded-full border border-ink/15 bg-white hover:bg-ink hover:text-white hover:border-ink transition-colors disabled:opacity-30 disabled:pointer-events-none"><x-icon name="right"/></button>
+                    <button type="button" @click="move(-1)" :disabled="start" aria-label="Previous places" class="grid place-items-center size-11 sm:size-12 rounded-full border border-ink/15 bg-white hover:bg-ink hover:text-white hover:border-ink transition-colors disabled:opacity-30 disabled:pointer-events-none"><x-glyph name="left"/></button>
+                    <button type="button" @click="move(1)" :disabled="end" aria-label="Next places" class="grid place-items-center size-11 sm:size-12 rounded-full border border-ink/15 bg-white hover:bg-ink hover:text-white hover:border-ink transition-colors disabled:opacity-30 disabled:pointer-events-none"><x-glyph name="right"/></button>
                 </div>
             </div>
             <div x-ref="track" @scroll.passive="sync()" role="group" aria-label="Places to visit in {{ $d['name'] }}"
@@ -180,7 +179,7 @@
                         <div class="absolute inset-x-0 bottom-0 p-5">
                             <p class="text-sm text-white/75">{{ $type }}</p>
                             <h3 class="font-display font-bold text-xl sm:text-2xl leading-snug">{{ $name }}</h3>
-                            <p class="mt-1 flex items-center gap-1.5 text-xs font-semibold text-white/85"><x-icon name="pin" class="size-3.5 shrink-0"/>{{ $meta }}</p>
+                            <p class="mt-1 flex items-center gap-1.5 text-xs font-semibold text-white/85"><x-glyph name="pin" class="size-3.5 shrink-0"/>{{ $meta }}</p>
                             <p class="mt-2 text-sm text-white/80 leading-snug line-clamp-4">{{ $desc }}</p>
                         </div>
                     </article>
@@ -236,7 +235,7 @@
                 <div class="bg-royal text-white r-ios-lg p-5 sm:p-6 flex flex-col">
                     <h3 class="{{ $h3 }}">Permits</h3>
                     <p class="mt-3 text-sm text-white/85 leading-relaxed">{{ $d['permits'] }}</p>
-                    @if (($d['group'] ?? 'Sikkim') === 'Sikkim')<a href="{{ route('guide') }}#entry" class="btn btn-light mt-5 self-start">Entry rules <x-icon name="arrow" class="size-4"/></a>@endif
+                    @if (($d['group'] ?? 'Sikkim') === 'Sikkim')<a href="{{ route('guide') }}#entry" class="btn btn-light mt-5 self-start">Entry rules <x-glyph name="arrow" class="size-4"/></a>@endif
                 </div>
                 <div class="{{ $card }} p-5 sm:p-6">
                     <h3 class="{{ $h3 }}">Where to stay</h3>
@@ -258,7 +257,7 @@
             </ol>
             <div class="mt-6 flex flex-wrap items-center justify-between gap-4">
                 <p class="text-sm text-ink/60 max-w-xl">A starting point. We plan around your dates, pace and budget.</p>
-                <button type="button" @click="pick('{{ $d['name'] }}')" class="btn btn-solid max-sm:w-full">Plan this trip <x-icon name="arrow" class="size-4 max-sm:hidden"/></button>
+                <button type="button" @click="pick('{{ $d['name'] }}')" class="btn btn-solid max-sm:w-full">Plan this trip <x-glyph name="arrow" class="size-4 max-sm:hidden"/></button>
             </div>
         </section>
 
@@ -313,7 +312,7 @@
     <div class="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-px-5 px-5 sm:scroll-px-8 sm:px-8 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:grid lg:grid-cols-3 lg:overflow-visible">
         @foreach ($others as $key => $o)
             <a href="{{ route('destination', $key) }}" class="group snap-start shrink-0 w-[68%] sm:w-[38%] lg:w-auto relative block aspect-[4/5] r-ios-lg overflow-hidden bg-mist">
-                <img src="/images/{{ $o['img'] }}" @dims('/images/'.$o['img']) alt="" loading="lazy" class="absolute inset-0 size-full object-cover lg:group-hover:scale-105 transition duration-700">
+                <img src="{{ $o['img_url'] }}" @dims($o['img_url']) alt="" loading="lazy" class="absolute inset-0 size-full object-cover lg:group-hover:scale-105 transition duration-700">
                 <span class="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/30 to-transparent"></span>
                 <span class="absolute inset-x-0 bottom-0 p-5 text-white">
                     <span class="block font-display font-bold text-xl">{{ $o['name'] }}</span>

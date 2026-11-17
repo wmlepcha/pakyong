@@ -12,7 +12,7 @@
             @keydown.arrow-down.prevent="step(1)" @keydown.arrow-up.prevent="step(-1)"
             @keydown.enter="o && ($event.preventDefault(), pickAt(hi))" @keydown.tab="o = false">
         <span class="truncate" :class="!{{ $model }} && 'text-ink/50 font-normal'" x-text="{{ $model }} ? {{ $model }} + '{{ $suffix }}' : 'Select'"></span>
-        <x-icon name="down" class="size-4 shrink-0 text-royal transition-transform duration-200" ::class="o && 'rotate-180'"/>
+        <x-glyph name="down" class="size-4 shrink-0 text-royal transition-transform duration-200" ::class="o && 'rotate-180'"/>
     </button>
     <ul x-ref="box" x-show="o" x-cloak x-transition:enter="transition duration-150 ease-out" x-transition:enter-start="opacity-0 -translate-y-1" x-transition:leave="transition duration-100" x-transition:leave-end="opacity-0"
         role="listbox" :aria-labelledby="$id('sel')" class="absolute z-20 left-0 right-0 mt-1.5 max-h-64 overflow-y-auto overscroll-contain bg-white border border-royal py-1 shadow-[0_18px_40px_-16px_rgba(45,58,34,.45)]">
@@ -20,7 +20,7 @@
             <li role="option" :aria-selected="opt == {{ $model }}" @click="pickAt(i)" @mousemove="hi = i"
                 class="flex items-center justify-between gap-3 px-4 py-3 text-base font-normal cursor-pointer" :class="[hi === i && 'bg-mist', opt == {{ $model }} && '!font-semibold text-royal']">
                 <span x-text="opt + '{{ $suffix }}'"></span>
-                <x-icon name="check" class="size-4 text-royal" x-show="opt == {{ $model }}"/>
+                <x-glyph name="check" class="size-4 text-royal" x-show="opt == {{ $model }}"/>
             </li>
         </template>
     </ul>

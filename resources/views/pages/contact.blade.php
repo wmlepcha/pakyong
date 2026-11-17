@@ -30,9 +30,9 @@
                 <li>
                     @if ($href)<a href="{{ $href }}" @if ($target) target="{{ $target }}" rel="noopener" @endif class="group flex items-center gap-4 sm:gap-5 bg-white sm:border border-ink/5 sm:rounded-3xl max-sm:rounded-none p-4 sm:p-6 hover:shadow-lg transition-shadow">
                     @else<div class="flex items-center gap-4 sm:gap-5 bg-white sm:border border-ink/5 sm:rounded-3xl p-4 sm:p-6">@endif
-                        <span class="grid place-items-center size-14 shrink-0 rounded-2xl bg-mist text-royal"><x-icon :name="$icon" class="size-6"/></span>
+                        <span class="grid place-items-center size-14 shrink-0 rounded-2xl bg-mist text-royal"><x-glyph :name="$icon" class="size-6"/></span>
                         <span class="min-w-0 flex-1"><span class="block font-display font-bold text-xl">{{ $title }}</span><span class="block text-ink/70 mt-0.5">{{ $detail }}</span></span>
-                        @if ($href)<x-icon name="right" class="size-5 text-ink/35 group-hover:text-royal group-hover:translate-x-1 transition"/>@endif
+                        @if ($href)<x-glyph name="right" class="size-5 text-ink/35 group-hover:text-royal group-hover:translate-x-1 transition"/>@endif
                     @if ($href)</a>@else</div>@endif
                 </li>
             @endforeach
@@ -40,7 +40,7 @@
 <div class="rounded-3xl bg-mist p-5 sm:p-7 mt-4 sm:mt-4">
                 <p class="font-display font-bold text-xl">Planning a full trip?</p>
                 <p class="mt-1 text-ink/70">Share your dates and group size and we'll send a tailored itinerary.</p>
-                <button type="button" @click="pick('')" class="mt-4 inline-flex items-center gap-3 rounded-full bg-ink text-white font-semibold pl-6 pr-5 py-3.5 hover:bg-royal transition-colors">Plan my trip <x-icon name="arrow" class="size-4"/></button>
+                <button type="button" @click="pick('')" class="mt-4 inline-flex items-center gap-3 rounded-full bg-ink text-white font-semibold pl-6 pr-5 py-3.5 hover:bg-royal transition-colors">Plan my trip <x-glyph name="arrow" class="size-4"/></button>
             </div>
         </div>
 
@@ -69,7 +69,7 @@
                 </div>
             </div>
             <div class="mt-6 flex flex-wrap items-center gap-4">
-                <button type="submit" class="inline-flex items-center gap-3 rounded-full bg-royal text-white font-semibold pl-7 pr-6 py-4 hover:bg-ink transition-colors">Send on WhatsApp <x-icon name="arrow" class="size-4"/></button>
+                <button type="submit" class="inline-flex items-center gap-3 rounded-full bg-royal text-white font-semibold pl-7 pr-6 py-4 hover:bg-ink transition-colors">Send on WhatsApp <x-glyph name="arrow" class="size-4"/></button>
                 <p class="text-sm text-ink/60">Opens WhatsApp with your message ready to send.</p>
             </div>
         </form>
@@ -83,7 +83,7 @@
     <div class="grid grid-cols-3 gap-3">
         @foreach ([['headset', 'Call', 'tel:+'.$wa, null], ['chat', 'WhatsApp', 'https://wa.me/'.$wa, '_blank'], ['navigation', 'Directions', $maps, '_blank']] as [$ic, $label, $href, $target])
             <a href="{{ $href }}" @if ($target) target="{{ $target }}" rel="noopener" @endif class="flex flex-col items-center gap-2 r-ios-lg bg-white border border-ink/10 py-4 active:bg-mist transition-colors">
-                <span class="grid place-items-center size-11 rounded-[999px] bg-mist text-royal"><x-icon :name="$ic" class="size-5"/></span>
+                <span class="grid place-items-center size-11 rounded-[999px] bg-mist text-royal"><x-glyph :name="$ic" class="size-5"/></span>
                 <span class="text-xs font-semibold">{{ $label }}</span>
             </a>
         @endforeach
@@ -93,7 +93,7 @@
     <ul class="mt-5 ios-group">
         <li class="flex items-center">
             <a href="tel:+{{ $wa }}" class="flex-1 min-w-0 px-4 py-3.5"><span class="block text-xs font-semibold text-royal">Phone</span><span class="block text-base mt-0.5">{{ $phone }}</span></a>
-            <button type="button" @click="copy()" aria-label="Copy phone number" class="grid place-items-center size-12 mr-1 text-ink/50"><x-icon name="copy" class="size-5"/></button>
+            <button type="button" @click="copy()" aria-label="Copy phone number" class="grid place-items-center size-12 mr-1 text-ink/50"><x-glyph name="copy" class="size-5"/></button>
         </li>
         <li><a href="mailto:{{ $email }}" class="block px-4 py-3.5"><span class="block text-xs font-semibold text-royal">Email</span><span class="block text-base mt-0.5 break-all">{{ $email }}</span></a></li>
         <li><a href="{{ $maps }}" target="_blank" rel="noopener" class="block px-4 py-3.5"><span class="block text-xs font-semibold text-royal">Location</span><span class="block text-base mt-0.5">{{ $address }}</span></a></li>
@@ -126,7 +126,7 @@
         <iframe title="Map showing our location in Pakyong, Sikkim" class="size-full border-0"
                 src="{{ $embed }}"
                 allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
-        <a href="{{ $maps }}" target="_blank" rel="noopener" class="absolute left-3 top-3 inline-flex items-center gap-2 rounded-[999px] bg-white shadow min-h-11 px-4 text-sm font-semibold"><x-icon name="navigation" class="size-4 text-royal"/>Directions</a>
+        <a href="{{ $maps }}" target="_blank" rel="noopener" class="absolute left-3 top-3 inline-flex items-center gap-2 rounded-[999px] bg-white shadow min-h-11 px-4 text-sm font-semibold"><x-glyph name="navigation" class="size-4 text-royal"/>Directions</a>
     </div>
 
     {{-- Toast --}}

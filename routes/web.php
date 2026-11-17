@@ -1,12 +1,15 @@
 <?php
 
+use App\Http\Controllers\ContactMessageController;
+use App\Http\Controllers\EnquiryController;
+use App\Support\ContentRepository;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/sitemap.xml', function () {
-    $fallback = config('blog.published');
+    $fallback = now()->toDateString();
     $pages = collect(['home', 'destinations', 'guide', 'blog', 'faq', 'contact', 'terms', 'privacy'])->map(fn ($r) => [route($r), $fallback])
-        ->merge(collect(array_keys(config('destinations')))->map(fn ($s) => [route('destination', $s), $fallback]))
-        ->merge(collect(config('blog.posts'))->map(fn ($p) => [route('post', $p['slug']), $p['updated'] ?? $p['date'] ?? $fallback]));
+        ->merge(ContentRepository::destinations()->keys()->map(fn ($s) => [route('destination', $s), $fallback]))
+        ->merge(ContentRepository::posts()->map(fn ($p) => [route('post', $p['slug']), $p['updated'] ?? $p['date'] ?? $fallback])->values());
 
     $entries = $pages->map(fn ($p) => '<url><loc>'.e($p[0]).'</loc><lastmod>'.$p[1].'</lastmod></url>')->implode("\n");
 
@@ -17,14 +20,16 @@ Route::view('/', 'pages.home')->name('home');
 Route::view('/destinations', 'pages.destinations')->name('destinations');
 Route::get('/destinations/{slug}', fn (string $slug) => view('pages.destination', [
     'slug' => $slug,
-    'd' => config("destinations.$slug") ?? abort(404),
+    'd' => ContentRepository::destination($slug) ?? abort(404),
 ]))->name('destination');
 Route::view('/travel-guide', 'pages.guide')->name('guide');
 Route::view('/blog', 'pages.blog')->name('blog');
 Route::get('/blog/{slug}', fn (string $slug) => view('pages.post', [
-    'post' => collect(config('blog.posts'))->firstWhere('slug', $slug) ?? abort(404),
+    'post' => ContentRepository::post($slug) ?? abort(404),
 ]))->name('post');
 Route::view('/faq', 'pages.faq')->name('faq');
 Route::view('/contact', 'pages.contact')->name('contact');
+Route::post('/enquiries', [EnquiryController::class, 'store'])->middleware('throttle:8,1')->name('enquiries.store');
+Route::post('/contact-messages', [ContactMessageController::class, 'store'])->middleware('throttle:8,1')->name('contact-messages.store');
 Route::view('/terms', 'pages.legal', ['doc' => 'terms'])->name('terms');
 Route::view('/privacy', 'pages.legal', ['doc' => 'privacy'])->name('privacy');

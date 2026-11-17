@@ -29,7 +29,7 @@
                 <div x-show="who === 'foreign'" x-cloak>
                     <h3 class="font-display text-2xl">Foreign nationals</h3>
                     <p class="mt-3 text-ink/75 max-w-xl">Foreign nationals are required to register through the FRRO portal at least 15 days in advance.</p>
-                    <a href="https://indianfrro.gov.in/efrro/" target="_blank" rel="noopener" class="btn btn-ext mt-6 max-sm:w-full">Register on FRRO <x-icon name="external" class="size-4"/></a>
+                    <a href="https://indianfrro.gov.in/efrro/" target="_blank" rel="noopener" class="btn btn-ext mt-6 max-sm:w-full">Register on FRRO <x-glyph name="external" class="size-4"/></a>
                 </div>
             </div>
         </div>

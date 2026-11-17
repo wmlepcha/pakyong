@@ -36,10 +36,18 @@
         };
     })();
 
+    // Records the lead on the server. Fire and forget: WhatsApp must open in the same tap (iOS blocks popups opened after a wait).
+    function record(url, payload) {
+        const token = document.querySelector('meta[name="csrf-token"]')?.content;
+        try {
+            fetch(url, { method: 'POST', keepalive: true, headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': token || '' }, body: JSON.stringify(payload) }).catch(() => {});
+        } catch (e) { /* the WhatsApp message still goes out */ }
+    }
+
     function trip() {
         const iso = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
         return {
-            open: false, wide: true, mexp: true, mexpEdit: false, step: 1, review: false, editing: false, err: '', buildErr: '', errs: {}, busy: false, dy: 0, ty: null, today: iso(new Date()),
+            openedAt: 0, open: false, wide: true, mexp: true, mexpEdit: false, step: 1, review: false, editing: false, err: '', buildErr: '', errs: {}, busy: false, dy: 0, ty: null, today: iso(new Date()),
                         titles: ['Where would you like to go?', 'Who is travelling?', 'Dates and group size', 'Budget and stay'],
             mlabels: ['Experience', 'Destinations', 'Traveller and season', 'Dates and group', 'Budget and stay', 'Review and send'],
             init() {
@@ -99,7 +107,7 @@
                 Object.assign(this.f, { tier: '', who: '', season: '', stay: '', date: '', days: '', people: '', budget: '', dests: !isPackage && Guard.DEST.includes(name) ? [name] : [] });
                 this.step = 1; this.review = false; this.editing = false; this.mexp = true; this.mexpEdit = false;
                 this.err = ''; this.buildErr = ''; this.errs = {};
-                this.open = true;
+                this.open = true; this.openedAt = Date.now();
             },
             toggleDest(d) {
                 const on = this.f.dests.includes(d);
@@ -182,6 +190,11 @@
                     f.budget && `Budget: about ₹${f.budget} per person`,
                     `Stay: ${f.stay}`,
                 ].filter(Boolean).map(l => String(l).replace(/[\r\n]+/g, ' ')).join('\n');
+                record('/enquiries', {
+                    name: f.name, phone: f.phone, destinations: f.dests, tier: f.tier, traveller: f.who, season: f.season, stay: f.stay,
+                    start_date: f.date, days: +f.days, people: +f.people, budget: f.budget === '' ? null : +f.budget, package: f.pkg || null,
+                    elapsed: Date.now() - this.openedAt,
+                });
                 window.open('https://wa.me/' + document.body.dataset.wa + '?text=' + encodeURIComponent(lines), '_blank');
                 this.close();
             },
@@ -191,7 +204,7 @@
     // Shared by both contact forms (desktop and phone).
     function contactForm(wa, phoneShown) {
         return {
-            name: '', phone: '', msg: '', errs: {}, busy: false, toast: '',
+            name: '', phone: '', msg: '', errs: {}, busy: false, toast: '', startedAt: Date.now(),
             say(t) { this.toast = t; setTimeout(() => this.toast = '', 2000); },
             check() {
                 this.name = Guard.name(this.name).trim(); this.phone = Guard.phone(this.phone).trim(); this.msg = Guard.text(this.msg, 500).trim();
@@ -202,6 +215,7 @@
                 if (this.busy || !this.check()) return;
                 this.busy = true; setTimeout(() => this.busy = false, 3000);
                 this.say('Opening WhatsApp…');
+                record('/contact-messages', { name: this.name, phone: this.phone, message: this.msg, elapsed: Date.now() - this.startedAt });
                 window.open('https://wa.me/' + wa + '?text=' + encodeURIComponent(`Hi, I'm ${this.name} (${this.phone}). ${this.msg}`), '_blank');
             },
             copy() {

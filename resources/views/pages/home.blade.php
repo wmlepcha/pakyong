@@ -2,23 +2,22 @@
 @push('head')
 <script type="application/ld+json">{!! json_encode([
     '@@context' => 'https://schema.org', '@@type' => 'ItemList',
-    'itemListElement' => collect(config('site.packages'))->values()->map(fn ($p, $i) => [
+    'itemListElement' => \App\Support\ContentRepository::packages()->values()->map(fn ($p, $i) => [
         '@@type' => 'ListItem', 'position' => $i + 1,
-        'item' => ['@@type' => 'TouristTrip', 'name' => $p[0], 'description' => implode('. ', $p[4]).'.', 'image' => url('/images/'.$p[2]), 'touristType' => 'Leisure'],
+        'item' => ['@@type' => 'TouristTrip', 'name' => $p['title'], 'description' => implode('. ', $p['bullets']).'.', 'image' => url($p['img_url'] ?? '/images/all-sikkim.webp'), 'touristType' => 'Leisure'],
     ])->all(),
 ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}</script>
 @endpush
 @section('content')
 @php
     $wa = preg_replace('/\D/', '', config('site.phone'));
-    $dests = collect(config('site.destinations'))->keyBy(fn ($d) => \Illuminate\Support\Str::before($d[0], ' '));
-    $slug = fn ($d) => route('destination', \Illuminate\Support\Str::slug($d[0]));
-    $kick = 'kicker text-ink/60';
+    $home = \App\Support\ContentRepository::home();
+    $tiles = \App\Support\ContentRepository::homeTiles();
 @endphp
 
 {{-- Hero: one full-bleed photograph, text on the left --}}
 <section class="bleed relative isolate min-h-[30rem] md:min-h-[40rem] flex items-center overflow-hidden bg-ink">
-    <img src="/images/all-sikkim.webp" @dims('/images/all-sikkim.webp') alt="Kanchenjunga above a sea of cloud in Sikkim" fetchpriority="high" class="absolute inset-0 -z-10 size-full object-cover">
+    <img src="{{ $home['hero_url'] }}" @dims($home['hero_url']) alt="{{ $home['hero_alt'] }}" fetchpriority="high" class="absolute inset-0 -z-10 size-full object-cover">
     <span class="absolute inset-0 -z-10 bg-gradient-to-r from-ink/85 via-ink/45 to-ink/5"></span>
     <div class="mx-auto w-full max-w-[1240px] px-5 sm:px-8 py-14 sm:py-20 text-paper">
         <p class="kicker text-paper/80">Your journey begins in the Eastern Himalayas</p>
@@ -47,15 +46,13 @@
         <p class="mt-4 text-ink/65">From high-altitude lakes to quiet village stays, discover the side of Sikkim that speaks to you.</p>
     </div>
     <div class="mt-10 sm:mt-14 grid grid-cols-2 lg:grid-cols-3 lg:grid-rows-2 gap-3 sm:gap-4 lg:h-[44rem]">
-        @foreach ([['North', 'col-span-2 lg:col-span-1 lg:row-span-2 aspect-[4/3] lg:aspect-auto'], ['West', 'aspect-[4/5] lg:aspect-auto'], ['East', 'aspect-[4/5] lg:aspect-auto'], ['South', 'col-span-2 aspect-[16/9] lg:aspect-auto']] as [$k, $cls])
-            @php [$name, $places, $img, $price] = $dests[$k]; @endphp
-            <a href="{{ $slug($dests[$k]) }}" class="group relative isolate overflow-hidden bg-ink {{ $cls }}">
-                <img src="/images/{{ $img }}" @dims('/images/'.$img) alt="{{ $name }}" loading="lazy" class="absolute inset-0 -z-10 size-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
+        @foreach ($tiles as $i => $t)
+            <a href="{{ route('destination', $t['slug']) }}" class="group relative isolate overflow-hidden bg-ink {{ ['col-span-2 lg:col-span-1 lg:row-span-2 aspect-[4/3] lg:aspect-auto', 'aspect-[4/5] lg:aspect-auto', 'aspect-[4/5] lg:aspect-auto', 'col-span-2 aspect-[16/9] lg:aspect-auto'][$i] ?? 'aspect-[4/5]' }}">
+                <img src="{{ $t['img_url'] }}" @dims($t['img_url']) alt="{{ $t['name'] }}" loading="lazy" class="absolute inset-0 -z-10 size-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
                 <span class="absolute inset-0 -z-10 bg-gradient-to-t from-ink/85 via-ink/15 to-transparent"></span>
                 <span class="absolute inset-x-0 bottom-0 p-5 sm:p-7 text-paper">
-                    <span class="block font-display text-2xl sm:text-3xl">{{ $name }}</span>
-                    <span class="block mt-1.5 text-sm text-paper/80">{{ $places }}</span>
-                    <span class="mt-3 block text-[11px] uppercase tracking-[.16em] text-paper/70">from {{ $price }}</span>
+                    <span class="block font-display text-2xl sm:text-3xl">{{ $t['name'] }}</span>
+                    <span class="block mt-1.5 text-sm text-paper/80">{{ $t['places_line'] }}</span>
                 </span>
             </a>
         @endforeach
@@ -65,7 +62,7 @@
 {{-- A sense of place --}}
 <section class="bleed bg-mist mt-12 sm:mt-24">
     <div class="mx-auto max-w-[1240px] px-5 sm:px-8 py-14 sm:py-20 grid lg:grid-cols-[1fr_1fr] gap-10 lg:gap-20 items-center">
-        <img src="/images/west.webp" @dims('/images/west.webp') alt="Prayer flags and a stupa on a Himalayan trail" loading="lazy" class="w-full aspect-[4/3] object-cover">
+        <img src="{{ $home['place_url'] }}" @dims($home['place_url']) alt="{{ $home['place_alt'] }}" loading="lazy" class="w-full aspect-[4/3] object-cover">
         <div>
             <h2 class="font-display text-[1.75rem] sm:text-5xl text-royal leading-tight">Travel with a sense of place.</h2>
             <p class="mt-6 text-ink/70 max-w-md">The best journeys are not rushed. They leave room for a quiet viewpoint, a conversation with a local, a warm cup of tea and the unexpected moments that become your favourite memories.</p>
@@ -82,15 +79,16 @@
     <div class="flex items-end justify-between gap-6">
         <h2 class="font-display text-[1.75rem] sm:text-4xl max-w-2xl text-balance text-royal">Handpicked trips, ready to customise</h2>
         <div class="flex gap-2 shrink-0">
-            <button type="button" @click="move(-1)" :disabled="start" aria-label="Previous trips" class="grid place-items-center size-12 border border-royal/40 text-royal hover:bg-royal hover:text-white transition-colors disabled:opacity-30 disabled:pointer-events-none"><x-icon name="left"/></button>
-            <button type="button" @click="move(1)" :disabled="end" aria-label="Next trips" class="grid place-items-center size-12 border border-royal/40 text-royal hover:bg-royal hover:text-white transition-colors disabled:opacity-30 disabled:pointer-events-none"><x-icon name="right"/></button>
+            <button type="button" @click="move(-1)" :disabled="start" aria-label="Previous trips" class="grid place-items-center size-12 border border-royal/40 text-royal hover:bg-royal hover:text-white transition-colors disabled:opacity-30 disabled:pointer-events-none"><x-glyph name="left"/></button>
+            <button type="button" @click="move(1)" :disabled="end" aria-label="Next trips" class="grid place-items-center size-12 border border-royal/40 text-royal hover:bg-royal hover:text-white transition-colors disabled:opacity-30 disabled:pointer-events-none"><x-glyph name="right"/></button>
         </div>
     </div>
     <div x-ref="track" @scroll.passive="sync()" class="mt-8 flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        @foreach (config('site.packages') as [$name, $dur, $img, $price, $points])
+        @foreach (\App\Support\ContentRepository::packages() as $pk)
+            @php [$name, $dur, $img, $points] = [$pk['title'], $pk['duration'], $pk['img_url'], $pk['bullets']]; @endphp
             <article class="snap-start shrink-0 w-[85%] sm:w-[calc(50%-0.75rem)] lg:w-[calc(33.333%-1rem)] bg-white overflow-hidden border border-ink/10 flex flex-col">
                 <div class="relative">
-                    <img src="/images/{{ $img }}" @dims('/images/'.$img) alt="{{ $name }}" loading="lazy" class="h-56 w-full object-cover">
+                    <img src="{{ $img }}" @dims($img) alt="{{ $name }}" loading="lazy" class="h-56 w-full object-cover">
                     <span class="absolute top-0 left-0 bg-royal text-white text-[11px] tracking-[.14em] uppercase px-3 py-2">{{ $dur }}</span>
                 </div>
                 <div class="p-6 flex flex-col flex-1">
@@ -98,8 +96,7 @@
                     <ul class="mt-3 space-y-1.5 text-sm text-ink/70">
                         @foreach ($points as $pt)<li class="flex items-center gap-3"><span class="h-px w-4 bg-royal shrink-0"></span>{{ $pt }}</li>@endforeach
                     </ul>
-                    <div class="mt-auto pt-6 flex items-center justify-between">
-                        <p class="text-sm text-ink/60">from <b class="font-display text-xl text-ink">{{ $price }}</b></p>
+                    <div class="mt-auto pt-6">
                         <button @click="pick('{{ $name }}', true)" class="btn btn-solid !px-4 !py-2.5">Enquire</button>
                     </div>
                 </div>
@@ -110,7 +107,7 @@
 
 
 {{-- Experiences: pills and one photo card on small screens, photo and hover list on desktop --}}
-@php $exp = config('site.experiences'); @endphp
+@php $exp = \App\Support\ContentRepository::experiences()->map(fn ($e) => [$e['title'], $e['description'], $e['img_url']])->values()->all(); @endphp
 <section class="px-5 sm:px-8 pt-12 sm:pt-24" x-data="{ a: 0, tx: 0, n: {{ count($exp) }},
         go(k) { this.a = (k + this.n) % this.n; $nextTick(() => this.$refs.pills?.children[this.a]?.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' })); },
         start(e) { this.tx = e.touches[0].clientX; }, end(e) { const d = e.changedTouches[0].clientX - this.tx; if (Math.abs(d) > 40) this.go(this.a + (d < 0 ? 1 : -1)); } }">
@@ -125,7 +122,7 @@
         </div>
         <div class="relative isolate mt-4 aspect-[4/5] overflow-hidden bg-ink text-paper" @touchstart.passive="start($event)" @touchend.passive="end($event)">
             @foreach ($exp as $k => [$t, $d, $img])
-                <img src="/images/{{ $img }}" @dims('/images/'.$img) alt="" loading="lazy" class="absolute inset-0 -z-10 size-full object-cover transition-all duration-700 ease-out" :class="a === {{ $k }} ? 'opacity-100 scale-100' : 'opacity-0 scale-105'">
+                <img src="{{ $img }}" @dims($img) alt="" loading="lazy" class="absolute inset-0 -z-10 size-full object-cover transition-all duration-700 ease-out" :class="a === {{ $k }} ? 'opacity-100 scale-100' : 'opacity-0 scale-105'">
             @endforeach
             <span class="absolute inset-0 -z-10 bg-gradient-to-t from-ink/90 via-ink/25 to-transparent"></span>
             <div class="absolute inset-x-0 bottom-0 p-5">
@@ -147,7 +144,7 @@
     <div class="max-md:hidden grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
         <div class="relative aspect-[4/3] lg:aspect-[4/4.4] overflow-hidden bg-mist">
             @foreach ($exp as $k => [$t, $d, $img])
-                <img src="/images/{{ $img }}" @dims('/images/'.$img) alt="{{ $t }}" loading="lazy" class="absolute inset-0 size-full object-cover transition-all duration-700 ease-out" :class="a === {{ $k }} ? 'opacity-100 scale-100' : 'opacity-0 scale-105'">
+                <img src="{{ $img }}" @dims($img) alt="{{ $t }}" loading="lazy" class="absolute inset-0 size-full object-cover transition-all duration-700 ease-out" :class="a === {{ $k }} ? 'opacity-100 scale-100' : 'opacity-0 scale-105'">
             @endforeach
         </div>
         <div>
@@ -161,7 +158,7 @@
                                 <span class="block font-display text-2xl transition-colors" :class="a === {{ $k }} ? 'text-royal' : 'text-ink/55 group-hover:text-ink'">{{ $t }}</span>
                                 <span class="grid transition-all duration-500 ease-out" :class="a === {{ $k }} ? 'grid-rows-[1fr] opacity-100 mt-2' : 'grid-rows-[0fr] opacity-0'"><span class="overflow-hidden text-ink/70">{{ $d }}</span></span>
                             </span>
-                            <x-icon name="arrow" class="mt-2 size-4 shrink-0 transition-colors" ::class="a === {{ $k }} ? 'text-royal' : 'text-ink/30'"/>
+                            <x-glyph name="arrow" class="mt-2 size-4 shrink-0 transition-colors" ::class="a === {{ $k }} ? 'text-royal' : 'text-ink/30'"/>
                         </button>
                     </li>
                 @endforeach
@@ -246,8 +243,8 @@
         <div>
             <h2 class="font-display text-2xl sm:text-3xl text-balance">Words from travellers</h2>
             <div class="mt-5 flex items-center gap-3">
-                <button type="button" @click="go(r - 1)" aria-label="Previous review" class="grid place-items-center size-10 border border-royal/40 text-royal hover:bg-royal hover:text-white transition-colors"><x-icon name="left" class="size-4"/></button>
-                <button type="button" @click="go(r + 1)" aria-label="Next review" class="grid place-items-center size-10 border border-royal/40 text-royal hover:bg-royal hover:text-white transition-colors"><x-icon name="right" class="size-4"/></button>
+                <button type="button" @click="go(r - 1)" aria-label="Previous review" class="grid place-items-center size-10 border border-royal/40 text-royal hover:bg-royal hover:text-white transition-colors"><x-glyph name="left" class="size-4"/></button>
+                <button type="button" @click="go(r + 1)" aria-label="Next review" class="grid place-items-center size-10 border border-royal/40 text-royal hover:bg-royal hover:text-white transition-colors"><x-glyph name="right" class="size-4"/></button>
                 <span class="text-sm text-ink/55 tabular-nums" x-text="(r + 1) + ' / ' + n"></span>
             </div>
         </div>
@@ -268,7 +265,8 @@
 
 
 {{-- Blog --}}
-@php $posts = config('blog.posts'); $lead = $posts[0]; $rest = array_slice($posts, 1, 2); @endphp
+@php $posts = \App\Support\ContentRepository::posts()->values()->all(); $lead = $posts[0] ?? null; $rest = array_slice($posts, 1, 2); @endphp
+@if ($lead)
 <section class="px-5 sm:px-8 pt-12 sm:pt-24">
     <div class="flex items-end justify-between gap-4 mb-8">
         <h2 class="font-display text-[1.75rem] sm:text-5xl text-royal">From the blog</h2>
@@ -276,7 +274,7 @@
     </div>
     <div class="max-lg:-mx-5 max-lg:sm:-mx-8 max-lg:px-5 max-lg:sm:px-8 max-lg:flex max-lg:overflow-x-auto max-lg:snap-x max-lg:snap-mandatory max-lg:scroll-px-5 max-lg:pb-2 max-lg:[scrollbar-width:none] max-lg:[&::-webkit-scrollbar]:hidden lg:grid lg:grid-cols-[1.4fr_1fr] gap-4">
         <a href="{{ route('post', $lead['slug']) }}" class="group relative isolate block min-h-[26rem] max-lg:w-[82%] max-sm:w-[84%] max-lg:shrink-0 max-lg:snap-start overflow-hidden bg-ink">
-            <img src="/images/{{ $lead['img'] }}" @dims('/images/'.$lead['img']) alt="" loading="lazy" class="absolute inset-0 -z-10 size-full object-cover group-hover:scale-105 transition duration-700">
+            <img src="{{ $lead['img_url'] }}" @dims($lead['img_url']) alt="{{ $lead['img_alt'] ?? '' }}" loading="lazy" class="absolute inset-0 -z-10 size-full object-cover group-hover:scale-105 transition duration-700">
             <span class="absolute inset-0 -z-10 bg-gradient-to-t from-ink/85 via-ink/20 to-transparent"></span>
             <span class="absolute inset-x-0 bottom-0 p-7 text-paper">
                 <span class="block font-display text-2xl sm:text-3xl max-w-md text-balance">{{ $lead['title'] }}</span>
@@ -286,7 +284,7 @@
         <div class="max-lg:contents grid gap-4 lg:grid-rows-2">
             @foreach ($rest as $p)
                 <a href="{{ route('post', $p['slug']) }}" class="group relative isolate block min-h-[14rem] max-lg:min-h-[26rem] max-lg:w-[82%] max-sm:w-[84%] max-lg:shrink-0 max-lg:snap-start overflow-hidden bg-ink">
-                    <img src="/images/{{ $p['img'] }}" @dims('/images/'.$p['img']) alt="" loading="lazy" class="absolute inset-0 -z-10 size-full object-cover group-hover:scale-105 transition duration-700">
+                    <img src="{{ $p['img_url'] }}" @dims($p['img_url']) alt="{{ $p['img_alt'] ?? '' }}" loading="lazy" class="absolute inset-0 -z-10 size-full object-cover group-hover:scale-105 transition duration-700">
                     <span class="absolute inset-0 -z-10 bg-gradient-to-t from-ink/85 via-ink/20 to-transparent"></span>
                     <span class="absolute inset-x-0 bottom-0 p-6 text-paper">
                         <span class="block font-display text-xl sm:text-2xl text-balance">{{ $p['title'] }}</span>
@@ -297,6 +295,7 @@
         </div>
     </div>
 </section>
+@endif
 
 {{-- FAQ: iOS-style inset grouped list on small screens, mist panel on desktop --}}
 <section class="px-5 sm:px-8 mt-12 sm:mt-24 max-md:pb-5 md:mx-8 md:px-10 md:py-14 md:bg-mist grid lg:grid-cols-[1fr_1.4fr] gap-6 md:gap-10 lg:gap-16" x-data="{ o: -1 }">
@@ -304,18 +303,18 @@
         <h2 class="font-display text-[1.75rem] sm:text-4xl text-balance">Questions, answered</h2>
         <p class="mt-3 md:mt-4 text-ink/70 max-w-sm">Everything first-time visitors ask about permits, timing and payment.</p>
         <div class="mt-6 md:mt-8 flex gap-2 sm:gap-3">
-            <a href="https://wa.me/{{ $wa }}" target="_blank" rel="noopener" class="btn btn-solid max-sm:flex-1">Ask us on WhatsApp <x-icon name="arrow" class="size-4 max-sm:hidden"/></a>
+            <a href="https://wa.me/{{ $wa }}" target="_blank" rel="noopener" class="btn btn-solid max-sm:flex-1">Ask us on WhatsApp <x-glyph name="arrow" class="size-4 max-sm:hidden"/></a>
             <a href="{{ route('faq') }}" class="btn btn-line-dark max-sm:flex-1">See all FAQs</a>
         </div>
     </div>
     </div>
     <div class="max-md:bg-white max-md:rounded-[1rem] max-md:border max-md:border-ink/10 max-md:overflow-hidden md:divide-y md:divide-ink/10 md:border-y md:border-ink/10">
-        @foreach (collect(config('faq.items'))->where('home', true)->values() as $k => $faq)
+        @foreach (\App\Support\ContentRepository::faqItems()->where('home', true)->values() as $k => $faq)
             @php [$q, $a] = [$faq['q'], $faq['a']]; @endphp
             <div class="max-md:border-t max-md:border-ink/10 max-md:first:border-0 max-md:mx-0">
                 <button type="button" @click="o = o === {{ $k }} ? -1 : {{ $k }}" :aria-expanded="o === {{ $k }}" class="w-full flex items-center justify-between gap-4 text-left max-md:px-4 max-md:py-4 md:py-5 font-medium md:font-semibold active:bg-mist md:active:bg-transparent hover:text-royal transition-colors">
                     <span class="text-[17px] md:text-base leading-snug">{{ $q }}</span>
-                    <x-icon name="right" class="md:hidden size-5 shrink-0 text-ink/35 transition-transform duration-300" ::class="o === {{ $k }} && 'rotate-90 !text-royal'"/>
+                    <x-glyph name="right" class="md:hidden size-5 shrink-0 text-ink/35 transition-transform duration-300" ::class="o === {{ $k }} && 'rotate-90 !text-royal'"/>
                     <span class="max-md:hidden shrink-0 text-2xl leading-none font-normal text-royal transition-transform duration-300" :class="o === {{ $k }} && 'rotate-45'" aria-hidden="true">+</span>
                 </button>
                 <div class="grid transition-all duration-300 ease-out" :class="o === {{ $k }} ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'">

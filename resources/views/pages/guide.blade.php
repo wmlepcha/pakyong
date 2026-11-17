@@ -153,7 +153,7 @@
                             <div class="py-3 pl-3"><dt class="text-ink/55 text-xs">High point</dt><dd class="font-semibold mt-1">{{ $rg['high'] }}</dd></div>
                         </dl>
                         <p class="mt-5 {{ $body }}">{{ $rg['about'] }}</p>
-                        <a href="{{ route('destination', \Illuminate\Support\Str::slug($rg['name'])) }}" class="btn btn-solid mt-5 max-sm:w-full">Explore {{ \Illuminate\Support\Str::before($rg['name'], ' ') }} Sikkim <x-icon name="arrow" class="size-4"/></a>
+                        <a href="{{ route('destination', \Illuminate\Support\Str::slug($rg['name'])) }}" class="btn btn-solid mt-5 max-sm:w-full">Explore {{ \Illuminate\Support\Str::before($rg['name'], ' ') }} Sikkim <x-glyph name="arrow" class="size-4"/></a>
                         <ul class="mt-5 space-y-2.5 text-sm {{ $body }}">
                             @foreach ($rg['highlights'] as $pt)<li class="flex gap-3"><span class="mt-2.5 h-px w-4 bg-royal shrink-0"></span>{{ $pt }}</li>@endforeach
                         </ul>
@@ -188,7 +188,7 @@
             </div>
             <div class="mt-5 flex flex-wrap items-center justify-between gap-4">
                 <p class="text-sm text-ink/60 max-w-xl">{{ $g['itineraries_note'] }}</p>
-                <button type="button" @click="pick('')" class="btn btn-solid max-sm:w-full">Plan my trip <x-icon name="arrow" class="size-4 max-sm:hidden"/></button>
+                <button type="button" @click="pick('')" class="btn btn-solid max-sm:w-full">Plan my trip <x-glyph name="arrow" class="size-4 max-sm:hidden"/></button>
             </div>
         </section>
 

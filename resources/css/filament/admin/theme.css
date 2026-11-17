@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;500&display=swap');
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+
+@source '../../../../app/Filament/**/*';
+@source '../../../../resources/views/filament/**/*';
+
+/* Same look as the public site: forest green, cream, square corners, serif headings. */
+@theme {
+    --font-serif: 'Noto Serif', ui-serif, Georgia, serif;
+    --radius-xs: 0;
+    --radius-sm: 0;
+    --radius-md: 0;
+    --radius-lg: 0;
+    --radius-xl: 0;
+    --radius-2xl: 0;
+    --radius-3xl: 0;
+}
+
+:root {
+    --himalio-green: #44532e;
+    --himalio-ink: #2d3a22;
+    --himalio-cream: #f6f6ee;
+    --himalio-mist: #e9e9d3;
+    --himalio-gold: #b9822f;
+}
+
+body.fi-body { background: var(--himalio-cream); }
+.fi-main, .fi-body { background-color: var(--himalio-cream); }
+
+.fi-header-heading,
+.fi-simple-header-heading,
+.fi-section-header-heading,
+.fi-modal-heading {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    letter-spacing: -0.005em;
+    color: var(--himalio-ink);
+}
+
+.fi-sidebar, .fi-topbar { background: #fff; }
+.fi-sidebar-item-active .fi-sidebar-item-btn { background: var(--himalio-mist); }
+.fi-sidebar-group-label { letter-spacing: .14em; text-transform: uppercase; font-size: .68rem; }
+
+.fi-btn { letter-spacing: .06em; font-weight: 600; }
+.fi-section, .fi-ta-ctn, .fi-wi-stats-overview-stat { border: 1px solid rgb(45 58 34 / .12); box-shadow: none; }
+:focus-visible { outline-color: var(--himalio-gold); }
+::selection { background: var(--himalio-green); color: var(--himalio-cream); }
+
+/* Login: full-bleed mountain photo under a forest wash, cream card in the middle. */
+.fi-simple-layout {
+    background-image: linear-gradient(rgb(45 58 34 / .72), rgb(45 58 34 / .55)), url('/images/all-sikkim.webp');
+    background-size: cover;
+    background-position: center;
+}
+.fi-simple-main {
+    background: var(--himalio-cream);
+    border: 0;
+    box-shadow: 0 30px 80px -24px rgb(20 28 12 / .6);
+    border-top: 3px solid var(--himalio-gold);
+}
+.fi-simple-header-heading { font-size: 1.75rem; }
+.fi-logo { margin-inline: auto; }

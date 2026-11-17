@@ -52,7 +52,7 @@
                         <div class="lg:hidden">
                             <button type="button" @click="toggle({{ $i }})" :aria-expanded="open.includes({{ $i }})" aria-controls="legal-{{ $i }}" class="w-full flex items-center justify-between gap-4 text-left px-4 py-4">
                                 <span class="font-display text-[1.0625rem] leading-snug">{{ $i + 1 }}. {{ $h }}</span>
-                                <x-icon name="right" class="size-5 shrink-0 text-ink/35 transition-transform duration-300" ::class="open.includes({{ $i }}) && 'rotate-90 !text-royal'"/>
+                                <x-glyph name="right" class="size-5 shrink-0 text-ink/35 transition-transform duration-300" ::class="open.includes({{ $i }}) && 'rotate-90 !text-royal'"/>
                             </button>
                         </div>
                         <div id="legal-{{ $i }}" :class="open.includes({{ $i }}) ? '' : 'max-lg:hidden'" class="lg:mt-3 space-y-4 text-ink/80 leading-relaxed max-lg:px-4 max-lg:pb-5">

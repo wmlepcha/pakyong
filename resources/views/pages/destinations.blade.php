@@ -3,11 +3,7 @@
 @section('description', 'Explore Sikkim, Darjeeling and Kalimpong: best time to visit, places to see, how to get there and sample day plans.')
 @section('content')
 @php
-    $meta = collect(config('site.destinations'))->keyBy(0);
-    $items = collect(config('destinations'))->map(fn ($d, $slug) => $d + [
-        'slug' => $slug, 'group' => $d['group'] ?? 'Sikkim',
-        'places_line' => $meta[$d['name']][1] ?? $d['tagline'], 'price' => $meta[$d['name']][3] ?? null,
-    ])->values();
+    $items = \App\Support\ContentRepository::destinations()->values()->map(fn ($d) => $d + ['group' => $d['region'] ?? 'Sikkim']);
     $groups = $items->pluck('group')->unique()->values();
     $chip = 'chip rounded-full px-4 py-2 text-sm font-semibold whitespace-nowrap transition-colors';
 @endphp
@@ -28,7 +24,7 @@
             <li x-show="g === 'All' || g === '{{ $it['group'] }}'">
                 <a href="{{ route('destination', $it['slug']) }}" class="block ios-group active:bg-mist transition-colors">
                     <span class="relative block aspect-[16/10] overflow-hidden bg-mist">
-                        <img src="/images/{{ $it['img'] }}" @dims('/images/'.$it['img']) alt="{{ $it['name'] }}" @if ($loop->first) fetchpriority="high" @else loading="lazy" @endif class="absolute inset-0 size-full object-cover">
+                        <img src="{{ $it['img_url'] }}" @dims($it['img_url']) alt="{{ $it['name'] }}" @if ($loop->first) fetchpriority="high" @else loading="lazy" @endif class="absolute inset-0 size-full object-cover">
                     </span>
                     <span class="ios-row flex items-center justify-between gap-3">
                         <span class="min-w-0">
@@ -36,8 +32,7 @@
                             <span class="block mt-0.5 text-[13px] text-ink/60 truncate">{{ $it['days'] }} · High point {{ $it['high'] }}</span>
                         </span>
                         <span class="flex items-center gap-2 shrink-0 text-ink/40">
-                            @if ($it['price'])<span class="text-[13px] font-semibold text-royal">from {{ $it['price'] }}</span>@endif
-                            <x-icon name="right" class="size-5"/>
+                            <x-glyph name="right" class="size-5"/>
                         </span>
                     </span>
                 </a>
@@ -49,11 +44,10 @@
     <div class="hidden md:grid mt-10 lg:grid-cols-3 gap-5">
         @foreach ($items as $it)
             <a x-show="g === 'All' || g === '{{ $it['group'] }}'" href="{{ route('destination', $it['slug']) }}" class="group block text-left bg-white p-2 border border-ink/10 hover:shadow-lg transition">
-                <span class="block overflow-hidden"><img src="/images/{{ $it['img'] }}" @dims('/images/'.$it['img']) alt="{{ $it['name'] }}" loading="lazy" class="h-48 w-full object-cover group-hover:scale-105 transition duration-500"></span>
+                <span class="block overflow-hidden"><img src="{{ $it['img_url'] }}" @dims($it['img_url']) alt="{{ $it['name'] }}" loading="lazy" class="h-48 w-full object-cover group-hover:scale-105 transition duration-500"></span>
                 <span class="block px-3 pt-4 pb-3">
                     <span class="block font-display text-lg">{{ $it['name'] }}</span>
-                    <span class="block text-sm text-ink/60 mt-1">{{ $it['places_line'] }}</span>
-                    @if ($it['price'])<span class="block mt-3 text-sm"><span class="text-ink/60">from</span> <b>{{ $it['price'] }}</b></span>@endif
+                    <span class="block text-sm text-ink/60 mt-1">{{ $it['places_line'] ?: $it['tagline'] }}</span>
                 </span>
             </a>
         @endforeach

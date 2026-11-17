@@ -16,6 +16,11 @@ return [
     'name' => env('APP_NAME', 'Laravel'),
 
     /*
+    | Hidden URL path of the admin panel (keep it unguessable, set ADMIN_PATH in .env).
+    */
+    'admin_path' => env('ADMIN_PATH', 'himalio-desk'),
+
+    /*
     |--------------------------------------------------------------------------
     | Application Environment
     |--------------------------------------------------------------------------

@@ -2,8 +2,8 @@
 @section('title', 'Sikkim travel FAQ: permits, best time, payment - '.config('site.brand'))
 @section('description', 'Answers on Sikkim permits, the best time to go, payment, altitude and what to expect on the road, from a local tour team.')
 @php
-    $cats = config('faq.categories');
-    $items = collect(config('faq.items'))->values();
+    $cats = \App\Support\ContentRepository::faqCategories();
+    $items = \App\Support\ContentRepository::faqItems();
     $phone = config('site.phone');
     $wa = preg_replace('/\D/', '', $phone);
     $jsItems = $items->map(fn ($i) => ['cat' => $i['cat'], 't' => mb_strtolower($i['q'].' '.$i['a'])])->all();
@@ -26,7 +26,7 @@
 
     <div class="mt-5 sm:mt-10 relative max-w-xl">
         <label for="faq-search" class="sr-only">Search questions</label>
-        <x-icon name="search" class="size-5 absolute left-4 top-1/2 -translate-y-1/2 text-ink/50 pointer-events-none"/>
+        <x-glyph name="search" class="size-5 absolute left-4 top-1/2 -translate-y-1/2 text-ink/50 pointer-events-none"/>
         <input id="faq-search" type="search" maxlength="60" x-model="q" @input="q = Guard.line($event.target.value, 60)" placeholder="Search, for example “permit” or “winter”" autocomplete="off"
                class="field r-ios lg:rounded-full pl-12 lg:pl-14 pr-4 placeholder:text-ink/60">
     </div>
@@ -55,14 +55,14 @@
                                         <button type="button" @click="toggle({{ $i }})" :aria-expanded="open.includes({{ $i }})" aria-controls="faq-{{ $i }}"
                                                 class="w-full flex items-center justify-between gap-4 text-left py-4 px-4 lg:px-0 lg:py-5 font-semibold text-[15px] lg:text-base hover:text-royal transition-colors">
                                             <span>{{ $it['q'] }}</span>
-                                            <x-icon name="right" class="lg:hidden size-5 shrink-0 text-ink/35 transition-transform duration-300" ::class="open.includes({{ $i }}) && 'rotate-90 !text-royal'"/>
+                                            <x-glyph name="right" class="lg:hidden size-5 shrink-0 text-ink/35 transition-transform duration-300" ::class="open.includes({{ $i }}) && 'rotate-90 !text-royal'"/>
                                             <span class="max-lg:hidden shrink-0 text-2xl leading-none font-normal text-royal transition-transform duration-300" :class="open.includes({{ $i }}) && 'rotate-45'" aria-hidden="true">+</span>
                                         </button>
                                     </h3>
                                     <div id="faq-{{ $i }}" class="grid transition-all duration-300 ease-out" :class="open.includes({{ $i }}) ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'">
                                         <div class="overflow-hidden">
                                             <p class="text-ink/75 text-[15px] lg:text-base leading-relaxed max-w-[62ch] px-4 lg:px-0 lg:pr-10">{{ $it['a'] }}</p>
-                                            @isset($it['link'])<a href="{{ $it['link'][1] }}" @if (str_starts_with($it['link'][1], 'http')) target="_blank" rel="noopener" @endif class="mt-1 ml-4 lg:ml-0 inline-flex items-center gap-2 min-h-11 text-sm font-semibold text-royal">{{ $it['link'][0] }} <x-icon name="arrow" class="size-4"/></a>@endisset
+                                            @isset($it['link'])<a href="{{ $it['link'][1] }}" @if (str_starts_with($it['link'][1], 'http')) target="_blank" rel="noopener" @endif class="mt-1 ml-4 lg:ml-0 inline-flex items-center gap-2 min-h-11 text-sm font-semibold text-royal">{{ $it['link'][0] }} <x-glyph name="arrow" class="size-4"/></a>@endisset
                                             <div class="pb-4 lg:pb-6"></div>
                                         </div>
                                     </div>
@@ -83,7 +83,7 @@
                 <h2 class="font-display text-[1.375rem] sm:text-3xl text-balance">Still have a question?</h2>
                 <p class="mt-2 text-white/80 max-w-lg">Message us on WhatsApp and a local team member will reply, or send your dates and we'll plan the trip with you.</p>
                 <div class="mt-5 sm:mt-6 flex gap-2 sm:gap-3">
-                    <a href="https://wa.me/{{ $wa }}" target="_blank" rel="noopener" class="btn btn-light max-sm:flex-1">Chat on WhatsApp <x-icon name="arrow" class="size-4 max-sm:hidden"/></a>
+                    <a href="https://wa.me/{{ $wa }}" target="_blank" rel="noopener" class="btn btn-light max-sm:flex-1">Chat on WhatsApp <x-glyph name="arrow" class="size-4 max-sm:hidden"/></a>
                     <button type="button" @click="pick('')" class="btn btn-line max-sm:flex-1">Plan my trip</button>
                 </div>
             </aside>
