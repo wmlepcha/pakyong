@@ -13,6 +13,7 @@ return [
         'Travel Guide' => 'guide',
         'Blog' => 'blog',
         'FAQ' => 'faq',
+        'Book a Ride' => 'ride',
         'Contact' => 'contact',
     ],
     'why' => [
@@ -22,10 +23,10 @@ return [
         ['24/7 support', 'A real person on WhatsApp from the day you book to the day you return.'],
     ],
     'seasons' => [
-        ['March to May', 'Spring', 'Rhododendrons in full bloom, clear skies.', 'bg-[#f3e0d9]'],
-        ['June to September', 'Monsoon', 'Lush valleys, waterfalls, fewer crowds.', 'bg-[#d8e5c9]'],
-        ['October to November', 'Autumn', 'Crystal views of Kanchenjunga.', 'bg-[#f1dfb5]'],
-        ['December to February', 'Winter', 'Snow in Lachung and Yumthang.', 'bg-[#d5e3ea]'],
+        ['March to May', 'Spring', 'Rhododendrons in full bloom, clear skies.', 'bg-[#f3e0d9]', 'border-[#e58f7d]'],
+        ['June to September', 'Monsoon', 'Lush valleys, waterfalls, fewer crowds.', 'bg-[#d8e5c9]', 'border-[#86c14b]'],
+        ['October to November', 'Autumn', 'Crystal views of Kanchenjunga.', 'bg-[#f1dfb5]', 'border-[#f0b429]'],
+        ['December to February', 'Winter', 'Snow in Lachung and Yumthang.', 'bg-[#d5e3ea]', 'border-[#5aaee0]'],
     ],
     'steps' => [
         ['Tell us your plan', 'Share dates, group size and interests through the form or WhatsApp.'],

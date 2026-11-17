@@ -2,12 +2,13 @@
 
 use App\Http\Controllers\ContactMessageController;
 use App\Http\Controllers\EnquiryController;
+use App\Http\Controllers\RideRequestController;
 use App\Support\ContentRepository;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/sitemap.xml', function () {
     $fallback = now()->toDateString();
-    $pages = collect(['home', 'destinations', 'guide', 'blog', 'faq', 'contact', 'terms', 'privacy'])->map(fn ($r) => [route($r), $fallback])
+    $pages = collect(['home', 'destinations', 'guide', 'blog', 'faq', 'ride', 'contact', 'terms', 'privacy'])->map(fn ($r) => [route($r), $fallback])
         ->merge(ContentRepository::destinations()->keys()->map(fn ($s) => [route('destination', $s), $fallback]))
         ->merge(ContentRepository::posts()->map(fn ($p) => [route('post', $p['slug']), $p['updated'] ?? $p['date'] ?? $fallback])->values());
 
@@ -31,5 +32,7 @@ Route::view('/faq', 'pages.faq')->name('faq');
 Route::view('/contact', 'pages.contact')->name('contact');
 Route::post('/enquiries', [EnquiryController::class, 'store'])->middleware('throttle:8,1')->name('enquiries.store');
 Route::post('/contact-messages', [ContactMessageController::class, 'store'])->middleware('throttle:8,1')->name('contact-messages.store');
+Route::view('/book-a-ride', 'pages.ride')->name('ride');
+Route::post('/ride-requests', [RideRequestController::class, 'store'])->middleware('throttle:8,1')->name('ride-requests.store');
 Route::view('/terms', 'pages.legal', ['doc' => 'terms'])->name('terms');
 Route::view('/privacy', 'pages.legal', ['doc' => 'privacy'])->name('privacy');

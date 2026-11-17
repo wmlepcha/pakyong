@@ -41,7 +41,7 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/storage',
+            'url' => '/storage', // relative, so previews work on whichever host the admin is opened from
             'visibility' => 'public',
             'throw' => false,
             'report' => false,

@@ -173,8 +173,8 @@
     <h2 class="font-display text-[1.75rem] sm:text-5xl text-royal">When to go</h2>
 
     <div class="md:hidden mt-6 -mx-5 px-5 flex gap-3 overflow-x-auto snap-x snap-mandatory scroll-px-5 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        @foreach ($seasons as [$months, $name, $d, $bg])
-            <article class="{{ $bg }} season-card fx-on relative isolate snap-start shrink-0 w-[78%] min-h-56 p-6 border-t-2 border-royal">
+        @foreach ($seasons as [$months, $name, $d, $bg, $bd])
+            <article class="{{ $bg }} {{ $bd }} season-card fx-on relative isolate snap-start shrink-0 w-[78%] min-h-56 p-6 border-t-4">
                 @include('partials.season-fx', ['season' => $name])
                 <div class="relative">
                     <h3 class="font-display text-[1.75rem]">{{ $name }}</h3>
@@ -186,8 +186,8 @@
     </div>
 
     <div class="max-md:hidden mt-10 grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-        @foreach ($seasons as [$months, $name, $d, $bg])
-            <article class="{{ $bg }} season-card relative isolate p-6 min-h-48 border-t-2 border-royal">
+        @foreach ($seasons as [$months, $name, $d, $bg, $bd])
+            <article class="{{ $bg }} {{ $bd }} season-card relative isolate p-6 min-h-48 border-t-4">
                 @include('partials.season-fx', ['season' => $name])
                 <div class="relative">
                     <h3 class="font-display text-2xl">{{ $name }}</h3>

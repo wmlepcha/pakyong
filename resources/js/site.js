@@ -14,8 +14,10 @@
         const SEASON = ['Peak season', 'Shoulder season', 'Off-season', 'Not sure yet'];
         const STAY = ['Flexible, suggest for me', 'Homestays', 'Hotels', 'Resorts'];
         const TIER = ['Base', 'Standard', 'Premium'];
+        const DISTRICTS = ['Gangtok', 'Pakyong', 'Mangan', 'Namchi', 'Gyalshing', 'Soreng', 'Darjeeling', 'Kalimpong', 'Siliguri', 'Other'];
+        const CARS = ['4 seater', '7 seater'];
         return {
-            DEST, DAYS, WHO, SEASON, STAY, TIER,
+            DEST, DAYS, WHO, SEASON, STAY, TIER, DISTRICTS, CARS,
             budget: s => base(s).replace(/\D/g, '').replace(/^0+/, '').slice(0, 7),
             pick: (list, v, d) => list.includes(v) ? v : d,
             name: s => squash(base(s).replace(/<[^>]*>?/g, '').replace(/[^\p{L}\p{M}\s.'’-]/gu, '').replace(/\s+/g, ' ').replace(/([.'’-])\1+/gu, '$1').replace(/^\s+/, ''), 3).slice(0, 60),
@@ -201,6 +203,79 @@
         };
     }
 
+    // Book a ride: route, date, car, then name and WhatsApp number, with a review step before sending.
+    function ride() {
+        const iso = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        return {
+            step: 1, review: false, editing: false, err: '', busy: false, startedAt: Date.now(), today: iso(new Date()),
+            titles: ['Where to?', 'When?', 'Which car?', 'Your details'],
+            f: { pickup: '', drop: '', district: '', date: '', car: '', name: '', phone: '' },
+            fmtDate(v) { return v ? new Date(v + 'T00:00').toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }) : ''; },
+            // First thing still missing on a step (1 to 4), or an empty string.
+            missing(n) {
+                const f = this.f;
+                if (n === 1) return f.pickup.trim().length < 3 ? 'Enter the pickup location.' : (f.drop.trim().length < 3 ? 'Enter the drop location.' : (Guard.DISTRICTS.includes(f.district) ? '' : 'Choose the pickup district.'));
+                if (n === 2) {
+                    if (!/^\d{4}-\d{2}-\d{2}$/.test(f.date)) return 'Please pick a pickup date.';
+                    const d = new Date(f.date + 'T00:00'), t = new Date(); t.setHours(0, 0, 0, 0);
+                    const l = new Date(t); l.setFullYear(l.getFullYear() + 1);
+                    return isNaN(d) || d < t || d > l ? 'Please pick a date within the next year.' : '';
+                }
+                if (n === 3) return Guard.CARS.includes(f.car) ? '' : 'Choose a car type.';
+                return Guard.vName(f.name.trim()) || Guard.vPhone(f.phone.trim());
+            },
+            get hint() { return this.review ? '' : this.missing(this.step); },
+            get ready() { return !this.hint; },
+            get summary() {
+                const f = this.f;
+                return [
+                    { step: 1, label: 'Route', value: `${f.pickup} to ${f.drop}` },
+                    { step: 1, label: 'Pickup district', value: f.district },
+                    { step: 2, label: 'Pickup date', value: this.fmtDate(f.date) },
+                    { step: 3, label: 'Car type', value: f.car },
+                    { step: 4, label: 'Name and WhatsApp', value: `${f.name}, ${f.phone}` },
+                ];
+            },
+            clean() { const f = this.f; f.pickup = Guard.line(f.pickup, 120).trim(); f.drop = Guard.line(f.drop, 120).trim(); f.name = Guard.name(f.name).trim(); f.phone = Guard.phone(f.phone).trim(); },
+            next() {
+                this.clean();
+                const e = this.missing(this.step);
+                if (e) return this.err = e;
+                this.err = '';
+                if (this.editing) { this.editing = false; this.review = true; }
+                else if (this.step < 4) this.step++;
+                else this.review = true;
+                setTimeout(() => document.getElementById('ride-top')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+            },
+            back() {
+                this.err = '';
+                if (this.review) { this.review = false; this.step = 4; }
+                else if (this.editing) { this.editing = false; this.review = true; }
+                else if (this.step > 1) this.step--;
+            },
+            edit(n) { this.review = false; this.editing = true; this.step = n; this.err = ''; },
+            send() {
+                if (!this.review) return this.next();
+                this.clean();
+                if ([1, 2, 3, 4].some(n => this.missing(n))) return this.err = 'Please check your details and try again.';
+                if (this.busy) return;                                  // stop double-taps opening many tabs
+                this.busy = true; setTimeout(() => this.busy = false, 3000);
+                const f = this.f;
+                const lines = [
+                    `Hi, I'm ${f.name} (${f.phone}). I'd like to book a ride.`,
+                    `Pickup: ${f.pickup} (${f.district})`,
+                    `Drop: ${f.drop}`,
+                    `Date: ${f.date}`,
+                    `Car: ${f.car}`,
+                ].map(l => String(l).replace(/[\r\n]+/g, ' ')).join('\n');
+                record('/ride-requests', { pickup_location: f.pickup, drop_location: f.drop, pickup_district: f.district, pickup_date: f.date, car_type: f.car, name: f.name, phone: f.phone, elapsed: Date.now() - this.startedAt });
+                window.open('https://wa.me/' + document.body.dataset.wa + '?text=' + encodeURIComponent(lines), '_blank');
+                this.done = true;
+            },
+            done: false,
+        };
+    }
+
     // Shared by both contact forms (desktop and phone).
     function contactForm(wa, phoneShown) {
         return {
@@ -307,4 +382,4 @@
     
 
 // Alpine reads these by name from the HTML (x-data="trip()", Guard.name(...)).
-Object.assign(window, { Guard, trip, contactForm, mosaic });
+Object.assign(window, { Guard, trip, contactForm, mosaic, ride });

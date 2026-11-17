@@ -4,6 +4,7 @@ namespace App\Filament\Actions;
 
 use App\Models\ContactMessage;
 use App\Models\Enquiry;
+use App\Models\RideRequest;
 use App\Support\Whatsapp;
 use Filament\Actions\Action;
 use Filament\Support\Icons\Heroicon;
@@ -27,7 +28,9 @@ class ReplyOnWhatsappAction
             ->modalCancelActionLabel('Close')
             ->modalContent(fn (Model $record) => view('filament.actions.whatsapp-reply', [
                 'record' => $record,
-                'type' => $record instanceof Enquiry ? 'enquiry' : 'contact',
+                'type' => match (true) {
+                    $record instanceof Enquiry => 'enquiry', $record instanceof RideRequest => 'ride', default => 'contact'
+                },
                 'number' => Whatsapp::number($record->phone),
                 'text' => self::template($record),
                 'logUrl' => route('filament.admin.whatsapp-log'),
@@ -38,6 +41,10 @@ class ReplyOnWhatsappAction
     private static function template(Model $record): string
     {
         $brand = config('site.brand');
+
+        if ($record instanceof RideRequest) {
+            return "Hi {$record->name}, thank you for booking a ride with {$brand}. We have your request for {$record->summary()}. ";
+        }
 
         if ($record instanceof ContactMessage) {
             return "Hi {$record->name}, thank you for getting in touch with {$brand}. ";

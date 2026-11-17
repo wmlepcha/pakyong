@@ -1,5 +1,5 @@
 {{-- Month-grid date picker bound to a parent Alpine value (YYYY-MM-DD). Replaces the browser's unstyled native calendar. --}}
-@props(['label', 'model', 'error' => 'false', 'range' => '0'])
+@props(['label', 'model', 'error' => 'false', 'range' => '0', 'years' => 3])
 <div x-id="['dp']"
      x-data="{ view: new Date(),
         get title() { return this.view.toLocaleDateString('en-IN', { month: 'long', year: 'numeric' }); },
@@ -9,9 +9,9 @@
             return [...Array(lead).fill(null), ...Array.from({ length: n }, (_, i) => new Date(y, m, i + 1))];
         },
         get canPrev() { const t = new Date(); return this.view > new Date(t.getFullYear(), t.getMonth(), 1); },
-        get canNext() { const t = new Date(); return this.view < new Date(t.getFullYear() + 3, t.getMonth(), 1); },
+        get canNext() { const t = new Date(); return this.view < new Date(t.getFullYear() + {{ $years }}, t.getMonth(), 1); },
         iso(d) { return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; },
-        off(d) { const t = new Date(); t.setHours(0, 0, 0, 0); const l = new Date(t); l.setFullYear(l.getFullYear() + 3); return d < t || d > l; },
+        off(d) { const t = new Date(); t.setHours(0, 0, 0, 0); const l = new Date(t); l.setFullYear(l.getFullYear() + {{ $years }}); return d < t || d > l; },
         inRange(d) { const n = +({{ $range }}); if (!{{ $model }} || !n) return false; const a = new Date({{ $model }} + 'T00:00'), b = new Date(a); b.setDate(b.getDate() + n - 1); return d > a && d <= b; },
         isToday(d) { return this.iso(d) === this.iso(new Date()); },
         shift(n) { this.view = new Date(this.view.getFullYear(), this.view.getMonth() + n, 1); },
