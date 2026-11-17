@@ -5,7 +5,7 @@ return [
     // Registered business (from the Udyam certificate).
     'legal_name' => 'Himalio Edge Enterprises',
     'udyam' => 'UDYAM-SK-05-0002972',
-    'email' => 'niteshchettri388@gmail.com',
+    'email' => 'contact@thehimaliotravels.com',
     'address' => ['Bering, Kerabari', 'Pakyong, Sikkim 737106'],
     'phone' => '+91 74781 27403',
     'nav' => [
