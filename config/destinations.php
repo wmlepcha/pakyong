@@ -11,7 +11,7 @@
  */
 return [
     'east-sikkim' => [
-        'name' => 'East Sikkim', 'short' => 'East', 'img' => 'east.jpeg', 'base' => 'Gangtok', 'days' => '3 to 4 days',
+        'name' => 'East Sikkim', 'short' => 'East', 'img' => 'east.webp', 'base' => 'Gangtok', 'days' => '3 to 4 days',
         'high' => 'Nathula, 14,140 ft', 'elev' => 'Gangtok sits at about 5,400 ft',
         'tagline' => 'The capital, a high-altitude lake and the Tibet border pass.',
         'good_for' => ['First-time visitors', 'Families', 'Monasteries', 'Short trips'],
@@ -66,7 +66,7 @@ return [
     ],
 
     'north-sikkim' => [
-        'name' => 'North Sikkim', 'short' => 'North', 'img' => 'north.jpeg', 'base' => 'Lachung and Lachen', 'days' => '3 to 4 days',
+        'name' => 'North Sikkim', 'short' => 'North', 'img' => 'north.webp', 'base' => 'Lachung and Lachen', 'days' => '3 to 4 days',
         'high' => 'Gurudongmar, 17,800 ft', 'elev' => 'Lachung sits at about 9,600 ft',
         'tagline' => 'River gorges, rhododendron valleys and one of the highest lakes on earth.',
         'good_for' => ['Adventure', 'Photography', 'Mountain scenery', 'Slow travel'],
@@ -120,7 +120,7 @@ return [
     ],
 
     'west-sikkim' => [
-        'name' => 'West Sikkim', 'short' => 'West', 'img' => 'west.jpeg', 'base' => 'Pelling', 'days' => '3 days',
+        'name' => 'West Sikkim', 'short' => 'West', 'img' => 'west.webp', 'base' => 'Pelling', 'days' => '3 days',
         'high' => 'Dzongri trek, about 13,000 ft', 'elev' => 'Pelling sits at about 6,800 ft',
         'tagline' => 'The closest views of Kanchenjunga, old monasteries and a first capital.',
         'good_for' => ['Honeymoons', 'Families', 'Monasteries', 'Trekking'],
@@ -172,7 +172,7 @@ return [
     ],
 
     'south-sikkim' => [
-        'name' => 'South Sikkim', 'short' => 'South', 'img' => 'south.jpeg', 'base' => 'Ravangla and Namchi', 'days' => '2 days',
+        'name' => 'South Sikkim', 'short' => 'South', 'img' => 'south.webp', 'base' => 'Ravangla and Namchi', 'days' => '2 days',
         'high' => 'Ravangla, about 7,000 ft', 'elev' => 'Ravangla sits at about 7,000 ft',
         'tagline' => 'Tea gardens, giant statues and the gentlest side of Sikkim.',
         'good_for' => ['Easy trips', 'Families', 'Elders', 'Tea and nature'],
@@ -217,6 +217,117 @@ return [
             ['Is South Sikkim worth including?', 'Yes, especially as a gentle stop between Gangtok and Pelling. It adds tea, views and an easier day.'],
             ['Is it suitable for older travellers?', 'Yes. The roads are gentler and the altitude is lower than in the north and east.'],
             ['How many days do I need?', 'One to two days is enough, or one night at Ravangla on the way to Pelling.'],
+        ],
+    ],
+
+    /*
+     * DRAFT: Darjeeling and Kalimpong. Written from general knowledge so the pages work end to end.
+     * Every distance, temperature, entry rule and place detail must be confirmed by the client before publishing,
+     * and the hero image (img) and place photos (destination_photos.php) still need real, licensed pictures.
+     * 'group' puts a destination under its own tab on /destinations; entries without it belong to Sikkim.
+     */
+    'darjeeling' => [
+        'group' => 'Darjeeling', 'place' => 'Darjeeling, West Bengal, India',
+        'name' => 'Darjeeling', 'short' => 'Darjeeling', 'img' => 'all-sikkim.webp', 'base' => 'Darjeeling town', 'days' => '2 to 3 days',
+        'high' => 'Tiger Hill, 8,500 ft', 'elev' => 'Darjeeling town sits at about 6,700 ft',
+        'tagline' => 'Tea gardens, a toy train and sunrise over Kanchenjunga.',
+        'good_for' => ['First-time visitors', 'Tea lovers', 'Families', 'Short trips'],
+        'about' => [
+            'Darjeeling is a hill town of colonial-era streets, tea estates and a narrow-gauge railway that still climbs through the town. On a clear morning the Kanchenjunga range fills the horizon.',
+            'Most visitors give it two or three nights: sunrise at Tiger Hill, the toy train, a tea estate and the markets around Chowrasta. It pairs easily with Kalimpong and Gangtok.',
+        ],
+        'calendar' => ['cold', 'good', 'good', 'peak', 'peak', 'wet', 'wet', 'wet', 'wet', 'peak', 'peak', 'cold'],
+        'seasons' => [
+            ['Spring', 'March - May', '8-20°C', 'Mild days and fresh tea flush', 'Pleasant weather and the first tea harvest. Views are often clear in the early morning and cloudier by afternoon.', ['Light layers', 'A warm jacket for mornings', 'Comfortable walking shoes']],
+            ['Monsoon', 'June - September', '14-21°C', 'Heavy rain and low cloud', 'Very wet, with mist and frequent road delays. Views are limited. A quiet time for those who do not mind the rain.', ['Waterproof jacket', 'Shoes with grip', 'Quick-dry layers']],
+            ['Autumn', 'October - November', '8-18°C', 'The clearest skies', 'The best time for Kanchenjunga views at sunrise. Days are comfortable and nights get cold.', ['Warm layers', 'A fleece or light down jacket', 'Sunglasses']],
+            ['Winter', 'December - February', '2-10°C', 'Cold and crisp', 'Cold mornings and evenings, often with clear views. Occasional light snow is possible in the coldest weeks.', ['Warm jacket', 'Thermals', 'Gloves and a woollen hat']],
+        ],
+        'pack_always' => ['Photo ID (original and copies)', 'Sunscreen, sunglasses and a hat', 'Power bank and a reusable water bottle', 'Regular medicines and a basic first-aid kit', 'Comfortable shoes for steep streets'],
+        'places' => [
+            ['Tiger Hill', 'Viewpoint', 'The classic sunrise point, with views of Kanchenjunga and, on very clear days, a glimpse of Everest. Leave before dawn.', 'About 11 km from town'],
+            ['Darjeeling Himalayan Railway', 'Toy train', 'The narrow-gauge steam and diesel train, a UNESCO World Heritage line. The short joyride to Ghum passes the Batasia Loop.', 'In town'],
+            ['Batasia Loop', 'Viewpoint', 'A spiral section of the railway with a garden, a war memorial and wide mountain views.', 'About 5 km from town'],
+            ['Happy Valley Tea Estate', 'Tea estate', 'A working tea estate close to town where you can see the leaves processed and taste the tea.', 'About 3 km from town'],
+            ['Himalayan Mountaineering Institute', 'Museum and zoo', 'A mountaineering school and museum with a small high-altitude zoo, named for Tenzing Norgay.', 'About 2 km from town'],
+            ['Ghum Monastery', 'Monastery', 'A Tibetan Buddhist monastery with a large Maitreya statue, on the road to Tiger Hill.', 'About 8 km from town'],
+            ['Peace Pagoda', 'Stupa', 'A white and gold pagoda on a wooded ridge, calm in the early morning.', 'About 3 km from town'],
+            ['Chowrasta and Mall Road', 'Promenade', 'The town square and its pedestrian street, good for an evening walk, cafes and shopping.', 'In town'],
+        ],
+        'getting' => [
+            ['From Bagdogra airport', 'The nearest airport, with pick-ups arranged by us. Allow extra time in the rains.', 'About 3-4 hours'],
+            ['From New Jalpaiguri (NJP) station', 'The nearest main railhead, with onward cars to Darjeeling.', 'About 3-4 hours'],
+            ['From Kalimpong', 'A winding hill road down to the Teesta river and up again.', 'About 2.5-3 hours'],
+            ['From Gangtok', 'The road crosses the Teesta valley and climbs to Darjeeling.', 'About 4-5 hours'],
+        ],
+        'permits' => 'Entry rules for Darjeeling differ from Sikkim, and they depend on your nationality and the places you plan to visit. Trekking trails and border areas have their own permits. We confirm the current requirements before you travel.',
+        'stay' => 'Darjeeling has hotels from budget to heritage, plus tea-estate homestays around the town. Book early in April, May, October and November.',
+        'itinerary' => [
+            'Arrive in Darjeeling and settle in. Evening walk around Chowrasta and Mall Road.',
+            'Early start for sunrise at Tiger Hill, then Ghum Monastery, the toy train and Batasia Loop.',
+            'Tea estate visit and the mountaineering institute, then depart or continue to Kalimpong.',
+        ],
+        'tips' => [
+            'Leave for Tiger Hill around 3:30 to 4 am for sunrise and book your cab the day before.',
+            'Mornings are clearest. Clouds often move in by late morning.',
+            'Streets are steep. Wear shoes with good grip.',
+            'Toy train tickets can sell out in peak season, so reserve in advance.',
+        ],
+        'faqs' => [
+            ['How many days do I need for Darjeeling?', 'Two to three days is comfortable. Add a day if you want to visit a tea estate in detail or continue to Kalimpong.'],
+            ['When is the best time to visit?', 'March to May and October to November give the clearest views and the most comfortable weather.'],
+            ['Can I combine Darjeeling with Sikkim?', 'Yes. Darjeeling, Kalimpong and Gangtok are often joined in one trip, with road transfers of three to five hours between them.'],
+        ],
+    ],
+
+    'kalimpong' => [
+        'group' => 'Kalimpong', 'place' => 'Kalimpong, West Bengal, India',
+        'name' => 'Kalimpong', 'short' => 'Kalimpong', 'img' => 'all-sikkim.webp', 'base' => 'Kalimpong town', 'days' => '2 days',
+        'high' => 'Deolo Hill, about 5,600 ft', 'elev' => 'Kalimpong sits at about 4,100 ft',
+        'tagline' => 'A quiet hill town of monasteries, nurseries and valley views.',
+        'good_for' => ['Slow travel', 'Flowers and nurseries', 'Monasteries', 'Short stays'],
+        'about' => [
+            'Kalimpong is smaller and calmer than Darjeeling, a town of old mission schools, monasteries and flower nurseries on a ridge above the Teesta river.',
+            'It works well as a relaxed stop between Darjeeling and Sikkim, with easy day walks and quieter villages nearby.',
+        ],
+        'calendar' => ['good', 'good', 'peak', 'peak', 'good', 'wet', 'wet', 'wet', 'wet', 'peak', 'peak', 'good'],
+        'seasons' => [
+            ['Spring', 'March - May', '12-26°C', 'Warm days and flowers in bloom', 'A good time for the nurseries and for viewpoints. Mornings are clear and afternoons can turn hazy.', ['Light layers', 'Sun hat and sunscreen', 'Comfortable shoes']],
+            ['Monsoon', 'June - September', '17-26°C', 'Green, wet and quiet', 'Heavy rain and landslide risk on connecting roads. Valleys are lush, but views are limited.', ['Waterproof jacket', 'Shoes with grip', 'Quick-dry layers']],
+            ['Autumn', 'October - November', '11-24°C', 'Clear and comfortable', 'Dry weather and good mountain views from the ridges. The most reliable time to visit.', ['Light jacket for evenings', 'Layers', 'Sunglasses']],
+            ['Winter', 'December - February', '6-18°C', 'Cool and clear', 'Cool mornings and evenings with clear skies. Snow is rare in town.', ['Warm jacket', 'Thermals for evenings', 'A woollen hat']],
+        ],
+        'pack_always' => ['Photo ID (original and copies)', 'Sunscreen, sunglasses and a hat', 'Power bank and a reusable water bottle', 'Regular medicines and a basic first-aid kit', 'Comfortable walking shoes'],
+        'places' => [
+            ['Deolo Hill', 'Viewpoint', 'A hilltop park above the town with wide views over the valley and, on clear days, the Kanchenjunga range.', 'About 2 km from town'],
+            ['Durpin Dara and Zang Dhok Palri Phodang', 'Monastery', 'A hilltop monastery with a large collection of Buddhist texts and views over the town.', 'About 3 km from town'],
+            ['Thongsa Gompa', 'Monastery', 'One of the older monasteries in the area, small and quiet.', 'In town'],
+            ['Mangal Dham', 'Temple', 'A modern temple complex with gardens, popular in the evening.', 'About 3 km from town'],
+            ['Flower nurseries', 'Experience', 'Kalimpong is known for its orchid, cactus and flower nurseries, open to visitors through the day.', 'In and around town'],
+            ['Dr Graham\'s Homes', 'Heritage', 'A well-known colonial-era school and cottage campus on the hillside, with a chapel and farm.', 'About 5 km from town'],
+            ['Teesta and Coronation Bridge', 'River viewpoint', 'The river valley below Kalimpong, crossed by an old arched bridge on the road to Sikkim.', 'About 15 km from town'],
+        ],
+        'getting' => [
+            ['From Bagdogra airport', 'The nearest airport, with pick-ups arranged by us.', 'About 3 hours'],
+            ['From New Jalpaiguri (NJP) station', 'The nearest main railhead, with onward cars to Kalimpong.', 'About 3 hours'],
+            ['From Darjeeling', 'A winding hill road with a river crossing.', 'About 2.5-3 hours'],
+            ['From Gangtok', 'The road follows the Teesta valley before climbing to Kalimpong.', 'About 3 hours'],
+        ],
+        'permits' => 'Entry rules for Kalimpong differ from Sikkim, and they depend on your nationality and the places you plan to visit. We confirm the current requirements before you travel.',
+        'stay' => 'Kalimpong has small hotels, heritage guesthouses and homestays, many with garden and valley views. Book early in the spring and autumn seasons.',
+        'itinerary' => [
+            'Arrive in Kalimpong and settle in. Walk to Deolo Hill for the evening view.',
+            'Durpin Dara, Thongsa Gompa and Mangal Dham, then a nursery visit and Dr Graham\'s Homes.',
+        ],
+        'tips' => [
+            'Visit nurseries in the morning when plants are freshly watered and the light is soft.',
+            'The town is spread across a ridge. Hire a cab for the longer stops.',
+            'Carry cash for small shops and nurseries, as card machines can be unreliable.',
+        ],
+        'faqs' => [
+            ['How many days do I need for Kalimpong?', 'Two days covers the main sights. Stay longer if you want quiet village walks.'],
+            ['Is Kalimpong worth visiting after Darjeeling?', 'Yes, if you prefer a quieter pace. It is much calmer and less crowded.'],
+            ['Can I visit Kalimpong from Gangtok?', 'Yes. It is roughly three hours by road, and many trips continue on to Darjeeling.'],
         ],
     ],
 ];

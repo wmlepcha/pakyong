@@ -2,18 +2,19 @@
 
 /*
  * Blog posts. Drafted from general knowledge: have your team check every fact,
- * add your own stories, and replace the byline with a named author.
+ * add your own stories. The author is the company (site.brand).
+ * date: first published (Y-m-d). Optional updated: last changed, shown as "Updated" and used for dateModified.
  * Order matters: the first post is featured.
  */
 return [
-    // First published; shown on every post and in its structured data.
+    // Fallback date for any post without its own date.
     'published' => '2026-11-13',
 
     'categories' => ['Destinations', 'Itineraries', 'Planning', 'Food and culture'],
 
     'posts' => [
         [
-            'slug' => 'gurudongmar-lake-what-to-expect', 'cat' => 'Destinations', 'mins' => 6, 'img' => 'north.jpeg',
+            'slug' => 'gurudongmar-lake-what-to-expect', 'date' => '2026-11-13', 'cat' => 'Destinations', 'mins' => 6, 'img' => 'north.webp',
             'title' => 'Gurudongmar Lake: what to expect at 17,800 ft',
             'excerpt' => 'Altitude, weather and the early start that makes the sunrise worth it.',
             'intro' => 'Gurudongmar Lake sits at about 17,800 feet in North Sikkim, close to the Tibet border. It is one of the highest lakes in the world and is sacred to both Buddhists and Sikhs. Most visitors remember it for the colour of the water, the silence and how thin the air feels.',
@@ -44,7 +45,7 @@ return [
             ],
         ],
         [
-            'slug' => 'five-day-gangtok-pelling-itinerary', 'cat' => 'Itineraries', 'mins' => 6, 'img' => 'west.jpeg',
+            'slug' => 'five-day-gangtok-pelling-itinerary', 'date' => '2026-11-12', 'cat' => 'Itineraries', 'mins' => 6, 'img' => 'west.webp',
             'title' => 'A 5-day Gangtok and Pelling itinerary',
             'excerpt' => 'A relaxed first trip: monasteries, viewpoints and a sky walk.',
             'intro' => 'If this is your first trip to Sikkim and you have five days, Gangtok and Pelling give you the best mix of city, monasteries and mountain views without too much driving. This plan keeps the days balanced, with a long drive only on day three.',
@@ -72,7 +73,7 @@ return [
             ],
         ],
         [
-            'slug' => 'sikkim-in-winter', 'cat' => 'Planning', 'mins' => 5, 'img' => 'east.jpeg',
+            'slug' => 'sikkim-in-winter', 'date' => '2026-11-10', 'cat' => 'Planning', 'mins' => 5, 'img' => 'east.webp',
             'title' => 'Sikkim in winter: is it worth it?',
             'excerpt' => 'Snow in Lachung, empty roads and what to pack for the cold.',
             'intro' => 'Winter, from December to February, is the quiet season in Sikkim. It is cold, but the skies are often clear, the crowds are thin and the high villages look their best under snow. It is not the right season for everyone, so here is an honest look at both sides.',
@@ -98,7 +99,7 @@ return [
             ],
         ],
         [
-            'slug' => 'sikkim-permits-explained', 'cat' => 'Planning', 'mins' => 5, 'img' => 'all-sikkim.jpeg',
+            'slug' => 'sikkim-permits-explained', 'date' => '2026-11-09', 'cat' => 'Planning', 'mins' => 5, 'img' => 'all-sikkim.webp',
             'title' => 'Sikkim permits, explained simply',
             'excerpt' => 'Who needs what, and why it is easier when your tour operator handles it.',
             'intro' => 'Permits are the part of a Sikkim trip people worry about most, and the part that is easiest to get wrong on your own. Rules differ by nationality and by place, and they change from time to time. Here is the short version, and always confirm the current rules before you travel.',
@@ -124,7 +125,7 @@ return [
             ],
         ],
         [
-            'slug' => 'what-to-eat-in-sikkim', 'cat' => 'Food and culture', 'mins' => 5, 'img' => 'south.jpeg',
+            'slug' => 'what-to-eat-in-sikkim', 'date' => '2026-11-07', 'cat' => 'Food and culture', 'mins' => 5, 'img' => 'south.webp',
             'title' => 'What to eat in Sikkim: a first-timer\'s list',
             'excerpt' => 'Momos, thukpa, sel roti and the warm millet drink worth trying once.',
             'intro' => 'Sikkimese food is simple, warming and shaped by Nepali, Bhutia and Lepcha kitchens. It suits the cold and the altitude, and much of it is cooked with little oil and plenty of local greens. These are the dishes to look for.',
@@ -150,7 +151,7 @@ return [
             ],
         ],
         [
-            'slug' => 'altitude-sickness-in-sikkim', 'cat' => 'Planning', 'mins' => 5, 'img' => 'north.jpeg',
+            'slug' => 'altitude-sickness-in-sikkim', 'date' => '2026-11-06', 'cat' => 'Planning', 'mins' => 5, 'img' => 'north.webp',
             'title' => 'Altitude sickness in Sikkim: how to avoid it',
             'excerpt' => 'Simple habits that keep a North Sikkim trip enjoyable.',
             'intro' => 'Gangtok sits at about 5,400 feet. Lachung is around 9,600, Tsomgo Lake about 12,400 and Gurudongmar about 17,800. That is a lot of climbing in a few days, which is why a little planning matters. Altitude sickness is common, mostly mild, and largely avoidable.',

@@ -55,22 +55,22 @@ return [
 
     'regions' => [
         [
-            'name' => 'East Sikkim', 'high' => 'Nathula, 14,140 ft', 'base' => 'Gangtok', 'days' => '3 to 4 days', 'img' => 'east.jpeg',
+            'name' => 'East Sikkim', 'high' => 'Nathula, 14,140 ft', 'base' => 'Gangtok', 'days' => '3 to 4 days', 'img' => 'east.webp',
             'about' => 'The capital and the easiest base. Gangtok has the widest choice of hotels, restaurants and cabs, and day trips reach the high passes on the Tibet border.',
             'highlights' => ['MG Marg, the pedestrian promenade, for an evening walk', 'Rumtek Monastery, seat of the Karmapa tradition', 'Enchey Monastery, Tashi Viewpoint and Ganesh Tok', 'Hanuman Tok and the Gangtok ropeway', 'Tsomgo (Changu) Lake at about 12,400 ft, with yak rides nearby', 'Baba Mandir and Nathula Pass at about 14,140 ft (permit needed, and Nathula is closed on some days of the week)'],
         ],
         [
-            'name' => 'North Sikkim', 'high' => 'Gurudongmar, 17,800 ft', 'base' => 'Lachung and Lachen', 'days' => '3 to 4 days', 'img' => 'north.jpeg',
+            'name' => 'North Sikkim', 'high' => 'Gurudongmar, 17,800 ft', 'base' => 'Lachung and Lachen', 'days' => '3 to 4 days', 'img' => 'north.webp',
             'about' => 'The wild, high-altitude side of Sikkim: river gorges, waterfalls, alpine valleys and Sikkim\'s most famous lake. Facilities are simple and the weather can change quickly, so book with a team that knows the roads.',
             'highlights' => ['Seven Sisters and Naga waterfalls on the way up', 'Lachung village and its monastery', 'Yumthang Valley at about 11,800 ft, known for rhododendrons in spring', 'Yumesamdong (Zero Point) at about 15,300 ft, weather permitting', 'Gurudongmar Lake at about 17,800 ft, one of the highest lakes in the world', 'Thangu and Chopta Valley, high meadows near the Tibet plateau'],
         ],
         [
-            'name' => 'West Sikkim', 'high' => 'Dzongri trek, ~13,000 ft', 'base' => 'Pelling', 'days' => '3 days', 'img' => 'west.jpeg',
+            'name' => 'West Sikkim', 'high' => 'Dzongri trek, ~13,000 ft', 'base' => 'Pelling', 'days' => '3 days', 'img' => 'west.webp',
             'about' => 'The closest views of Kanchenjunga, along with the oldest monasteries and Sikkim\'s first capital. It suits families, honeymooners and anyone who wants slower days.',
             'highlights' => ['Pemayangtse Monastery, one of the oldest in the state', 'Rabdentse ruins, the second capital of the Chogyal kings', 'Rimbi Waterfall and the Pelling Skywalk', 'Khecheopalri Lake, a sacred lake surrounded by forest', 'Yuksom, the first capital, and the start of the Dzongri trek', 'Tashiding Monastery on its hilltop'],
         ],
         [
-            'name' => 'South Sikkim', 'high' => 'Ravangla, ~7,000 ft', 'base' => 'Ravangla and Namchi', 'days' => '2 days', 'img' => 'south.jpeg',
+            'name' => 'South Sikkim', 'high' => 'Ravangla, ~7,000 ft', 'base' => 'Ravangla and Namchi', 'days' => '2 days', 'img' => 'south.webp',
             'about' => 'Gentler, greener and closer to the plains, which makes it a good first or last stop. Its tea gardens and large statues are easy to reach by road.',
             'highlights' => ['Buddha Park at Ravangla, with its giant seated Buddha', 'Temi Tea Garden, Sikkim\'s only tea estate', 'Maenam Hill for sunrise walks', 'Samdruptse and the Char Dham pilgrim complex at Namchi', 'Village homestays with local food'],
         ],

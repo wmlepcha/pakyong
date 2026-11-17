@@ -6,18 +6,51 @@
 
 @theme {
     --font-sans: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif;
-    --font-display: 'Playfair Display', ui-serif, Georgia, serif;
-    --color-ink: #0b1b3f;
-    --color-royal: #0b3d9e;
-    --color-mist: #e8f0fc;
-    --color-paper: #fbfcff;
-    --color-star: #f5b301;
+    --font-display: 'Noto Serif', ui-serif, Georgia, serif;
+    --color-ink: #2d3a22;
+    --color-royal: #44532e;
+    --color-mist: #e9e9d3;
+    --color-paper: #f6f6ee;
+    --color-star: #b9822f;
+
+    /* Square-cornered editorial look: every radius step collapses to zero (rounded-full stays for dots and avatars). */
+    --radius-xs: 0;
+    --radius-sm: 0;
+    --radius-md: 0;
+    --radius-lg: 0;
+    --radius-xl: 0;
+    --radius-2xl: 0;
+    --radius-3xl: 0;
+    --radius-4xl: 0;
 
     /* Phones and tablets share the app layout: the desktop layout starts at 1024px. */
     --breakpoint-md: 64rem;
 }
 
 html { scroll-behavior: smooth; }
+body { overflow-x: clip; }
+.font-display { font-weight: 400; letter-spacing: -0.005em; }
+.rounded-full { border-radius: 0; }
+.bleed { margin-inline: calc(50% - 50vw); }
+::selection { background: var(--color-royal); color: var(--color-paper); }
+:focus-visible { outline: 2px solid var(--color-star); outline-offset: 3px; }
+
+/* Buttons: small tracked caps, square, one solid and one outline variant. */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: .75rem; padding: 1rem 1.75rem; font-size: .72rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; white-space: nowrap; transition: background-color .2s, color .2s, border-color .2s; }
+
+.btn:disabled { opacity: .4; cursor: not-allowed; pointer-events: none; }
+@media (max-width: 39.99rem) { .btn { min-height: 2.75rem; padding: .875rem .75rem; gap: .5rem; font-size: 10px; letter-spacing: .1em; } }
+.btn-solid { background: var(--color-royal); color: #fff; }
+.btn-solid:hover { background: var(--color-ink); }
+.btn-ext { background: #1a77cc; color: #fff; }
+.btn-ext:hover { background: #135fa3; }
+.btn-light { background: var(--color-mist); color: var(--color-ink); }
+.btn-light:hover { background: #fff; }
+.btn-line { border: 1px solid rgb(255 255 255 / .65); color: #fff; }
+.btn-line:hover { background: rgb(255 255 255 / .12); }
+.btn-line-dark { border: 1px solid var(--color-royal); color: var(--color-royal); }
+.btn-line-dark:hover { background: var(--color-royal); color: #fff; }
+.kicker { font-size: .68rem; font-weight: 500; letter-spacing: .22em; text-transform: uppercase; }
 [x-cloak] { display: none !important; }
 
 /* Native-feel touch behaviour */
@@ -34,5 +67,69 @@ html { -webkit-tap-highlight-color: transparent; }
 @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1 !important; transform: none !important; transition: none !important; } }
 
 /* Header: hairline and soft shadow appear once the page is scrolled */
-header[data-scrolled="true"] { box-shadow: 0 1px 0 rgba(11, 27, 63, .06), 0 10px 30px -18px rgba(11, 27, 63, .3); }
+header[data-scrolled="true"] { box-shadow: 0 1px 0 rgba(45, 58, 34, .08), 0 10px 30px -18px rgba(45, 58, 34, .35); }
 header { transition: box-shadow .3s ease; }
+
+/* Enquiry planner scrim: frosted glass over the page, solid tint when transparency is reduced. */
+.glass-scrim { background: rgb(45 58 34 / .28); backdrop-filter: blur(14px) saturate(1.4); -webkit-backdrop-filter: blur(14px) saturate(1.4); }
+@media (prefers-reduced-transparency: reduce) { .glass-scrim { background: rgb(45 58 34 / .8); backdrop-filter: none; -webkit-backdrop-filter: none; } }
+
+/* Form fields: 16px minimum so iOS Safari never zooms on focus, native chrome stripped so iOS and desktop match. */
+.field { width: 100%; min-height: 3rem; margin-top: .375rem; padding: .75rem 1rem; font-size: 1rem; line-height: 1.4; color: var(--color-ink); background: #fff; border: 1px solid rgb(45 58 34 / .3); border-radius: 0; -webkit-appearance: none; appearance: none; }
+.field:focus { border-color: var(--color-royal); outline: 2px solid var(--color-star); outline-offset: 1px; }
+select.field { padding-right: 2.5rem; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2344532e' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right .75rem center; background-size: 1.1rem; }
+@media (hover: none) { input, select, textarea { font-size: max(16px, 1em); } }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+a, button, summary, label, select { touch-action: manipulation; }
+
+/* iOS-style tab bar material */
+.tabbar { background: rgb(246 246 238 / .86); backdrop-filter: blur(20px) saturate(1.8); -webkit-backdrop-filter: blur(20px) saturate(1.8); }
+@media (prefers-reduced-transparency: reduce) { .tabbar { background: var(--color-paper); backdrop-filter: none; -webkit-backdrop-filter: none; } }
+
+/* Season weather: subtle ambient motion inside the "When to go" cards. Runs only while a card is active or hovered. */
+.fx { position: absolute; inset: 0; overflow: hidden; pointer-events: none; opacity: 0; transition: opacity .5s; }
+.fx span { position: absolute; top: -8%; left: var(--x); animation: fx-fall var(--t) linear var(--d) infinite; animation-play-state: paused; will-change: transform; }
+.fx-on .fx, .season-card:hover .fx, .season-card:focus-within .fx { opacity: 1; }
+.fx-on .fx span, .season-card:hover .fx span, .season-card:focus-within .fx span { animation-play-state: running; }
+.fx-rain::before { content: ""; position: absolute; inset: 0 0 55%; background: linear-gradient(rgb(68 83 46 / .16), transparent); }
+.fx-rain span { top: -12%; width: 1.5px; height: calc(var(--z) * 4); rotate: 10deg; border-radius: 1px; background: linear-gradient(transparent, rgb(52 74 62 / .55)); animation-name: fx-rain; }
+.fx-snow span { width: var(--z); height: var(--z); border-radius: 999px; background: #fff; opacity: .9; }
+.fx-petal span { width: calc(var(--z) + 3px); height: var(--z); border-radius: 100% 0 100% 0; background: #d79b8e; opacity: .8; }
+.fx-leaf span { width: calc(var(--z) + 4px); height: calc(var(--z) + 2px); border-radius: 0 100% 0 100%; background: #a5671f; opacity: .6; }
+@keyframes fx-rain { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(-60px, 360px, 0); } }
+@keyframes fx-fall { from { transform: translate3d(0, 0, 0) rotate(0); } to { transform: translate3d(var(--dx), 340px, 0) rotate(var(--r)); } }
+@media (prefers-reduced-motion: reduce) { .fx { display: none; } }
+
+/* Fieldsets default to min-content width, which lets wide children (swipe rows) stretch the whole form. */
+fieldset { min-width: 0; }
+
+/* Small screens: iOS-style fields. 17px type (never below 16px, so Safari does not zoom), softer corners, taller touch targets. */
+@media (max-width: 63.99rem) {
+    .field { min-height: 3.25rem; padding: .85rem 1rem; font-size: 1.0625rem; border-color: rgb(45 58 34 / .2); }
+    .field:focus { outline-offset: 0; }
+    input, textarea, select { -webkit-text-size-adjust: 100%; }
+}
+
+/* ===== iOS phone kit (under 1024px only; desktop keeps the square editorial look) ===== */
+:root { --header-h: calc(72px + env(safe-area-inset-top)); }
+@media (max-width: 63.99rem) {
+    .r-ios { border-radius: .75rem; }
+    .r-ios-lg { border-radius: 1rem; }
+    /* Inset grouped list: white rounded block, hairlines between children. */
+    .ios-group { background: #fff; border: 1px solid rgb(45 58 34 / .1); border-radius: .75rem; overflow: hidden; }
+    .ios-group > * + * { border-top: 1px solid rgb(45 58 34 / .1); }
+    .ios-row { min-height: 2.75rem; padding: .75rem 1rem; }
+    /* Chips and segmented tabs: 44px tap height. Colours stay with the element's own classes. */
+    .chip { min-height: 2.75rem; padding-inline: 1rem; font-size: .875rem; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; }
+    /* Sticky bars act like an iOS navigation bar. */
+    .ios-bar { background: rgb(246 246 238 / .88); backdrop-filter: blur(20px) saturate(1.6); -webkit-backdrop-filter: blur(20px) saturate(1.6); top: var(--header-h) !important; }
+    .ios-title { font-size: 2rem; line-height: 1.1; }
+}
+@media (max-width: 63.99rem) and (prefers-reduced-transparency: reduce) { .ios-bar { background: var(--color-paper); backdrop-filter: none; -webkit-backdrop-filter: none; } }
+
+/* Phones only (under 640px): same grouped list, for blocks that are a card grid on tablets. */
+@media (max-width: 39.99rem) {
+    .ios-group-sm { background: #fff; border: 1px solid rgb(45 58 34 / .1); border-radius: .75rem; overflow: hidden; }
+    .ios-group-sm > * + * { border-top: 1px solid rgb(45 58 34 / .1); }
+    .ios-row-sm { padding: .75rem 1rem; min-height: 2.75rem; }
+}

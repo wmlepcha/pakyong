@@ -1,4 +1,0 @@
-User-agent: *
-Disallow:
-
-Sitemap: https://pakyong.dhungkartechnology.in/sitemap.xml

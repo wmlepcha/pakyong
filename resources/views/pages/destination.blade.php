@@ -5,7 +5,7 @@
     $others = collect(config('destinations'))->except($slug);
     $monthShort = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     $seasonMonths = [[2, 3, 4], [5, 6, 7, 8], [9, 10], [11, 0, 1]];
-    $levels = ['peak' => 'bg-royal text-white', 'good' => 'bg-royal/30 text-ink', 'wet' => 'bg-sky-200 text-ink', 'cold' => 'bg-slate-300 text-ink'];
+    $levels = ['peak' => 'bg-royal text-white', 'good' => 'bg-royal/30 text-ink', 'wet' => 'bg-[#cdd8bd] text-ink', 'cold' => 'bg-[#c2c8b4] text-ink'];
 
     // Best months, e.g. "Apr-May, Oct-Nov", from the months marked peak.
     $runs = [];
@@ -17,11 +17,11 @@
 
     $facts = [['Best time', $best], ['Plan', $d['days']], ['High point', $d['high']], ['Base', $d['base']]];
     $toc = ['overview' => 'Overview', 'best-time' => 'Best time to visit', 'places' => 'Places to visit', 'pack' => 'What to pack', 'getting-there' => 'Getting there', 'permits-stay' => 'Permits and stay', 'itinerary' => 'Suggested plan', 'tips' => 'Tips', 'faq' => 'FAQ'];
-    $h2 = 'font-display font-bold text-2xl sm:text-4xl text-balance';
-    $h3 = 'font-display font-bold text-xl';
+    $h2 = 'font-display text-[1.375rem] sm:text-4xl text-balance';
+    $h3 = 'font-display text-lg sm:text-xl';
     $body = 'text-ink/75 leading-relaxed';
-    $pill = 'rounded-full px-1 py-2 sm:px-4 text-xs sm:text-sm font-semibold whitespace-nowrap text-center transition-colors flex-1 min-w-0 sm:flex-none';
-    $card = 'bg-white border border-ink/5 rounded-3xl';
+    $pill = 'inline-flex items-center justify-center min-h-11 rounded-full px-1 sm:px-4 text-[13px] sm:text-sm font-semibold whitespace-nowrap text-center transition-colors flex-1 min-w-0 sm:flex-none';
+    $card = 'bg-white border border-ink/10 r-ios-lg';
 
     // Photos of individual places (Wikimedia Commons, credited at the bottom of the page). Only this region's own photos are ever used.
     $photos = config('destination_photos.'.$slug, []);
@@ -31,7 +31,7 @@
         if ($url = $photoUrl($i)) { $pool[] = ['img' => $url, 'name' => $pl[0], 'type' => $pl[1]]; }
     }
     if (count($pool) < 5) { array_unshift($pool, ['img' => '/images/'.$d['img'], 'name' => $d['name'], 'type' => 'Base: '.$d['base']]); }
-    $tileClasses = ['col-span-2 h-44 sm:col-span-1 sm:row-span-2 sm:h-auto', 'h-24 sm:h-auto', 'h-24 sm:h-auto', 'h-24 sm:h-auto', 'h-24 sm:h-auto'];
+    $tileClasses = ['col-span-2 aspect-[16/10] sm:aspect-auto sm:col-span-1 sm:row-span-2 sm:h-auto', 'max-sm:hidden sm:h-auto', 'max-sm:hidden sm:h-auto', 'max-sm:hidden sm:h-auto', 'max-sm:hidden sm:h-auto'];
 @endphp
 @section('title', $d['name'].' travel guide - '.config('site.brand'))
 @section('description', $d['tagline'].' When to visit, temperature, places to see and what to pack for '.$d['name'].'.')
@@ -41,19 +41,19 @@
     '@@context' => 'https://schema.org', '@@type' => 'TouristDestination',
     'name' => $d['name'], 'description' => $d['tagline'].' '.$d['about'][0],
     'image' => url('/images/'.$d['img']), 'touristType' => $d['good_for'],
-    'containedInPlace' => ['@@type' => 'AdministrativeArea', 'name' => 'Sikkim, India'],
+    'containedInPlace' => ['@@type' => 'AdministrativeArea', 'name' => $d['place'] ?? 'Sikkim, India'],
 ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}</script>
 @endpush
 @section('content')
 
 {{-- Hero: a mosaic of photos that change, then the essentials --}}
 <section class="px-5 sm:px-8 pt-3 sm:pt-6">
-    <a href="{{ route('destinations') }}" class="inline-flex items-center gap-2 text-sm font-semibold text-ink/70 hover:text-royal"><x-icon name="left" class="size-4"/> All destinations</a>
+    <a href="{{ route('destinations') }}" class="inline-flex items-center gap-1 -ml-1 min-h-11 text-[15px] font-semibold text-royal"><x-icon name="left" class="size-5"/> All destinations</a>
     <div class="mt-4 lg:mt-6 flex flex-col gap-6 lg:gap-10">
         <div x-data='mosaic(@json($pool, JSON_HEX_APOS | JSON_HEX_QUOT))' class="order-first lg:order-last grid grid-cols-2 gap-2 sm:grid-cols-[1.5fr_1.2fr_1fr] sm:grid-rows-2 sm:gap-3 sm:h-[22rem] lg:h-[30rem]">
             @foreach ($tileClasses as $t => $cls)
                 @php $first = $pool[$t % count($pool)]; @endphp
-                <div class="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-mist {{ $cls }}">
+                <div class="relative overflow-hidden r-ios-lg bg-mist {{ $cls }}">
                     @foreach (['a', 'b'] as $L)
                         {{-- Each layer carries its own photo and its own name, so they fade together --}}
                         <div class="absolute inset-0 transition-opacity duration-[1400ms]" :class="tiles[{{ $t }}].front === '{{ $L }}' ? 'opacity-100' : 'opacity-0'">
@@ -72,17 +72,17 @@
 
         <div class="lg:grid lg:grid-cols-[1.1fr_1fr] lg:gap-12 lg:items-end">
             <div>
-                <h1 class="font-display font-bold text-[2rem] leading-[1.1] sm:text-5xl lg:text-6xl text-balance">{{ $d['name'] }}</h1>
+                <h1 class="font-display ios-title sm:text-5xl lg:text-6xl text-balance">{{ $d['name'] }}</h1>
                 <p class="mt-3 text-base sm:text-lg text-ink/70 max-w-xl text-pretty">{{ $d['tagline'] }}</p>
                 <p class="mt-4 text-sm sm:text-base text-ink/70"><span class="font-semibold text-ink">Good for</span> {{ implode(', ', array_map('mb_strtolower', $d['good_for'])) }}</p>
                 <div class="mt-6 grid grid-cols-2 gap-2.5 sm:flex sm:gap-3">
-                    <button type="button" @click="pick('{{ $d['name'] }}')" class="inline-flex items-center justify-center rounded-full bg-royal text-white text-sm sm:text-base font-semibold px-3 py-3.5 sm:px-8 sm:py-4 whitespace-nowrap hover:bg-ink transition-colors">Plan this trip</button>
-                    <a href="https://wa.me/{{ $wa }}?text={{ rawurlencode('Hi, I have a question about '.$d['name']) }}" target="_blank" rel="noopener" class="inline-flex items-center justify-center gap-1.5 sm:gap-3 rounded-full bg-mist text-ink text-sm sm:text-base font-semibold px-3 py-3.5 sm:pl-7 sm:pr-6 sm:py-4 whitespace-nowrap hover:bg-royal/10 transition-colors">Ask on WhatsApp <x-icon name="arrow" class="size-4"/></a>
+                    <button type="button" @click="pick('{{ $d['name'] }}')" class="btn btn-solid">Plan this trip</button>
+                    <a href="https://wa.me/{{ $wa }}?text={{ rawurlencode('Hi, I have a question about '.$d['name']) }}" target="_blank" rel="noopener" class="btn btn-light">Ask on WhatsApp <x-icon name="arrow" class="size-4 max-sm:hidden"/></a>
                 </div>
             </div>
-            <dl class="mt-7 lg:mt-0 grid grid-cols-2 gap-x-6 gap-y-6 border-t border-ink/15 pt-5">
+            <dl class="mt-6 lg:mt-0 ios-group lg:grid lg:grid-cols-2 lg:gap-x-6 lg:gap-y-6 lg:border-t lg:border-ink/15 lg:pt-5">
                 @foreach ($facts as [$k, $v])
-                    <div><dt class="text-sm text-ink/60">{{ $k }}</dt><dd class="mt-1 font-display font-bold text-xl leading-snug">{{ $v }}</dd></div>
+                    <div class="ios-row flex items-baseline justify-between gap-4 lg:block lg:p-0"><dt class="text-sm text-ink/60">{{ $k }}</dt><dd class="lg:mt-1 font-display text-[1.0625rem] lg:text-xl leading-snug text-right lg:text-left">{{ $v }}</dd></div>
                 @endforeach
             </dl>
         </div>
@@ -96,23 +96,23 @@
 
 <div class="px-5 sm:px-8 pt-8 grid grid-cols-[minmax(0,1fr)] lg:grid-cols-[14rem_minmax(0,1fr)] gap-x-14 gap-y-6">
     {{-- Contents: pinned chips on phones and tablets, side list on desktop --}}
-    <nav aria-label="On this page" class="min-w-0 sticky top-20 lg:top-28 z-30 self-start -mx-5 sm:-mx-8 px-5 sm:px-8 py-3 bg-paper lg:m-0 lg:p-0 lg:bg-transparent ">
+    <nav aria-label="On this page" class="ios-bar min-w-0 sticky top-20 lg:top-28 z-30 self-start -mx-5 sm:-mx-8 px-5 sm:px-8 py-3 bg-paper lg:m-0 lg:p-0 lg:bg-transparent ">
         <p class="hidden lg:block text-xs font-semibold text-ink/55 mb-3 px-3">On this page</p>
         <ul x-ref="chips" class="flex lg:flex-col gap-1 overflow-x-auto lg:overflow-visible [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             @foreach ($toc as $id => $label)
                 <li class="shrink-0"><a href="#{{ $id }}" :aria-current="active === '{{ $id }}' ? 'true' : null"
                        :class="active === '{{ $id }}' ? 'bg-ink text-white lg:bg-mist lg:text-royal font-semibold' : 'bg-mist lg:bg-transparent text-ink/75 lg:text-ink/70 hover:text-ink lg:hover:bg-mist/60'"
-                       class="block rounded-full lg:rounded-xl px-4 py-2 lg:px-3 text-sm whitespace-nowrap transition-colors">{{ $label }}</a></li>
+                       class="chip block rounded-full lg:rounded-xl px-4 py-2 lg:px-3 text-sm whitespace-nowrap transition-colors">{{ $label }}</a></li>
             @endforeach
         </ul>
     </nav>
 
-    <div class="min-w-0 space-y-14 sm:space-y-24 pt-2 sm:pt-4 pb-4">
+    <div class="min-w-0 space-y-10 sm:space-y-24 pt-2 sm:pt-4 pb-4">
 
         {{-- Overview --}}
         <section id="overview" data-spy class="scroll-mt-40 lg:scroll-mt-28">
             <h2 class="{{ $h2 }}">Overview</h2>
-            <p class="mt-5 font-display text-xl sm:text-2xl leading-snug max-w-3xl text-balance">{{ $d['about'][0] }}</p>
+            <p class="mt-4 font-display text-[1.0625rem] sm:text-2xl leading-snug max-w-3xl text-balance">{{ $d['about'][0] }}</p>
             <p class="mt-4 max-w-3xl {{ $body }}">{{ $d['about'][1] }}</p>
         </section>
 
@@ -133,15 +133,15 @@
             <ul class="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-xs text-ink/65">
                 <li class="flex items-center gap-2"><span class="size-3 rounded bg-royal"></span>Peak views and weather</li>
                 <li class="flex items-center gap-2"><span class="size-3 rounded bg-royal/30"></span>Good</li>
-                <li class="flex items-center gap-2"><span class="size-3 rounded bg-sky-200"></span>Rain and landslide risk</li>
-                <li class="flex items-center gap-2"><span class="size-3 rounded bg-slate-300"></span>Cold, snow in the high areas</li>
+                <li class="flex items-center gap-2"><span class="size-3 rounded bg-[#cdd8bd]"></span>Rain and landslide risk</li>
+                <li class="flex items-center gap-2"><span class="size-3 rounded bg-[#c2c8b4]"></span>Cold, snow in the high areas</li>
             </ul>
             <div class="mt-6 {{ $card }} p-5 sm:p-8" role="tabpanel">
                 @foreach ($d['seasons'] as $k => [$name, $months, $temp, $mood, $text])
                     <div x-show="s === {{ $k }}" @if ($k) x-cloak @endif class="grid sm:grid-cols-[13rem_1fr] gap-5 sm:gap-8">
                         <div>
                             <p class="text-sm text-ink/60">{{ $name }} · {{ $months }}</p>
-                            <p class="mt-1 font-display font-bold text-4xl sm:text-5xl">{{ $temp }}</p>
+                            <p class="mt-1 font-display text-[1.625rem] sm:text-5xl">{{ $temp }}</p>
                             <p class="mt-1 text-xs text-ink/55">Typical day and night range</p>
                         </div>
                         <div>
@@ -161,7 +161,7 @@
                            sync() { const t = $refs.track; this.start = t.scrollLeft < 8; this.end = t.scrollLeft + t.clientWidth >= t.scrollWidth - 8; } }" x-init="sync()">
             <div class="flex items-end justify-between gap-6">
                 <h2 class="{{ $h2 }}">Places to visit</h2>
-                <div class="flex gap-2 shrink-0">
+                <div class="max-sm:hidden flex gap-2 shrink-0">
                     <button type="button" @click="move(-1)" :disabled="start" aria-label="Previous places" class="grid place-items-center size-11 sm:size-12 rounded-full border border-ink/15 bg-white hover:bg-ink hover:text-white hover:border-ink transition-colors disabled:opacity-30 disabled:pointer-events-none"><x-icon name="left"/></button>
                     <button type="button" @click="move(1)" :disabled="end" aria-label="Next places" class="grid place-items-center size-11 sm:size-12 rounded-full border border-ink/15 bg-white hover:bg-ink hover:text-white hover:border-ink transition-colors disabled:opacity-30 disabled:pointer-events-none"><x-icon name="right"/></button>
                 </div>
@@ -170,7 +170,7 @@
                  class="mt-6 -mx-5 px-5 sm:-mx-8 sm:px-8 lg:mx-0 lg:px-0 flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-px-5 sm:scroll-px-8 lg:scroll-px-0 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 @foreach ($d['places'] as $i => [$name, $type, $desc, $meta])
                     @php $img = $photoUrl($i); @endphp
-                    <article class="group relative snap-start shrink-0 w-[76%] sm:w-[46%] lg:w-[calc(50%-0.5rem)] xl:w-[calc(33.333%-0.7rem)] aspect-[3/4] rounded-3xl overflow-hidden text-white {{ $img ? 'bg-mist' : 'bg-gradient-to-br from-royal to-ink' }}">
+                    <article class="group relative snap-start shrink-0 w-[76%] sm:w-[46%] lg:w-[calc(50%-0.5rem)] xl:w-[calc(33.333%-0.7rem)] aspect-[3/4] r-ios-lg overflow-hidden text-white {{ $img ? 'bg-mist' : 'bg-gradient-to-br from-royal to-ink' }}">
                         @if ($img)
                             <img src="{{ $img }}" @dims($img) alt="{{ $name }}" loading="lazy" class="absolute inset-0 size-full object-cover lg:group-hover:scale-105 transition duration-700">
                         @else
@@ -200,15 +200,15 @@
                 <div>
                     <h3 class="{{ $h3 }}">What to wear in <span x-text="['{{ implode("','", array_column($d['seasons'], 0)) }}'][s].toLowerCase()"></span></h3>
                     @foreach ($d['seasons'] as $k => $se)
-                        <ul x-show="s === {{ $k }}" @if ($k) x-cloak @endif class="mt-3 divide-y divide-ink/10 border-y border-ink/10 px-0 text-sm {{ $body }}">
-                            @foreach ($se[5] as $item)<li class="py-3">{{ $item }}</li>@endforeach
+                        <ul x-show="s === {{ $k }}" @if ($k) x-cloak @endif class="mt-3 ios-group divide-y divide-ink/10 border-y border-ink/10 px-0 text-sm {{ $body }}">
+                            @foreach ($se[5] as $item)<li class="ios-row py-3">{{ $item }}</li>@endforeach
                         </ul>
                     @endforeach
                 </div>
                 <div>
                     <h3 class="{{ $h3 }}">Always bring</h3>
-                    <ul class="mt-3 divide-y divide-ink/10 border-y border-ink/10 text-sm {{ $body }}">
-                        @foreach ($d['pack_always'] as $item)<li class="py-3">{{ $item }}</li>@endforeach
+                    <ul class="mt-3 ios-group divide-y divide-ink/10 border-y border-ink/10 text-sm {{ $body }}">
+                        @foreach ($d['pack_always'] as $item)<li class="ios-row py-3">{{ $item }}</li>@endforeach
                     </ul>
                 </div>
             </div>
@@ -218,9 +218,9 @@
         {{-- Getting there --}}
         <section id="getting-there" data-spy class="scroll-mt-40 lg:scroll-mt-28">
             <h2 class="{{ $h2 }}">Getting there</h2>
-            <dl class="mt-5 sm:mt-6 divide-y divide-ink/10 max-sm:rounded-2xl max-sm:bg-white max-sm:border max-sm:border-ink/5 max-sm:px-4 sm:border-y sm:border-ink/10">
+            <dl class="mt-4 sm:mt-6 ios-group divide-y divide-ink/10 sm:border-y sm:border-ink/10">
                 @foreach ($d['getting'] as [$route, $detail, $time])
-                    <div class="py-4 sm:py-6 grid lg:grid-cols-[14rem_1fr_9.5rem] gap-2 lg:gap-8 items-start">
+                    <div class="py-4 sm:py-6 px-4 lg:px-0 grid lg:grid-cols-[14rem_1fr_9.5rem] gap-1 lg:gap-8 items-start">
                         <dt class="{{ $h3 }}">{{ $route }}</dt>
                         <dd class="{{ $body }}">{{ $detail }}</dd>
                         <dd class="lg:text-right"><span class="text-sm font-semibold text-royal">{{ $time }}</span></dd>
@@ -233,10 +233,10 @@
         <section id="permits-stay" data-spy class="scroll-mt-40 lg:scroll-mt-28">
             <h2 class="{{ $h2 }}">Permits and where to stay</h2>
             <div class="mt-6 grid sm:grid-cols-2 gap-4">
-                <div class="bg-royal text-white rounded-3xl p-5 sm:p-6 flex flex-col">
+                <div class="bg-royal text-white r-ios-lg p-5 sm:p-6 flex flex-col">
                     <h3 class="{{ $h3 }}">Permits</h3>
                     <p class="mt-3 text-sm text-white/85 leading-relaxed">{{ $d['permits'] }}</p>
-                    <a href="{{ route('guide') }}#entry" class="mt-5 inline-flex items-center gap-2 self-start rounded-full bg-white text-ink text-sm font-semibold pl-5 pr-4 py-3 hover:bg-mist transition-colors">Entry rules <x-icon name="arrow" class="size-4"/></a>
+                    @if (($d['group'] ?? 'Sikkim') === 'Sikkim')<a href="{{ route('guide') }}#entry" class="btn btn-light mt-5 self-start">Entry rules <x-icon name="arrow" class="size-4"/></a>@endif
                 </div>
                 <div class="{{ $card }} p-5 sm:p-6">
                     <h3 class="{{ $h3 }}">Where to stay</h3>
@@ -248,41 +248,41 @@
         {{-- Suggested plan --}}
         <section id="itinerary" data-spy class="scroll-mt-40 lg:scroll-mt-28">
             <h2 class="{{ $h2 }}">Suggested {{ count($d['itinerary']) }}-day plan</h2>
-            <ol class="mt-6 divide-y divide-ink/10 border-y border-ink/10">
+            <ol class="mt-4 sm:mt-6 ios-group divide-y divide-ink/10 border-y border-ink/10">
                 @foreach ($d['itinerary'] as $i => $day)
-                    <li class="py-5 grid sm:grid-cols-[7rem_1fr] gap-1 sm:gap-8">
-                        <p class="font-display font-bold text-xl text-royal">Day {{ $i + 1 }}</p>
+                    <li class="ios-row py-5 grid sm:grid-cols-[7rem_1fr] gap-1 sm:gap-8">
+                        <p class="font-display text-lg sm:text-xl text-royal">Day {{ $i + 1 }}</p>
                         <p class="{{ $body }} max-w-2xl">{{ $day }}</p>
                     </li>
                 @endforeach
             </ol>
             <div class="mt-6 flex flex-wrap items-center justify-between gap-4">
                 <p class="text-sm text-ink/60 max-w-xl">A starting point. We plan around your dates, pace and budget.</p>
-                <button type="button" @click="pick('{{ $d['name'] }}')" class="inline-flex items-center gap-3 rounded-full bg-ink text-white font-semibold pl-6 pr-5 py-3.5 hover:bg-royal transition-colors">Plan this trip <x-icon name="arrow" class="size-4"/></button>
+                <button type="button" @click="pick('{{ $d['name'] }}')" class="btn btn-solid max-sm:w-full">Plan this trip <x-icon name="arrow" class="size-4 max-sm:hidden"/></button>
             </div>
         </section>
 
         {{-- Tips --}}
         <section id="tips" data-spy class="scroll-mt-40 lg:scroll-mt-28">
             <h2 class="{{ $h2 }}">Tips from our team</h2>
-            <ul class="mt-6 grid sm:grid-cols-2 gap-x-12 divide-y divide-ink/10 sm:divide-y-0 border-y border-ink/10 sm:[&>li]:border-b sm:[&>li]:border-ink/10 sm:border-b-0">
-                @foreach ($d['tips'] as $tip)<li class="py-3 text-sm {{ $body }}">{{ $tip }}</li>@endforeach
+            <ul class="mt-4 sm:mt-6 ios-group grid sm:grid-cols-2 gap-x-12 divide-y divide-ink/10 sm:divide-y-0 border-y border-ink/10 sm:[&>li]:border-b sm:[&>li]:border-ink/10 sm:border-b-0">
+                @foreach ($d['tips'] as $tip)<li class="ios-row py-3 text-sm {{ $body }}">{{ $tip }}</li>@endforeach
             </ul>
         </section>
 
         {{-- FAQ --}}
         <section id="faq" data-spy class="scroll-mt-40 lg:scroll-mt-28">
-            <h2 class="{{ $h2 }}">Questions about {{ $d['short'] }} Sikkim</h2>
-            <div class="mt-6 max-w-3xl divide-y divide-ink/10 border-y border-ink/10">
+            <h2 class="{{ $h2 }}">Questions about {{ $d['name'] }}</h2>
+            <div class="mt-4 sm:mt-6 max-w-3xl ios-group divide-y divide-ink/10 border-y border-ink/10">
                 @foreach ($d['faqs'] as $k => [$q, $a])
                     <div>
                         <h3>
-                            <button type="button" @click="faq = faq === {{ $k }} ? -1 : {{ $k }}" :aria-expanded="faq === {{ $k }}" class="w-full flex items-center justify-between gap-4 text-left py-5 font-semibold hover:text-royal transition-colors">
+                            <button type="button" @click="faq = faq === {{ $k }} ? -1 : {{ $k }}" :aria-expanded="faq === {{ $k }}" class="w-full flex items-center justify-between gap-4 text-left py-4 px-4 lg:px-0 lg:py-5 font-semibold text-[15px] lg:text-base hover:text-royal transition-colors">
                                 {{ $q }}
                                 <span class="shrink-0 text-2xl leading-none font-normal text-royal transition-transform duration-300" :class="faq === {{ $k }} && 'rotate-45'" aria-hidden="true">+</span>
                             </button>
                         </h3>
-                        <div x-show="faq === {{ $k }}" x-cloak class="pb-6 pr-10"><p class="{{ $body }} max-w-[62ch]">{{ $a }}</p></div>
+                        <div x-show="faq === {{ $k }}" x-cloak class="pb-4 px-4 lg:px-0 lg:pb-6 lg:pr-10"><p class="{{ $body }} text-[15px] lg:text-base max-w-[62ch]">{{ $a }}</p></div>
                     </div>
                 @endforeach
             </div>
@@ -292,7 +292,7 @@
 </div>
 
 @if ($photos)
-<section class="px-5 sm:px-8 pt-12">
+<section class="px-5 sm:px-8 pt-8 sm:pt-12">
     <details class="max-w-3xl text-xs text-ink/55">
         <summary class="cursor-pointer font-semibold">Photo credits</summary>
         <p class="mt-3 leading-relaxed">Photos from Wikimedia Commons:
@@ -305,14 +305,14 @@
 @endif
 
 {{-- Other destinations --}}
-<section class="pt-16 sm:pt-24">
+<section class="pt-12 sm:pt-24">
     <div class="flex items-center justify-between gap-4 px-5 sm:px-8 mb-5 sm:mb-8">
-        <h2 class="font-display font-bold text-2xl sm:text-4xl">Explore more of Sikkim</h2>
-        <a href="{{ route('destinations') }}" class="shrink-0 whitespace-nowrap text-sm font-semibold text-royal">View all</a>
+        <h2 class="font-display text-[1.375rem] sm:text-4xl">Explore more destinations</h2>
+        <a href="{{ route('destinations') }}" class="shrink-0 whitespace-nowrap inline-flex items-center min-h-11 text-sm font-semibold text-royal">View all</a>
     </div>
     <div class="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-px-5 px-5 sm:scroll-px-8 sm:px-8 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:grid lg:grid-cols-3 lg:overflow-visible">
         @foreach ($others as $key => $o)
-            <a href="{{ route('destination', $key) }}" class="group snap-start shrink-0 w-[68%] sm:w-[38%] lg:w-auto relative block aspect-[4/5] rounded-3xl overflow-hidden bg-mist">
+            <a href="{{ route('destination', $key) }}" class="group snap-start shrink-0 w-[68%] sm:w-[38%] lg:w-auto relative block aspect-[4/5] r-ios-lg overflow-hidden bg-mist">
                 <img src="/images/{{ $o['img'] }}" @dims('/images/'.$o['img']) alt="" loading="lazy" class="absolute inset-0 size-full object-cover lg:group-hover:scale-105 transition duration-700">
                 <span class="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/30 to-transparent"></span>
                 <span class="absolute inset-x-0 bottom-0 p-5 text-white">

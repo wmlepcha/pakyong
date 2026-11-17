@@ -4,7 +4,7 @@
  * Legal documents, drafted for a Sikkim tour operator under Indian law.
  * This is a starting draft, not legal advice: have a lawyer review it, and set the
  * cancellation schedule and business details to match how you actually operate.
- * Tokens :brand and :phone are replaced from config/site.php.
+ * Tokens :brand, :legal, :udyam and :phone are replaced from config/site.php.
  * A block is a paragraph (string), ['list' => [...]] or ['table' => [headers, rows]].
  */
 return [
@@ -22,7 +22,7 @@ return [
         ],
         'sections' => [
             ['About these terms', [
-                'These terms are an agreement between you and :brand, a tour operator based in Gangtok, Sikkim ("we", "us"). By sending an enquiry, paying an advance or travelling with us, you accept these terms.',
+                'These terms are an agreement between you and :brand, a tour operator based in Pakyong, Sikkim and a trade name of :legal ("we", "us"), registered under Udyam number :udyam. By sending an enquiry, paying an advance or travelling with us, you accept these terms.',
                 'If you book for a group, you confirm you are authorised to accept these terms for everyone in it, and you will make sure they read them.',
             ]],
             ['Our role', [
@@ -132,7 +132,7 @@ return [
         ],
         'sections' => [
             ['Who we are', [
-                ':brand is a tour operator based in Gangtok, Sikkim. We decide why and how your personal information is used for your enquiry or booking. You can reach us at :phone.',
+                ':brand, a trade name of :legal, is a tour operator based in Pakyong, Sikkim. We decide why and how your personal information is used for your enquiry or booking. You can reach us at :phone.',
             ]],
             ['What we collect', [
                 ['list' => [
