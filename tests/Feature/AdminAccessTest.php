@@ -115,6 +115,19 @@ class AdminAccessTest extends TestCase
         $this->actingAs($admin)->get($this->adminUrl('/posts/'.$post->id.'/edit'))->assertOk()->assertSee('Day one');
     }
 
+    public function test_pages_carry_security_headers_and_the_admin_keeps_its_stricter_ones(): void
+    {
+        $this->get('/')->assertHeader('X-Content-Type-Options', 'nosniff')->assertHeader('X-Frame-Options', 'SAMEORIGIN')->assertHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+        $this->get($this->adminUrl('/login'))->assertHeader('X-Frame-Options', 'DENY');
+    }
+
+    public function test_script_closing_tags_in_post_content_cannot_break_out_of_the_json_ld(): void
+    {
+        Post::factory()->create(['slug' => 'xss', 'title' => 'Hi </script><script>alert(1)</script>', 'is_published' => true]);
+
+        $this->get('/blog/xss')->assertOk()->assertDontSee('</script><script>alert(1)', false);
+    }
+
     public function test_faqs_are_split_into_tabs_by_category(): void
     {
         $admin = User::factory()->create(['is_admin' => true]);

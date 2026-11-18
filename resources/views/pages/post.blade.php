@@ -15,7 +15,7 @@
         ['@@type' => 'ListItem', 'position' => 2, 'name' => 'Blog', 'item' => route('blog')],
         ['@@type' => 'ListItem', 'position' => 3, 'name' => $post['title'], 'item' => url()->current()],
     ],
-], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}</script>
+], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
 <script type="application/ld+json">{!! json_encode([
     '@@context' => 'https://schema.org', '@@type' => 'BlogPosting',
     'headline' => $post['title'], 'description' => $post['excerpt'],
@@ -23,7 +23,7 @@
     'datePublished' => $published, 'dateModified' => $modified,
     'author' => ['@@type' => 'Organization', 'name' => config('site.brand'), 'url' => url('/')],
     'publisher' => ['@@type' => 'Organization', 'name' => config('site.brand'), 'logo' => ['@@type' => 'ImageObject', 'url' => url('/apple-touch-icon.png')]],
-], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}</script>
+], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
 @endpush
 @section('content')
 @php

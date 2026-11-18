@@ -12,11 +12,11 @@
 <script type="application/ld+json">{!! json_encode([
     '@@context' => 'https://schema.org', '@@type' => 'FAQPage',
     'mainEntity' => $items->map(fn ($i) => ['@@type' => 'Question', 'name' => $i['q'], 'acceptedAnswer' => ['@@type' => 'Answer', 'text' => $i['a']]])->all(),
-], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}</script>
+], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
 @endpush
 @section('content')
 <section class="px-5 sm:px-8 pt-4 sm:pt-10 pb-12 sm:pb-24"
-         x-data='{ q: "", cat: "All", open: [], items: @json($jsItems, JSON_HEX_APOS | JSON_HEX_QUOT),
+         x-data='{ q: "", cat: "All", open: [], items: @json($jsItems, JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP),
                    show(i) { const it = this.items[i]; return (this.cat === "All" || this.cat === it.cat) && (!this.q.trim() || it.t.includes(this.q.trim().toLowerCase())) },
                    has(c) { return this.items.some((it, i) => it.cat === c && this.show(i)) },
                    get count() { return this.items.filter((_, i) => this.show(i)).length },

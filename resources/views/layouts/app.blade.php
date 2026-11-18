@@ -34,11 +34,11 @@
         'address' => ['@@type' => 'PostalAddress', 'streetAddress' => 'Bering, Kerabari', 'addressLocality' => 'Pakyong', 'addressRegion' => 'Sikkim', 'postalCode' => '737106', 'addressCountry' => 'IN'],
         'logo' => url('/apple-touch-icon.png'), 'image' => url('/images/all-sikkim.webp'),
         'areaServed' => 'Sikkim, India',
-    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}</script>
+    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
     <script type="application/ld+json">{!! json_encode([
         '@@context' => 'https://schema.org', '@@type' => 'WebSite',
         'name' => $brand, 'url' => url('/'), 'inLanguage' => 'en',
-    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}</script>
+    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=Noto+Serif:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">

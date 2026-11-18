@@ -6,7 +6,7 @@
         '@@type' => 'ListItem', 'position' => $i + 1,
         'item' => ['@@type' => 'TouristTrip', 'name' => $p['title'], 'description' => implode('. ', $p['bullets']).'.', 'image' => url($p['img_url'] ?? '/images/all-sikkim.webp'), 'touristType' => 'Leisure'],
     ])->all(),
-], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}</script>
+], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
 @endpush
 @section('content')
 @php

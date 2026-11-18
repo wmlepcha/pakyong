@@ -43,13 +43,13 @@
         ['@@type' => 'ListItem', 'position' => 2, 'name' => 'Destinations', 'item' => route('destinations')],
         ['@@type' => 'ListItem', 'position' => 3, 'name' => $d['name'], 'item' => url()->current()],
     ],
-], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}</script>
+], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
 <script type="application/ld+json">{!! json_encode([
     '@@context' => 'https://schema.org', '@@type' => 'TouristDestination',
     'name' => $d['name'], 'description' => $d['tagline'].' '.$d['about'][0],
     'image' => url($d['img_url']), 'touristType' => $d['good_for'],
     'containedInPlace' => ['@@type' => 'AdministrativeArea', 'name' => $d['place'] ?? 'Sikkim, India'],
-], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}</script>
+], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
 @endpush
 @section('content')
 
@@ -57,7 +57,7 @@
 <section class="px-5 sm:px-8 pt-3 sm:pt-6">
     <a href="{{ route('destinations') }}" class="inline-flex items-center gap-1 -ml-1 min-h-11 text-[15px] font-semibold text-royal"><x-glyph name="left" class="size-5"/> All destinations</a>
     <div class="mt-4 lg:mt-6 flex flex-col gap-6 lg:gap-10">
-        <div x-data='mosaic(@json($pool, JSON_HEX_APOS | JSON_HEX_QUOT))' class="order-first lg:order-last grid grid-cols-2 gap-2 sm:grid-cols-[1.5fr_1.2fr_1fr] sm:grid-rows-2 sm:gap-3 sm:h-[22rem] lg:h-[30rem]">
+        <div x-data='mosaic(@json($pool, JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP))' class="order-first lg:order-last grid grid-cols-2 gap-2 sm:grid-cols-[1.5fr_1.2fr_1fr] sm:grid-rows-2 sm:gap-3 sm:h-[22rem] lg:h-[30rem]">
             @foreach ($tileClasses as $t => $cls)
                 @php $first = $pool[$t % count($pool)]; @endphp
                 <div class="relative overflow-hidden r-ios-lg bg-mist {{ $cls }}">
