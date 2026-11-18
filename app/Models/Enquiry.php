@@ -14,6 +14,8 @@ class Enquiry extends Model
 
     public const STATUSES = ['new' => 'New', 'contacted' => 'Contacted', 'booked' => 'Booked', 'closed' => 'Closed'];
 
+    public const STATUS_COLORS = ['new' => 'info', 'contacted' => 'warning', 'booked' => 'success', 'closed' => 'gray'];
+
     protected $guarded = [];
 
     /**
@@ -21,7 +23,7 @@ class Enquiry extends Model
      */
     protected function casts(): array
     {
-        return ['destinations' => 'array', 'start_date' => 'date'];
+        return ['destinations' => 'array', 'start_date' => 'date', 'status_notes' => 'array'];
     }
 
     public function whatsappMessages(): MorphMany

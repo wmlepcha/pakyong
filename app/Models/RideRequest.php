@@ -19,7 +19,7 @@ class RideRequest extends Model
      */
     protected function casts(): array
     {
-        return ['pickup_date' => 'date'];
+        return ['pickup_date' => 'date', 'status_notes' => 'array'];
     }
 
     public function whatsappMessages(): MorphMany

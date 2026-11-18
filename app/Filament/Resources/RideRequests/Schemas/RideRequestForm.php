@@ -2,30 +2,20 @@
 
 namespace App\Filament\Resources\RideRequests\Schemas;
 
-use App\Models\Enquiry;
-use App\Models\RideRequest;
-use Filament\Forms\Components\Placeholder;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
+use App\Filament\Support\StatusNotes;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\View as ViewComponent;
 use Filament\Schemas\Schema;
 
 class RideRequestForm
 {
     public static function configure(Schema $schema): Schema
     {
-        $show = fn (string $label, string $field): Placeholder => Placeholder::make($field)->label($label)
-            ->content(fn (?RideRequest $record): string => (string) ($record?->{$field} instanceof \DateTimeInterface ? $record->{$field}->format('j M Y') : ($record?->{$field} ?? '-')));
-
-        return $schema->components([
+        return $schema->columns(1)->components([
+            ViewComponent::make('filament.ride-summary'),
             Section::make('Follow-up')->columns(2)->schema([
-                Select::make('status')->options(Enquiry::STATUSES)->required(),
-                Textarea::make('notes')->label('Private notes')->rows(3)->columnSpanFull(),
-            ]),
-            Section::make('The ride')->columns(3)->schema([
-                $show('Pickup', 'pickup_location'), $show('Drop', 'drop_location'), $show('Pickup district', 'pickup_district'),
-                $show('Pickup date', 'pickup_date'), $show('Car type', 'car_type'), $show('Received', 'created_at'),
-                $show('Name', 'name'), $show('WhatsApp', 'phone'),
+                StatusNotes::statusField(),
+                ...StatusNotes::fields(),
             ]),
         ]);
     }

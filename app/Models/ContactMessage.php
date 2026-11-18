@@ -14,6 +14,14 @@ class ContactMessage extends Model
 
     protected $guarded = [];
 
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return ['status_notes' => 'array'];
+    }
+
     public function whatsappMessages(): MorphMany
     {
         return $this->morphMany(WhatsappMessage::class, 'messageable')->latest();

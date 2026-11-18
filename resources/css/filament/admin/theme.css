@@ -43,6 +43,12 @@ body.fi-body { background: var(--himalio-cream); }
 
 .fi-btn { letter-spacing: .06em; font-weight: 600; }
 .fi-section, .fi-ta-ctn, .fi-wi-stats-overview-stat { border: 1px solid rgb(45 58 34 / .12); box-shadow: none; }
+.fi-wi-stats-overview-stat { background: #fff; padding: 1.25rem 1.5rem; }
+.fi-wi-stats-overview-stat-value { font-family: var(--font-serif); font-size: 2.25rem; line-height: 1.1; color: var(--himalio-ink); }
+.fi-wi-stats-overview-stat-label { font-size: .8rem; letter-spacing: .06em; text-transform: uppercase; color: rgb(45 58 34 / .65); }
+.fi-wi-stats-overview-stat-content { gap: .5rem; }
+.fi-ta-header-cell-label { font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: rgb(45 58 34 / .6); }
+.fi-ta-row:hover { background: var(--himalio-cream); }
 :focus-visible { outline-color: var(--himalio-gold); }
 ::selection { background: var(--himalio-green); color: var(--himalio-cream); }
 
