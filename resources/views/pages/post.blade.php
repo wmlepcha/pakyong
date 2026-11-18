@@ -9,6 +9,14 @@
 @endphp
 @push('head')
 <script type="application/ld+json">{!! json_encode([
+    '@@context' => 'https://schema.org', '@@type' => 'BreadcrumbList',
+    'itemListElement' => [
+        ['@@type' => 'ListItem', 'position' => 1, 'name' => 'Home', 'item' => route('home')],
+        ['@@type' => 'ListItem', 'position' => 2, 'name' => 'Blog', 'item' => route('blog')],
+        ['@@type' => 'ListItem', 'position' => 3, 'name' => $post['title'], 'item' => url()->current()],
+    ],
+], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}</script>
+<script type="application/ld+json">{!! json_encode([
     '@@context' => 'https://schema.org', '@@type' => 'BlogPosting',
     'headline' => $post['title'], 'description' => $post['excerpt'],
     'image' => url($post['img_url']), 'mainEntityOfPage' => url()->current(),

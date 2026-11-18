@@ -2,9 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Filament\Widgets\LatestRideRequests;
 use App\Models\RideRequest;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Livewire\Livewire;
 use Tests\TestCase;
 
 class RideRequestTest extends TestCase
@@ -63,6 +65,9 @@ class RideRequestTest extends TestCase
         $admin->saveAppAuthenticationSecret('JBSWY3DPEHPK3PXP');
 
         $this->actingAs($admin)->get('/'.config('app.admin_path').'/ride-requests')->assertOk();
+        $this->actingAs($admin)->get('/'.config('app.admin_path').'/ride-requests/'.$ride->id.'/edit')->assertOk()->assertSee('Karma Sherpa');
+        $this->actingAs($admin)->get('/'.config('app.admin_path'))->assertOk();
+        Livewire::actingAs($admin)->test(LatestRideRequests::class)->assertCanSeeTableRecords([$ride]);
         $this->actingAs($admin)->postJson(route('filament.admin.whatsapp-log'), ['type' => 'ride', 'id' => $ride->id, 'body' => 'Your car is booked.'])->assertOk();
 
         $this->assertSame('contacted', $ride->fresh()->status);

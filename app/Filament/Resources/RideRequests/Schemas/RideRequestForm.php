@@ -15,7 +15,7 @@ class RideRequestForm
     public static function configure(Schema $schema): Schema
     {
         $show = fn (string $label, string $field): Placeholder => Placeholder::make($field)->label($label)
-            ->content(fn (?RideRequest $r): string => (string) ($r?->{$field} instanceof \DateTimeInterface ? $r->{$field}->format('j M Y') : ($r?->{$field} ?? '-')));
+            ->content(fn (?RideRequest $record): string => (string) ($record?->{$field} instanceof \DateTimeInterface ? $record->{$field}->format('j M Y') : ($record?->{$field} ?? '-')));
 
         return $schema->components([
             Section::make('Follow-up')->columns(2)->schema([

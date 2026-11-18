@@ -17,6 +17,20 @@ Route::get('/sitemap.xml', function () {
     return response('<?xml version="1.0" encoding="UTF-8"?>'."\n".'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'."\n".$entries."\n</urlset>\n", 200, ['Content-Type' => 'application/xml']);
 });
 Route::get('/robots.txt', fn () => response("User-agent: *\nDisallow:\n\nSitemap: ".url('/sitemap.xml')."\n", 200, ['Content-Type' => 'text/plain']));
+Route::get('/llms.txt', function () {
+    $lines = ['# '.config('site.brand'), '', '> Locally run travel and cab service for Sikkim, Darjeeling and Kalimpong: tour planning, permits, and 4 or 7 seater rides.', '', '## Destinations'];
+    foreach (ContentRepository::destinations() as $slug => $d) {
+        $lines[] = '- ['.$d['name'].']('.route('destination', $slug).'): '.$d['tagline'];
+    }
+    $lines[] = '';
+    $lines[] = '## Guides';
+    foreach (ContentRepository::posts() as $p) {
+        $lines[] = '- ['.$p['title'].']('.route('post', $p['slug']).'): '.$p['excerpt'];
+    }
+    $lines = array_merge($lines, ['', '## Key pages', '- [Travel guide]('.route('guide').')', '- [FAQ]('.route('faq').')', '- [Book a ride]('.route('ride').')', '- [Contact]('.route('contact').')', '']);
+
+    return response(implode("\n", $lines), 200, ['Content-Type' => 'text/plain; charset=UTF-8']);
+});
 Route::view('/', 'pages.home')->name('home');
 Route::view('/destinations', 'pages.destinations')->name('destinations');
 Route::get('/destinations/{slug}', fn (string $slug) => view('pages.destination', [
@@ -30,9 +44,9 @@ Route::get('/blog/{slug}', fn (string $slug) => view('pages.post', [
 ]))->name('post');
 Route::view('/faq', 'pages.faq')->name('faq');
 Route::view('/contact', 'pages.contact')->name('contact');
-Route::post('/enquiries', [EnquiryController::class, 'store'])->middleware('throttle:8,1')->name('enquiries.store');
-Route::post('/contact-messages', [ContactMessageController::class, 'store'])->middleware('throttle:8,1')->name('contact-messages.store');
+Route::post('/enquiries', [EnquiryController::class, 'store'])->middleware(['throttle:8,1', 'throttle:40,1440,daily'])->name('enquiries.store');
+Route::post('/contact-messages', [ContactMessageController::class, 'store'])->middleware(['throttle:8,1', 'throttle:40,1440,daily'])->name('contact-messages.store');
 Route::view('/book-a-ride', 'pages.ride')->name('ride');
-Route::post('/ride-requests', [RideRequestController::class, 'store'])->middleware('throttle:8,1')->name('ride-requests.store');
+Route::post('/ride-requests', [RideRequestController::class, 'store'])->middleware(['throttle:8,1', 'throttle:40,1440,daily'])->name('ride-requests.store');
 Route::view('/terms', 'pages.legal', ['doc' => 'terms'])->name('terms');
 Route::view('/privacy', 'pages.legal', ['doc' => 'privacy'])->name('privacy');

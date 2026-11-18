@@ -23,9 +23,9 @@ class LatestEnquiries extends TableWidget
                 TextColumn::make('created_at')->label('Received')->since(),
                 TextColumn::make('name')->weight('semibold'),
                 TextColumn::make('phone'),
-                TextColumn::make('destinations')->badge()->state(fn (Enquiry $r): array => $r->destinations ?? []),
-                TextColumn::make('status')->badge()->formatStateUsing(fn (string $s): string => Enquiry::STATUSES[$s] ?? $s),
+                TextColumn::make('destinations')->badge()->state(fn (Enquiry $record): array => $record->destinations ?? []),
+                TextColumn::make('status')->badge()->formatStateUsing(fn (string $state): string => Enquiry::STATUSES[$state] ?? $state),
             ])
-            ->recordUrl(fn (Enquiry $r): string => EnquiryResource::getUrl('edit', ['record' => $r]));
+            ->recordUrl(fn (Enquiry $record): string => EnquiryResource::getUrl('edit', ['record' => $record]));
     }
 }

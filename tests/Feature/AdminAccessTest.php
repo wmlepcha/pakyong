@@ -3,6 +3,11 @@
 namespace Tests\Feature;
 
 use App\Filament\Pages\Auth\Login;
+use App\Filament\Resources\Faqs\Pages\ListFaqs;
+use App\Models\ContactMessage;
+use App\Models\Enquiry;
+use App\Models\Faq;
+use App\Models\FaqCategory;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
@@ -56,6 +61,30 @@ class AdminAccessTest extends TestCase
         foreach (['', '/destinations', '/posts', '/faqs', '/packages', '/experiences', '/enquiries', '/contact-messages', '/home-images'] as $path) {
             $this->actingAs($admin)->get($this->adminUrl($path))->assertOk();
         }
+    }
+
+    public function test_the_edit_pages_of_enquiries_and_messages_open(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+        $admin->saveAppAuthenticationSecret('JBSWY3DPEHPK3PXP');
+
+        $this->actingAs($admin)->get($this->adminUrl('/enquiries/'.Enquiry::factory()->create()->id.'/edit'))->assertOk()->assertSee('Pema Lepcha');
+        $this->actingAs($admin)->get($this->adminUrl('/contact-messages/'.ContactMessage::factory()->create()->id.'/edit'))->assertOk()->assertSee('Tenzing Bhutia');
+    }
+
+    public function test_faqs_are_split_into_tabs_by_category(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+        $admin->saveAppAuthenticationSecret('JBSWY3DPEHPK3PXP');
+        $permits = FaqCategory::create(['name' => 'Permits']);
+        $planning = FaqCategory::create(['name' => 'Planning']);
+        $a = Faq::factory()->create(['faq_category_id' => $permits->id]);
+        $b = Faq::factory()->create(['faq_category_id' => $planning->id]);
+
+        Livewire::actingAs($admin)->test(ListFaqs::class)
+            ->assertCanSeeTableRecords([$a, $b])
+            ->set('activeTab', 'category-'.$permits->id)
+            ->assertCanSeeTableRecords([$a])->assertCanNotSeeTableRecords([$b]);
     }
 
     public function test_repeated_failed_logins_lock_the_account_for_a_while(): void

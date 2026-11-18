@@ -22,7 +22,7 @@ class EnquiriesTable
                 TextColumn::make('created_at')->label('Received')->since()->sortable(),
                 TextColumn::make('name')->searchable()->weight('semibold'),
                 TextColumn::make('phone')->searchable()->copyable(),
-                TextColumn::make('destinations')->badge()->separator(',')->state(fn (Enquiry $r): array => $r->destinations ?? []),
+                TextColumn::make('destinations')->badge()->separator(',')->state(fn (Enquiry $record): array => $record->destinations ?? []),
                 TextColumn::make('start_date')->date('j M Y')->label('Start'),
                 TextColumn::make('days')->suffix(' days'),
                 TextColumn::make('people')->label('People'),

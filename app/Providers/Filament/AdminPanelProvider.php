@@ -37,6 +37,7 @@ class AdminPanelProvider extends PanelProvider
             ->multiFactorAuthentication([
                 AppAuthentication::make()->recoverable(),
             ], isRequired: true)
+            ->darkMode(false)
             ->brandName('The Himalio Travels')
             ->brandLogo(asset('images/brand/himalio-logo-green-600.webp'))
             ->brandLogoHeight('2.75rem')

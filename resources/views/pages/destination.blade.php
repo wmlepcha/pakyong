@@ -37,6 +37,14 @@
 @section('og_image', url($d['img_url']))
 @push('head')
 <script type="application/ld+json">{!! json_encode([
+    '@@context' => 'https://schema.org', '@@type' => 'BreadcrumbList',
+    'itemListElement' => [
+        ['@@type' => 'ListItem', 'position' => 1, 'name' => 'Home', 'item' => route('home')],
+        ['@@type' => 'ListItem', 'position' => 2, 'name' => 'Destinations', 'item' => route('destinations')],
+        ['@@type' => 'ListItem', 'position' => 3, 'name' => $d['name'], 'item' => url()->current()],
+    ],
+], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}</script>
+<script type="application/ld+json">{!! json_encode([
     '@@context' => 'https://schema.org', '@@type' => 'TouristDestination',
     'name' => $d['name'], 'description' => $d['tagline'].' '.$d['about'][0],
     'image' => url($d['img_url']), 'touristType' => $d['good_for'],

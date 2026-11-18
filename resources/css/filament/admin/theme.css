@@ -46,17 +46,60 @@ body.fi-body { background: var(--himalio-cream); }
 :focus-visible { outline-color: var(--himalio-gold); }
 ::selection { background: var(--himalio-green); color: var(--himalio-cream); }
 
-/* Login: full-bleed mountain photo under a forest wash, cream card in the middle. */
+/* Login: frosted-glass card over a meadow photo. */
 .fi-simple-layout {
-    background-image: linear-gradient(rgb(45 58 34 / .72), rgb(45 58 34 / .55)), url('/images/all-sikkim.webp');
-    background-size: cover;
-    background-position: center;
+    background: linear-gradient(rgb(20 30 12 / 0), rgb(20 30 12 / .2)), url('../../../images/admin-login.webp') 30% top / cover no-repeat;
 }
+.fi-simple-main-ctn { padding: 1.25rem 1rem; }
 .fi-simple-main {
-    background: var(--himalio-cream);
+    position: relative;
+    z-index: 0;
+    background: none;
     border: 0;
-    box-shadow: 0 30px 80px -24px rgb(20 28 12 / .6);
-    border-top: 3px solid var(--himalio-gold);
+    box-shadow: none;
+    padding: 2rem 1.5rem;
+    color: #fff;
 }
-.fi-simple-header-heading { font-size: 1.75rem; }
-.fi-logo { margin-inline: auto; }
+/* The glass sits on a pseudo-element: backdrop-filter on the card itself would trap Filament's fixed modals inside it. */
+.fi-simple-main::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: 1.5rem;
+    background: rgb(255 255 255 / .14);
+    -webkit-backdrop-filter: blur(22px) saturate(1.2);
+    backdrop-filter: blur(22px) saturate(1.2);
+    border: 1px solid rgb(255 255 255 / .55);
+    box-shadow: 0 24px 60px -20px rgb(20 30 12 / .55);
+}
+.fi-simple-header-subheading, .fi-simple-main > * > p { color: rgb(255 255 255 / .92); }
+/* Dialogs and white panels inside the card keep the normal dark-on-white look. */
+.fi-simple-main .fi-modal-window, .fi-simple-main .fi-section { color: var(--himalio-ink); }
+.fi-simple-main .fi-modal-window label, .fi-simple-main .fi-modal-window .fi-fo-field-label-content, .fi-simple-main .fi-modal-window .fi-input, .fi-simple-main .fi-modal-window .fi-icon-btn { color: var(--himalio-ink); }
+.fi-simple-main .fi-modal-window .fi-input-wrp { background: #fff; box-shadow: inset 0 0 0 1px rgb(45 58 34 / .3); border-radius: .5rem; }
+.fi-simple-main .fi-modal-window .fi-input-wrp:focus-within { box-shadow: inset 0 0 0 2px var(--himalio-green); }
+.fi-simple-main .fi-modal-window .fi-input-wrp-suffix { border-color: rgb(45 58 34 / .2); }
+.fi-simple-main .fi-logo { margin-inline: auto; filter: brightness(0) invert(1); }
+.fi-simple-header-heading { font-size: 1.75rem; color: #fff; }
+.fi-simple-main label, .fi-simple-main .fi-fo-field-label-content, .fi-simple-main .fi-checkbox-input + span, .fi-simple-main .fi-fo-field-wrp-label { color: #fff; }
+.fi-simple-main .fi-input-wrp {
+    background: rgb(255 255 255 / .12);
+    border-radius: 1rem;
+    box-shadow: none;
+    --tw-ring-color: rgb(255 255 255 / .5);
+    --tw-ring-shadow: inset 0 0 0 1px rgb(255 255 255 / .5);
+}
+.fi-simple-main .fi-input { color: #fff; }
+.fi-simple-main .fi-input::placeholder { color: rgb(255 255 255 / .75); }
+.fi-simple-main .fi-input-wrp-suffix, .fi-simple-main .fi-icon-btn { color: #fff; }
+.fi-simple-main .fi-btn { border-radius: 1rem; background: linear-gradient(90deg, #b9c780, #56731f); color: #fff; box-shadow: none; border: 1px solid rgb(255 255 255 / .55); font-size: 1rem; }
+.fi-simple-main a, .fi-simple-main .fi-fo-field-wrp-error-message { color: #fff; }
+
+/* Phones: sit the card in the lower half so the peaks stay visible above it. */
+@media (max-width: 639.98px) {
+    .fi-simple-main-ctn { padding-top: 30vh; }
+}
+
+/* Links inside the white dialog (e.g. the authenticator app names) stay green, not the login's white. */
+.fi-simple-main .fi-modal-window a { color: var(--himalio-green); text-decoration: underline; text-underline-offset: 2px; }
