@@ -41,7 +41,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandName('The Himalio Travels')
             ->brandLogo(asset('images/brand/himalio-logo-green-600.webp'))
             ->brandLogoHeight('2.75rem')
-            ->favicon(asset('favicon-32.png'))
+            ->favicon(asset("favicon-32.png")."?v=2")
             ->colors([
                 'primary' => [
                     50 => '#f4f6ec', 100 => '#e9edd6', 200 => '#d3dbb1', 300 => '#b3c07f', 400 => '#8d9f55',
